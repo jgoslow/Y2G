@@ -1,0 +1,212 @@
+doctype html(lang='en-US')
+head
+  meta(charset='UTF-8')
+  meta(name='viewport', content='width=device-width, initial-scale=1')
+  title= title
+
+  link(rel='pingback', href='http://map/xmlrpc.php')
+  link(rel='icon', type='image/ico', href='images/layout/favicon.ico')
+
+  meta(property='og:title', content='Yards to Gardens | Home')
+  meta(property='og:description', content='Just another WordPress site')
+  meta(property='og:url', content='http://y2g.org/')
+  meta(property='og:site_name', content='Yards to Gardens')
+  meta(property='og:type', content='website')
+  meta(property='og:image', name='thumb1', content='images/layout/social.png')
+  meta(property='og:image', name='thumb2', content='images/layout/social1.png')
+  meta(property='og:image', name='thumb3', content='images/layout/social2.png')
+
+  // STYLESHEETS
+  link(rel='stylesheet', type='text/css', media='all', href='/stylesheets/style.css')
+  link(rel='stylesheet', type='text/css', media='all', href='/stylesheets/base.css')
+  link(rel='stylesheet', type='text/css', media='all', href='/fonts/fonts.css')
+  link(href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300italic,400italic,700italic,400,300,700', rel='stylesheet', type='text/css')
+  link(href='http://fonts.googleapis.com/css?family=Roboto:400,900,700,500,300,100,300italic,400italic', rel='stylesheet', type='text/css')
+  link(rel='stylesheet', type='text/css', media='all', href='/stylesheets/form.css')
+  link(rel='stylesheet', type='text/css', media='all', href='/stylesheets/responsive.css')
+  link(rel='stylesheet', type='text/css', media='all', href='/stylesheets/jquery.ui.css')
+
+  script.
+    // declare vars used throughout App
+    var map, loggedIn = false, returning = false;
+
+  script(type='text/javascript', src='lib/js/map.load.js')
+
+body.home.page.page-id-6.page-template-default
+  #container.container
+    block content
+
+    #header_wrap.header_wrap
+      header#header
+        a.mobile-menu-btn
+
+        .mobile-menu-bg
+
+        #logo.logo.left
+          a(href='/')
+            img.respond(src='images/svg/logo-full.svg', data-default='images/svg/logo-full.svg', data-mobile='images/svg/logo-small.svg', data-medium='images/svg/logo-small.svg', height='63', width='450', alt='Yards to Gardens.org')
+
+        .mobile-menu
+          #admin.admin.right
+            span.login
+              a#show_login.login_button.login.openmodal(data-modaltype='login', href='/login.html') Login
+
+              a.login_button.openmodal.signup(href='/sign-up.html', data-modaltype='sign-up') Sign Up
+
+            span.logout.profile
+              a.login_button.openmodal.logout(href='/profile.html', data-modaltype='profile') Profile
+
+            a.login_button.logout(href='/', onclick='logout();') logout
+
+            #social.social
+              a.outside_link.tw(href='twitter') &#xF081;
+
+              a.outside_link.fb(href='Facebook') &#xF082;
+
+              a.outside_link.pi(href='pinterest') &#xF0D3;
+
+          #nav.nav.right
+            #menu.menu-main-container(class='.menu-wrap')
+              ul#menu-main.menu-main.menu
+                li.menu-item.menu-item-type-post_type.menu-item-object-page.current-menu-item.page_item.page-item-6.current_page_item.menu-item-10
+                  a(href='index.html') Home
+
+                li.menu-item.menu-item-type-post_type.menu-item-object-page.menu-item-274
+                  a(href='about.html') About Y2G
+
+                li.menu-item.menu-item-type-post_type.menu-item-object-page.menu-item-279
+                  a(href='resources.html') Resources
+
+                li.menu-item.menu-item-type-post_type.menu-item-object-page.menu-item-273
+                  a(href='contact.html') Contact Us
+
+          .clear
+
+    #map_wrap.map_wrap(style='height:350px;')
+      #map_tools_top.map_tools_top
+        .top_right
+          a#show_listings.show_listings(href='#')
+            span.fa &#xF103;
+            span.text Show Listings
+
+          #listings_wrap.listings_wrap
+            .top
+            #listings.listings
+            .bottom
+
+        #location_tool.location_tool
+          .wrap
+            a.icon(href='#')
+
+            .tools
+              .wrap
+                form#location_filter.location_filter
+                  input#address_input.address_input(placeholder='Type where you are and hit enter.')
+                  input#location_tool_submit.submit.fa(type='submit', value='', href='#')
+
+                  #radius_box.radius_box
+                    label(for='radius') Radius
+
+                    input#radius_input.radius_input(name='radius', value='3')
+                    span.lc mi
+
+                    .clear
+
+                  #radius_slider.radius_slider
+                    a 1/2 mile
+
+                    a 25 miles
+
+                    a all
+
+                  a.close.fa(href='#') &#xF00D;
+
+      #map_container.map_container
+        #map_canvas.map_canvas
+
+      #map_spacer.map_spacer
+
+      #map_tools_bottom.map_tools_bottom
+        .lower_left
+          a#expand_map.expand_map.fa(title='Expand Map', href='#') &#xF103;
+
+          a#edit_listing.edit_listings.openmodal(href='/edit-listings.html', data-modaltype='edit-listings')
+            span.fa &#xF044;
+            |  Edit Your Listings
+
+          a#map_new_listing.new_listing.openmodal(href='/new-listing.html', data-modaltype='new-listing')
+            span
+            | Create a Listing
+
+      .map_modal_bg(style='')
+
+    #lower_wrap.lower_wrap
+      #content_wrap.content_wrap
+        #content.content
+          .post.left
+            h1 Here's How it Works
+            p
+              | Yards to Gardens lets you share or find all things gardening. Whether you have extra space in your yard, extra tools in the garage, extra seeds or seedings, or just looking for a space to garden, Y2G makes it easy to share what you&rsquo;ve got or find what you&rsquo;re looking for.
+            p
+              | To post a listing just click on one of the categories, enter the information requested, verify your email and your listing will appear on the Y2G map.
+            select#select
+              option Option 1
+              option Option 2
+              option Option 3
+              option Option 4
+              option Option 5
+          // START SIDEBAR
+          #sidebar.sidebar
+          // END SIDEBAR
+          .clear
+        // End Content
+      // End Content_Wrap
+      #footer_wrap.footer_wrap
+        footer#footer
+          #credit.credit
+        // End Footer
+      // End Footer Wrap
+    // End Lower_Wrap
+  // End Container
+  .clear
+
+  #modal.modal
+
+  .modal_bg
+
+  #message.message
+  // JAVASCRIPT
+  script(type='text/javascript', src='lib/js/jquery/jquery.min.js', style='')
+
+  script(type='text/javascript', src='lib/js/tweenmax.js')
+
+  script(type='text/javascript', src='lib/js/jquery/jquery-ui.js')
+  // <script type="text/javascript" src="http://mapjs/jquery/jquery-tools.js"></script>
+  script(type='text/javascript', src='lib/js/lyra.js')
+
+  script(type='text/javascript', src='lib/js/main.js')
+
+  script(type='text/javascript', src='lib/js/responsive.js')
+
+  script.
+    jQuery(function($){
+    $('h1').click(function(){
+    $('#select').val('Option 4');
+    });
+    });
+  // <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7oM_im_K8XAFd25v4ZTAgnk2pAXHLblM"></script>
+  //
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHfWHqA0vkS16oU6Qi0xAT-6-RQ51edD4&amp;sensor=false">
+    </script><script src="https://maps.gstatic.com/intl/en_us/mapfiles/api-3/15/5/main.js" type="text/javascript"></script>
+  //
+    <?php if ($GLOBALS[ 'map' ] == true) : //include 'lib/jsphp/dbcall.js.php'; ?>
+    <?php $location = 'san francisco ca'; ?>
+    <script type="text/javascript" src="js/map.js"></script>
+    <script type="text/javascript">
+    getLatLng('<?php echo $location; ?>', '3');
+    </script>
+    <script type="text/javascript" src="js/infobubble.js"></script>
+    <script type="text/javascript" src="js/icons.js"></script>
+    <!--<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/lib/js/hello.js"></script>
+    <!--<script type="text/javascript" src="js/map.js"></script>
+    <script type="text/javascript" src="js/map_interface.js"></script>

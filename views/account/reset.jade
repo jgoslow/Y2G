@@ -1,0 +1,7 @@
+h2 Reset your Password.
+p Enter a new password below and click "update password."
+  <br> Almost there...
+form#reset-form(method="post", action="/account/reset", onsubmit="account.login('#reset-form'); return false;")
+    .field
+      input(type='password', name='password', value='', placeholder='new password', required")
+    input.next.submit(type='submit', value='update password')
