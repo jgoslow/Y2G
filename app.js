@@ -87,8 +87,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 var routes = require('./routes/index');
-    account = require('./routes/account');
-    listings = require('./routes/listings');
+account = require('./routes/account');
+listings = require('./routes/listings');
 app.use('/', routes);
 app.use('/account', account);
 app.use('/listings', listings);
@@ -97,14 +97,14 @@ app.use('/listings', listings);
 // NEW
 // Session-persisted message middleware
 /*app.use(function(req, res, next){
-  var err = req.session.error;
-  var msg = req.session.success;
-  delete req.session.error;
-  delete req.session.success;
-  res.locals.message = '';
-  if (err) res.locals.message = '<p class="msg error">' + err + '</p>';
-  if (msg) res.locals.message = '<p class="msg success">' + msg + '</p>';
-  next();
+var err = req.session.error;
+var msg = req.session.success;
+delete req.session.error;
+delete req.session.success;
+res.locals.message = '';
+if (err) res.locals.message = '<p class="msg error">' + err + '</p>';
+if (msg) res.locals.message = '<p class="msg success">' + msg + '</p>';
+next();
 });*/
 
 
