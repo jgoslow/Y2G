@@ -1,0 +1,127 @@
+
+var listingType = $('#new-listing').data('type');
+console.log('.choose-type .'+listingType);
+$('.choose-type .'+listingType).addClass('active');
+$('.new-listing .choose-type a').click(function(){
+  var type = $(this).data('type');
+  $('#new-listing').data('type', type).removeClass('gardener garden organic tools').addClass(type);
+  $(this).siblings().removeClass('active');
+  $(this).addClass('active');
+  $('#listingType').val(type);
+  return false;
+});
+
+$('.new-listing .goto').click(function(){
+  if ($(this).hasClass('disabled')) {
+    var msg = $(this).data('error');
+    y2g.message(msg, 'error', 2);
+    return false;
+  }
+  var goto = $(this).data('goto');
+  if (goto !== $('.new-listing').data('current-step')) {
+    TweenLite.to($('.new-listing .steps-container'), .5, {marginLeft: -100*(goto-1)+'%'});
+    $('.new-listing .steps .current, .new-listing .step.current').removeClass('current');
+    $('.new-listing .steps li:nth-child('+goto+'), .new-listing .step:nth-child('+goto+')').addClass('current');
+    $('.new-listing').data('current-step', goto);
+  }
+  return false;
+});
+
+$(document).keydown(function(e){
+  if (e.keyCode == 13) {
+    if ($(document.activeElement).is('.location')) {
+      var address = $('.new-listing input.location').val();
+      getLocation(address, null, selectLocation);
+      return false;
+    }
+  }
+});
+$('.new-listing .get-location').click(function(){
+  var address = $('.new-listing input.location').val();
+  getLocation(address, null, selectLocation);
+  return false;
+});
+
+function selectLocation(results) {
+  var locations = results;
+  form.disableNext(3);
+  $('.location-results div').remove();
+  results.forEach(function(result){
+    var div = document.createElement('div'),
+        html = '<a href="#">'+result.formatted_address+'</a>';
+    $(div).addClass("loc").html(html).appendTo($('.location-results'));
+  });
+  $('.step.location').addClass('results');
+  setTimeout(function(){ $('#location-results').focus(); }, 1500);
+  setTimeout(function(){
+    TweenMax.staggerTo($('.location-results .loc'), .5, {opacity: 1}, .05);
+    $('.location-results .loc').click(function(){
+      var n = $(this).index();
+      $('.location-results .loc.active').removeClass('active');
+      $(this).addClass('active');
+      form.enableNext(3);
+      form.setLocation(locations[n]);
+      return false;
+    });
+  }, 500);
+  setTimeout(function(){
+    if (results.length == 1) { console.log('just 1'); $('.location-results .loc:first-child').click(); }
+    else if (results.length == null) { y2g.message('There were no results for that address.  Try again!', 'error', 2); }
+  }, 1000);
+}
+
+var form = function(){};
+form.enableNext = function(num) {
+  $('.goto[data-goto='+num+']').removeClass('disabled');
+  $('.step.location').addClass("chosen");
+}
+form.disableNext = function(num) {
+  $('.goto[data-goto='+num+']').addClass('disabled');
+  $('.step.location').removeClass("chosen");
+}
+form.setLocation = function(loc) {
+  var address = loc.formatted_address,
+      city,
+      state,
+      zip,
+      country,
+      latLng = {lat:'', lng:''};
+  if (loc.types[0] == 'street_address') { city = loc.address_components[3].long_name; state = loc.address_components[5].short_name; country = loc.address_components[6].long_name; zip = loc.address_components[7].long_name; }
+  else if (loc.types[0] == "locality") { city = loc.address_components[0].long_name; state = loc.address_components[2].short_name; country = loc.address_components[3].long_name; zip = ''; }
+
+  latLng.lat = loc.geometry.location.k;
+  latLng.lng = loc.geometry.location.D;
+  latLng = JSON.stringify(latLng);
+  console.log(loc);
+  console.log(address, city, state, zip, country, latLng);
+  $('#location-address').attr('value',address);
+  $('#location-city').attr('value',city);
+  $('#location-state').attr('value',state);
+  $('#location-zip').val(zip);
+  $('#location-country').val(country);
+  $('#location-latLng').val(latLng);
+}
+
+/*$('#new-listing-form').parsley().subscribe('parsley:form:validate', function (formInstance) {
+  debugger;
+  if (($('#new-listing').data('type') !== 'gardener') && (formInstance.isValid('gardener', false))) {
+    $('.invalid-form-error-message').html('');
+    return;
+  } else {
+    $('#new-listing-form').parsley().validate();
+    // else stop form submission
+    formInstance.submitEvent.preventDefault();
+  }
+  return;
+});*/
+
+
+
+$('#new-listings-form').submit(function(e){
+  debugger;
+  e.preventDefault();
+  if ( $(this).parsley().isValid() ) {
+    $.post('/listings/add', $(this).serialize());
+  }
+  return false;
+});

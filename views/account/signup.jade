@@ -1,0 +1,29 @@
+#signup.content.sign-up
+    h2 Sign Up for Y2G
+    p When you sign up with Y2G, you can create listings, setup alerts, and connect with other gardeners nearby (you don&apos;t need an account to respond to existing listings).
+      form#sign-up-form.signup.standard(onsubmit="account.signup('#sign-up-form'); return false;")
+        .field.required
+          input(type='text', name="name", value="", placeholder="Display Name", required)
+          <p>Choose any name you like <br> we recommend just your first name.</p>
+        .field.required
+          input#UserEmail(type='email', name='email', value='', placeholder='email', required, data-parsley-type="email", data-required-message="We need a valid email to activate your account.")
+          //, data-ajax-name="email",, data-parsley-remote-options='{ "type": "GET",  "data": { "field": "email" } }', data-parsley-errors-messages-disabled="1", data-parsley-remote-validator="validateEmail", data-parsley-remote="1", data-parsley-trigger="focusout", data-parsley-id="2315")
+        .field.required
+          input(type='password', name='password', value='', placeholder='password', required)
+        br
+        a.show-gardener-profile-signup(href="#") Wanna create a gardener profile?
+        div.gardener-profile-signup
+          .field
+            input(type='text', name='location', value='', placeholder='location, country, or zip')
+          .field
+            textarea(name='reasons', value='', placeholder='reasons for gardening')
+          .field
+            textarea(name='bio', value='', placeholder='Say a little something about your history with gardens - your gardener bio.')
+          .field
+            label(data-info="This puts you on the map as being available to help gardeners in your area. There are certifications you can get to become a master gardener, but we're not being official.  Are you excellent at gardening?  Why not list?!")  List as a Master Gardener:
+            br
+            span Yes
+            input(type='checkbox', value='true', name='master_gardener')
+        input.next(type='submit', value="Sign Up")
+    #login_profile
+script(type="text/javascript", src="/javascripts/page/signup.js")
