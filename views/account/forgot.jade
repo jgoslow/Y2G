@@ -1,0 +1,9 @@
+h2 Forgot your Password?
+p Enter your account email below and click "submit."
+  <br> We'll send you a link to reset your password.
+form#reset-form(method="post", action="/account/reset", onsubmit="account.login('#reset-form'); return false;")
+    .field
+      input(type='email', name='email', value='', placeholder='email address', required, data-parsley-type="email", data-required-message="We need a valid email to activate your account.")
+    input.next.submit(type='submit', value='submit')
+    p Don't have an account?
+      a.actually-sign-up(href='#', onclick="openModal( '', '/account/sign-up/', 'sign-up'); return false;", value='signup', data-modaltype='signup openmodal') Create one here!

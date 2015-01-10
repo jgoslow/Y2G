@@ -1,0 +1,168 @@
+
+/* above iphone portrait */
+@media (min-width: 415px) {
+
+  .container {
+    background:url(../../images/layout/tablet/footer-grass-sheep.gif) bottom center repeat-x;
+    background-size: 100%;
+  }
+  .admin {
+    float: none;
+  }
+  .admin {
+    margin-top: 0px;
+    position: fixed;
+    top: 0;
+    right: 60px;
+    left: auto;
+  }
+  .menu-main {
+    background: url(../../images/svg/gardener-half.svg) 10px center no-repeat;
+    background-size: 100px;
+  }
+  .login_button {
+    margin:0 10px 0 0;
+    font-size:11px;
+    text-transform:uppercase;
+    font-weight: normal;
+    display: inline-block;
+  }
+  .login_button:after, .profile a:first-child:after {
+    content: '|';
+    display: inline-block;
+    margin-left: 10px;
+  }
+  .signup:after, .logout:after {
+    content: '';
+    margin-left: 0;
+  }
+  .logged-in .logout {
+    display: inline-block;
+  }
+
+  header .social {
+    bottom: -2px;
+    position: relative;
+  }
+  header .social a {
+    font-size: 19px;
+    margin-left: 10px;
+    margin-right: 0;
+  }
+
+}
+
+
+@media (min-width: 650px) {
+
+  .mobile-menu-btn {
+    display: none;
+  }
+
+  .mobile-menu, .menu-open .mobile-menu {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: auto;
+    background: none;
+    padding: 0;
+    margin-right: 0;
+    height: auto;
+    z-index: auto;
+    box-shadow:none;
+  }
+  .mobile-menu-bg {
+    display: none;
+  }
+  .container {
+    padding-top: 0;
+  }
+  /* header */
+  .header_wrap {
+    height:85px;
+    position:relative;
+    border-bottom:5px solid black;
+  }
+  header {
+    padding: 20px 10px 0;
+  }
+  header .logo {
+    margin-top: 6px;
+  }
+  header .logo img {
+    width: 300px;
+    max-width: 450px;
+    height: auto;
+  }
+  .nav {
+    padding-right: 0;
+    border: none;
+    margin-top: 17px;
+    height: 40px;
+  }
+  .admin {
+    position: absolute;
+    top: -12px;
+    right: 0px;
+  }
+  .menu-wrap {
+    margin-top: 30px;
+  }
+  .menu-main {
+    padding-right: 0;
+    background: none;
+  }
+  .menu li {
+    display: inline-block;
+  }
+  .menu li a {
+    padding: 1px 10px 0;
+    border-left:2px solid black;
+    font-size: 14px;
+  }
+}
+
+
+/* Above ipad portrait */
+
+@media (min-width: 768px) {
+  .menu li a {
+    font-size: 16px;
+    padding: 1px 13px 0;
+  }
+}
+
+/* Above ipad portrait */
+@media (min-width: 769px) {
+
+  /* New Listing Modal */
+  .new-listing .choose-type a {
+    width: 22%;
+    padding-top: 22%;
+  }
+  .new-listing .choose-type a:nth-child(2n) {margin-right: 4%;}
+  .new-listing .choose-type a:last-child {margin-right: 0;}
+
+
+
+}
+
+
+@media (min-width: 940px) {
+
+  .modal-login {
+    width: 600px !important;
+    margin-left: -300px !important;
+  }
+
+}
+
+/* Above ipad landscape */
+@media (min-width: 1080px) {
+
+  .container {
+    background:url(../../images/layout/footer-grass-sheep-wide.gif) bottom center repeat-x;
+    background-size: auto;
+  }
+
+}

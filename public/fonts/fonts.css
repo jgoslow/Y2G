@@ -1,0 +1,80 @@
+
+@font-face {
+  font-family: 'Font Awesome';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Font Awesome'), local('FontAwesome'), url(fontawesome-webfont.ttf) format('ttf');
+}
+
+
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: thin;
+  font-weight: 300;
+  src: local('Roboto Thin'), local('Roboto-Thin'), url(Roboto/Roboto-Thin.ttf) format('ttf');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 300;
+  src: local('Roboto Thin Italic'), local('Roboto-ThinItalic'), url(Roboto/Roboto-ThinItalic.ttf) format('ttf');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Regular'), local('Roboto-Regular'), url(Roboto/Roboto-Regular.ttf) format('ttf');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: medium;
+  font-weight: 500;
+  src: local('Roboto Medium'), local('Roboto-Medium'), url(Roboto/Roboto-Medium.ttf) format('ttf');
+}
+@font-face {
+  font-family: 'Roboto';
+  font-style: italic;
+  font-weight: 500;
+  src: local('Roboto Medium Italic'), local('Roboto-MediumItalic'), url(Roboto/Roboto-MediumItalic.ttf) format('ttf');
+}
+
+
+
+
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Roboto Condensed Light'), local('RobotoCondensed-Light'), url(RobotoCondensed/Roboto-Light.ttf) format('ttf');
+}
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: italic;
+  font-weight: 100;
+  src: local('Roboto Condensed Light Italic'), local('RobotoCondensed-LightItalic'), url(RobotoCondensed/Roboto-LightItalic.ttf) format('ttf');
+}
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Condensed Regular'), local('RobotoCondensed-Regular'), url(RobotoCondensed/RobotoCondensed-Regular.ttf) format('ttf');
+}
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Roboto Condensed Italic'), local('RobotoCondensed-Italic'), url(RobotoCondensed/RobotoCondensed-Italic.ttf) format('ttf');
+}
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: bold;
+  font-weight: 700;
+  src: local('Roboto Condensed Bold'), local('RobotoCondensed-Bold'), url(RobotoCondensed/RobotoCondensed-Bold.ttf) format('ttf');
+}
+@font-face {
+  font-family: 'Roboto Condensed';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Roboto Condensed Bold Italic'), local('RobotoCondensed-BoldItalic'), url(RobotoCondensed/RobotoCondensed-Boldtalic.ttf) format('ttf');
+}
