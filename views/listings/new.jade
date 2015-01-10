@@ -1,0 +1,80 @@
+if !user
+  h1 Please Log in
+  p You must be logged in to create a listing.  Please log in or create an account.
+  .btn-options
+    button.login.show-login.btn-option(onclick="jQuery('#login-wrap').slideDown(); jQuery('#signup-wrap').slideUp();return false;") Login
+    button.login.show-signup.btn-option(onclick="jQuery('#signup-wrap').slideDown(); jQuery('#login-wrap').slideUp();return false;") Sign Up
+  #login-wrap(style="display:none;")
+    include ../account/login.jade
+  #signup-wrap(style="display:none;")
+    include ../account/signup.jade
+
+else
+  - if (!listingType) listingType = 'gardener';
+  div#new-listing(class=listingType+' new-listing', data-type=listingType, data-current-step="1")
+    form#new-listing-form(onsubmit="listings.create('#new-listing-form'); return false;")
+      input(type="hidden", name="owner", value="#{user.id}")
+      input(type="hidden", name="ownerName", value="#{user.name}")
+      ul.steps
+        li.type.goto.current(data-goto='1')
+          a(href="type") Type
+        li.goto.location(data-goto='2')
+          a(href="location") Location
+        li.goto.disabled.info(data-goto='3', data-error="Make sure you've selected a Listing Type and entered a Location.", 3)
+          a(href="info") Info
+      h2 Create a new Listing
+      .steps-container
+        .step.type.current
+          h3 Choose a listing type:
+          .choose-type.clearfix(class=listingType)
+            a.gardener(href="#", data-type="gardener")
+              span Gardener
+            a.garden(href="#", data-type="garden")
+              span Garden
+            a.organic(href="#", data-type="organic")
+              span Organic Materials
+            a.tools(href="#", data-type="tools")
+              span Tools & Stuff
+          input#listingType(type="hidden", name="type",value=listingType)
+          p.gardener You are listing as a Gardener looking for space to garden.
+          p.garden You are listing available space for someone else to garden in.
+          p.organic You are listing extra organic materials to share (i.e. Mulch, worms, compost...etc).
+          p.tools You are listing extra tools to share.
+          button.next.goto(type="button", data-goto='2') next
+        .step.location
+          h3 Enter the location
+          input.location(name="location", placeholder="location, city, zip")
+          button.get-location.btn-small go
+          #location-results
+            h3 Choose your location
+            .location-results
+          input#location-address(type="hidden", name="address")
+          input#location-city(type="hidden", name="city")
+          input#location-state(type="hidden", name="state")
+          input#location-zip(type="hidden", name="zip")
+          input#location-country(type="hidden", name="country")
+          input#location-latLng(type="hidden", name="latLng")
+          button.next.disabled.goto(type="button", data-goto='3', data-error="Please enter and select a location") next
+        .step.info
+          h3 Tell us about your listings
+          .field
+            input(type='text', name="title", placeholder='title', required, data-parsley-length="[1, 100]")
+          .field
+            textarea(name="description", placeholder="Describe your Listing", required, data-parsley-length="[6, 240]", data-parsley-error-message="Tell us something about your listing, not too short, not too long. =)")
+          //.field
+            label(for="pic") pic
+              input(type="file", name="pic")
+          .field
+            input(type="hidden", name="imgData")
+          .field
+            textarea.gardener(type="text", name="bio", placeholder="Gardener Bio", data-parsley-length="[6, 500]", data-parsley-error-message="Tell us something about your gardening experience (no more than 500 chars).", data-parsley-group="gardener")
+            p.note We take your privacy seriously, and will never share your listed address or email with anyone on the site.
+              a.info(href="#info", data-info="By default, our map will display a marker on random location within a block or two of the location you enter - check this box to display a marker on exact location. This can be useful for things like community gardens or public spaces, or if you just don't care!") more info
+          .field
+            label
+              input(type="checkbox", name="marker", value="precise")
+              = 'display precise marker'
+          button.next.disabled.submit(type="submit", data-error="Please fill out all *required fields") Create your Listing!
+  script(type="text/javascript", src="/javascripts/page/listings.new.js")
+
+include ../snippets/footer-lite.jade

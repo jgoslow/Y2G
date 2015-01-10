@@ -1,0 +1,19 @@
+if rcpt
+  h1 hello
+if user
+  h2 Send a Message to
+  form#login-form(method="post", action="/account/login", onsubmit="account.login('#login-form'); return false;")
+    .field
+      input(type='email', name='email', value='', placeholder='email address', required, data-parsley-type="email", data-required-message="We need a valid email to activate your account.")
+    .field
+      input(type='password', name="password" placeholder='password')
+    input(type="hidden", name="rcpt", value=rcpt)
+    input.next.submit(type='submit', value='login')
+    p Don't have an account?
+    a.actually-sign-up(href='#', onclick="openModal( '', '/account/sign-up/', 'sign-up'); return false;", value='signup', data-modaltype='signup openmodal') Create one here!
+else
+  h2 There has been an error.
+  p Either the user has closed their account or there was a technical error.  Please try again later.
+
+script.
+  console.log(user)
