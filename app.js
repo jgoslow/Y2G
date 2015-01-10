@@ -89,9 +89,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 var routes = require('./routes/index');
 account = require('./routes/account');
 listings = require('./routes/listings');
+messages = require('./routes/messages');
 app.use('/', routes);
 app.use('/account', account);
 app.use('/listings', listings);
+app.use('/messages', listings);
 
 
 // NEW
