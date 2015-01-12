@@ -115,7 +115,7 @@ router.post('/sign-up/', function(req, res) {
       });
       newUser.save(function(err, user) {
         var newUser = user;
-        done(err, token, newUser, 'done');
+        done(err, token, newUser);
       });
     },
     function(token, newUser, done) {
@@ -129,23 +129,17 @@ router.post('/sign-up/', function(req, res) {
       request.post({
         url:     url,
         form:    options
-      }, function(error, response, body, newUser){
-        console.log(body);
-        done(err, newUser, response)
+      }, function(err, response){
+        done(err, response, 'done')
       });
-      /*request.post(url+ options, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          console.log(body) // Print the body of response.
-        }
-      });*/
     }
-    ], function(err, newUser, response) {
-      //if (err) return next(err);
+    ], function(err, response, body) {
       if (err) {
-        console.log(err, newUser, response);
+        console.log(err, response);
         res.status(409).send(err);
       } else {
-      res.status(200).send(newUser.email);
+        var email = JSON.parse(response.body)[0].email;
+        res.status(200).send(email);
       }
     });
 
@@ -179,17 +173,25 @@ router.get('/restricted', restrict, function(req, res){
 /* GET Activation Page. */
 router.get('/activate/', function(req, res) {
   User.findOne({ activationToken: req.query.token }, function(err, user) {
+    if (user.active == true) {
+      req.flash('error', 'Your account is already activated, please login or request a password reset.');
+      return res.redirect('/');
+    } else {
       if (user.activationToken == req.query.token) {
         user.active = true;
         console.log(user);
         user.save(function(err, user) {
           req.logIn(user, function(err) {
             if (err) return next(err);
-            req.flash('success', 'You are now logged in');
+            req.flash('success', 'Your account is now active.  We went ahead and logged you in.');
             return res.redirect('/');
           });
         });
+      } else {
+        req.flash('error', 'There has been an error - please try to login or recreate your account.');
+        return res.redirect('/');
       }
+    }
   });
 });
 

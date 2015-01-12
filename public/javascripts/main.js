@@ -90,7 +90,7 @@ $('#message .close').click(function(){
 	$('#message').fadeOut();
 });
 $('body > .alert').append('<a class="close">').fadeIn();
-setTimeout(function(){ $('body > .alert').fadeOut(); }, 3000);
+setTimeout(function(){ $('body > .alert').fadeOut(); }, 5000);
 
 
 // Login & Signup Functions
@@ -107,8 +107,9 @@ account.signup = function(form) {
 			} else if (data == 'username exists') {
 
 			} else {
-				y2g.message('An email has been sent to '+data+'.<br><br>Please check your email and click the confirmation link.<br><br>If you do not receivce an email check your spam folder or contact <a href="support@y2g.org">support</a>.', 'success', 5);
+				y2g.message('SUCCESS!<br><br>An email has been sent to '+data+'.<br><br>Please check your email and click the confirmation link.<br><br>If you do not receive an email, check your spam folder or contact <a href="support@y2g.org">support</a>.', 'success', 6);
 				closeModal('sign-up');
+				$('#sign-up-form input').val('');
 			}
 		})
 		.done(function(data) {

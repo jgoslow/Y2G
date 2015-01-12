@@ -36,13 +36,13 @@ head
 
 body.home.page.page-id-6.page-template-default
   if messages.error
-    .alert.alert-danger
+    .alert.error
       div= messages.error
   if messages.info
-    .alert.alert-info
+    .alert.info
       div= messages.info
   if messages.success
-    .alert.alert-success
+    .alert.success
       div= messages.success
   #container.container
     block content
