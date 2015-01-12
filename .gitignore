@@ -2,3 +2,4 @@ config.json
 config.js
 .DS*
 node_modules
+.git.bfg*
