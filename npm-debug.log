@@ -1,7 +1,7 @@
 0 info it worked if it ends with ok
-1 verbose cli [ 'node', '/usr/local/bin/npm', 'start' ]
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'start' ]
 2 info using npm@1.4.28
-3 info using node@v0.10.33
+3 info using node@v0.10.34
 4 verbose run-script [ 'prestart', 'start', 'poststart' ]
 5 info prestart y2g@1.0.0
 6 info start y2g@1.0.0
@@ -17,10 +17,10 @@
 10 error You can get their info via:
 10 error     npm owner ls y2g
 10 error There is likely additional logging output above.
-11 error System Darwin 14.0.0
-12 error command "node" "/usr/local/bin/npm" "start"
-13 error cwd /Library/WebServer/localhost/y2g
-14 error node -v v0.10.33
+11 error System Linux 3.13.0-37-generic
+12 error command "/usr/local/bin/node" "/usr/local/bin/npm" "start"
+13 error cwd /var/www/Y2G
+14 error node -v v0.10.34
 15 error npm -v 1.4.28
 16 error code ELIFECYCLE
 17 verbose exit [ 1, true ]
