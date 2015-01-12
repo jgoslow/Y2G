@@ -21,7 +21,7 @@
     "moment": "*",
     "mongodb": "*",
     "mongojs": "*",
-    "mongoose": "*",
+    "mongoose": "3.8.21",
     "mongoose-auth": "*",
     "mongoose-unique-validator": "*",
     "monk": "*",
