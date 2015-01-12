@@ -21,7 +21,11 @@
     "moment": "*",
     "mongodb": "*",
     "mongojs": "*",
+<<<<<<< HEAD
     "mongoose": "*",
+=======
+    "mongoose": "3.8.21",
+>>>>>>> f4266b22a6d0c0a7a151bf0079ad57bd408a8b25
     "mongoose-auth": "*",
     "mongoose-unique-validator": "*",
     "monk": "*",
