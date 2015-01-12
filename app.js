@@ -23,8 +23,6 @@ var connStr = 'mongodb://'+config.db.user+':'+config.db.pass+'@'+config.db.host+
 var dbURL = config.db.user+':'+config.db.pass+'@'+config.db.host+':'+config.db.port+'/'+config.db.db;
 var collections = ["listings", "users"];
 
-<<<<<<< HEAD
-=======
 var mailin = require('mailin');
 mailin.start({
   port: 25,
@@ -54,7 +52,6 @@ mailin.on('message', function (connection, data, content) {
    * Use parsed message `data` directly or use raw message `content`. */
 });
 
->>>>>>> f4266b22a6d0c0a7a151bf0079ad57bd408a8b25
 // Passport Funcs
 passport.use(new LocalStrategy({
     usernameField: 'email'
@@ -125,11 +122,7 @@ messages = require('./routes/messages');
 app.use('/', routes);
 app.use('/account', account);
 app.use('/listings', listings);
-<<<<<<< HEAD
-app.use('/messages', listings);
-=======
 app.use('/messages', messages);
->>>>>>> f4266b22a6d0c0a7a151bf0079ad57bd408a8b25
 
 
 // NEW
