@@ -24,7 +24,10 @@ var dbURL = config.db.user+':'+config.db.pass+'@'+config.db.host+':'+config.db.p
 var collections = ["listings", "users"];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 3c7dcce2b593b1ea83ddcb2a729cd422ff9478f7
 var mailin = require('mailin');
 mailin.start({
   port: 25,
@@ -54,7 +57,10 @@ mailin.on('message', function (connection, data, content) {
    * Use parsed message `data` directly or use raw message `content`. */
 });
 
+<<<<<<< HEAD
 >>>>>>> f4266b22a6d0c0a7a151bf0079ad57bd408a8b25
+=======
+>>>>>>> 3c7dcce2b593b1ea83ddcb2a729cd422ff9478f7
 // Passport Funcs
 passport.use(new LocalStrategy({
     usernameField: 'email'
@@ -126,10 +132,14 @@ app.use('/', routes);
 app.use('/account', account);
 app.use('/listings', listings);
 <<<<<<< HEAD
+<<<<<<< HEAD
 app.use('/messages', listings);
 =======
 app.use('/messages', messages);
 >>>>>>> f4266b22a6d0c0a7a151bf0079ad57bd408a8b25
+=======
+app.use('/messages', messages);
+>>>>>>> 3c7dcce2b593b1ea83ddcb2a729cd422ff9478f7
 
 
 // NEW
