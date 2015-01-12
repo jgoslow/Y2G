@@ -93,14 +93,14 @@ h1 {
   font-family:'Font Awesome';
 }
 
-.success {
+.success, .alert-success {
   color: #82c341;
 }
   .success-box {
     background-color: #82c341;
     color: white;
   }
-.error {
+.error, .alert-error {
   color: #f05139;
 }
   .error-box {
