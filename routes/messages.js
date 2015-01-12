@@ -26,15 +26,14 @@ router.get('/', function(req, res) {
 
 /*Send a Message Page */
 router.get('/send', function(req, res) {
-  console.log(req);
-  res.render('message/message', {
+  res.render('messages/message', {
     user: req.user,
     rcpt: req.rcpt
   });
 });
 router.post('/send', function(req, res) {
   var messageInfo = req.body;
-  console.log(messageInfo);
+  console.log(req);
   var userId = messageInfo.userId;
   // create a user a new user
   /*async.waterfall([
@@ -102,81 +101,5 @@ router.post('/send', function(req, res) {
 });
 
 
-/* POST Check if Email exists. */
-router.post('/email-check', function(req, res){
-  if (res.req.query.email) {
-    db.users.find({email:res.req.query.email}).count(function(err, response) {
-      console.log(response);
-      if (response == '0') {
-        res.status('email is available').send('false').end();
-      } else {
-        res.status('email is in use').send('true').end();
-      }
-
-    });
-  } else {
-    res.send('email required');
-  }
-});
-
-
-
-router.get('/user-test', function(req, res){
-  mongoose.connect(dbURL, function(err) {
-    if (err) throw err;
-    console.log('Successfully connected to MongoDB');
-  });
-  // create a user a new user
-  var testUser = new User({
-    name: 'jamar',
-    email: 'jmar777@hello.com',
-    password: 'Password'
-  });
-
-  // save user to database
-  testUser.save(function(err) {
-    if (err) throw err;
-    if (err && (11000 === err.code || 11001 === err.code)) {
-      // custom error message
-      throw 'email already in use';
-    }
-
-    // fetch user and test password verification
-    User.findOne({ email: 'jmar777@hello.com' }, function(err, user) {
-      if (err) throw err;
-
-      // test a matching password
-      user.comparePassword('Password', function(err, isMatch) {
-        if (err) throw err;
-        console.log('Password:', isMatch); // -&gt; Password123: true
-      });
-
-      // test a failing password
-      user.comparePassword('123Password', function(err, isMatch) {
-        if (err) throw err;
-        console.log('123Password:', isMatch); // -&gt; 123Password: false
-      });
-    });
-  });
-});
-
-/* GET users listing. */
-router.get('/users/', function(req, res) {
-  db.users.find({}).limit(5000, function(err, response) {
-    res.send(response);
-  });
-});
-
 
 module.exports = router;
-
-function restrict(req, res, next) {
-  if (req.session.user) {
-    next();
-  } else {
-    req.session.error = 'Access denied!';
-    res.redirect('/login');
-  }
-}
-
-var y2g = function(){}
