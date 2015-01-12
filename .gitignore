@@ -3,3 +3,4 @@ config.js
 .DS*
 node_modules
 .git.bfg*
+npm-debug.log

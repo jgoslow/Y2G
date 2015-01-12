@@ -129,8 +129,9 @@ router.post('/sign-up/', function(req, res) {
       request.post({
         url:     url,
         form:    options
-      }, function(error, response, body){
+      }, function(error, response, body, newUser){
         console.log(body);
+        done(err, newUser, response)
       });
       /*request.post(url+ options, function (error, response, body) {
         if (!error && response.statusCode == 200) {
@@ -138,10 +139,10 @@ router.post('/sign-up/', function(req, res) {
         }
       });*/
     }
-    ], function(err, newUser) {
+    ], function(err, newUser, response) {
       //if (err) return next(err);
       if (err) {
-        console.log(err);
+        console.log(err, newUser, response);
         res.status(409).send(err);
       } else {
       res.status(200).send(newUser.email);
