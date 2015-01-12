@@ -26,15 +26,23 @@ router.get('/', function(req, res) {
 
 /*Send a Message Page */
 router.get('/send', function(req, res) {
+<<<<<<< HEAD
   console.log(req);
   res.render('message/message', {
+=======
+  res.render('messages/message', {
+>>>>>>> f4266b22a6d0c0a7a151bf0079ad57bd408a8b25
     user: req.user,
     rcpt: req.rcpt
   });
 });
 router.post('/send', function(req, res) {
   var messageInfo = req.body;
+<<<<<<< HEAD
   console.log(messageInfo);
+=======
+  console.log(req);
+>>>>>>> f4266b22a6d0c0a7a151bf0079ad57bd408a8b25
   var userId = messageInfo.userId;
   // create a user a new user
   /*async.waterfall([
@@ -102,6 +110,7 @@ router.post('/send', function(req, res) {
 });
 
 
+<<<<<<< HEAD
 /* POST Check if Email exists. */
 router.post('/email-check', function(req, res){
   if (res.req.query.email) {
@@ -180,3 +189,7 @@ function restrict(req, res, next) {
 }
 
 var y2g = function(){}
+=======
+
+module.exports = router;
+>>>>>>> f4266b22a6d0c0a7a151bf0079ad57bd408a8b25
