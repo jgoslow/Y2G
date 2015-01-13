@@ -10,21 +10,6 @@ jQuery(document).ready(function($) {
     	return false;
 	});
 
-
-	if (!$('#modal')) {
-		$('body').append('<div id="modal"></div><div id="modal_bg"></div>');
-	}
-	$('a.modal_pdf').each(function(){
-		var url = $(this).attr('href');
-		$(this).before('<a href="'+url+'" class="download outside_link">download pdf</a>')
-	}).click(function(){
-		var url = $(this).attr('href');
-		var html = '<object data="'+url+'#view=FitH,100" type="application/pdf" width="100%" height="100%"><iframe src="http://docs.google.com/viewer?url='+url+'&embedded=true" width="100%" height="100%" style="border: none;"></iframe></object>';
-		$('.modal').css('width','80%').css('left','10%').html(html);
-		$('#modal, .modal_bg').fadeIn();
-		return false;
-	});
-
 	$('.modal_bg, .modal:after, .modal_close').click(function(){
 		//$('.modal, .modal_bg, .fullscreen_gallery').fadeOut();
 		closeModal();
@@ -41,6 +26,8 @@ jQuery(document).ready(function($) {
 });
 
 function openModal(obj, target, type) {
+	if (type == 'message') { $('.modal-message').remove(); }
+
 	$('#modal').data('modal-type', type);
 	$('html, body').css('overflow', 'hidden')
 
@@ -64,19 +51,16 @@ function openModal(obj, target, type) {
 				return false;
 			},
 		});
-
-
 	} else {
 		console.log('modal exists');
 		$('.modal_bg, .modal-'+type).fadeIn();
 	}
-	if (obj != '') {
+	/*if (obj != '') {
 		if (obj.attr('data-function') != undefined) {
 			var func = obj.attr('data-function');
 			executeFunctionByName(func, window);
 		}
-	}
-
+	}*/
 
 	setTimeout(function(){
 		var w = $(window).width(),

@@ -98,8 +98,10 @@ var account = function() {
 }
 account.signup = function(form) {
 	var form = $(form),
-			email = form.find('.email').val();
+			email = form.find('.email').val(),
+			submit =form.find('input[type="submit"]');
 
+	submit.attr('disabled','disabled');
 	if ( form.parsley().isValid() ) {
 		$.post('/account/sign-up', form.serialize(), function(data){
 			if (data == 'email exists') {
@@ -109,7 +111,7 @@ account.signup = function(form) {
 			} else {
 				y2g.message('SUCCESS!<br><br>An email has been sent to '+data+'.<br><br>Please check your email and click the confirmation link.<br><br>If you do not receive an email, check your spam folder or contact <a href="support@y2g.org">support</a>.', 'success', 6);
 				closeModal('sign-up');
-				$('#sign-up-form input').val('');
+				$('#sign-up-form input:not([type="submit"])').val('');
 			}
 		})
 		.done(function(data) {
@@ -123,7 +125,7 @@ account.signup = function(form) {
 			//alert('There has been an error, please contact Y2G support or try again later.');
 		})
 		.always(function() {
-
+			setTimeout(function(){ submit.removeAttr('disabled'); }, 5000);
 		});
 	}
 	return false;
@@ -178,6 +180,39 @@ function signup() {
 		console.log($(this).attr('name') + ' has been stored as: ' + $(this).val());
 	});
 	y2g.message("Thanks for signing up! We've logged you in.", 'success', 2);
+}
+
+// Message Functions
+var messages = function(){};
+
+messages.send = function(form){
+	var form = $(form);
+	debugger;
+	if ( form.parsley().isValid() ) {
+		$.post('/messages/send', form.serialize(), function(data){
+			console.log(data);
+			$('body').append('<audio id="heidi" style="opacity: 0;"><source src="http://www.y2g.org/assets/public/heidi.mp3" type="audio/mpeg"></audio>');
+			closeModal('message');
+			setTimeout(function(){
+				y2g.message('Success!<br><br> Your message has been sent to ' + data + '. What are you gonna do now?<br><br> Go Plant something...', 'success', 4);
+			}, 1000);
+			setTimeout(function(){
+				document.getElementById('heidi').play();
+				y2g.message('Or else...', 'error', 5);
+			}, 5000);
+		})
+		.done(function(data) {
+			//closeModal('sign-up');
+		})
+		.fail(function(XMLHttpRequest, textStatus, errorThrown){
+			console.log('status:' + XMLHttpRequest.status + ', status text: ' + XMLHttpRequest.statusText);
+			alert('There has been an error, please contact Y2G support or try again later.');
+		})
+		.always(function() {
+
+		});
+	}
+	return false;
 }
 
 // Create Listing

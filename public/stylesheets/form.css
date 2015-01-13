@@ -114,7 +114,7 @@ input:focus, textarea:focus, option:focus {
     color: #f05139;
     margin: 0 4px;
   }
-.next {
+.next, input.next[type="submit"] {
   height: 50px;
   display: block;
   margin: 45px auto 0;
@@ -132,6 +132,9 @@ input:focus, textarea:focus, option:focus {
   transition:all .25s ease-in-out;
   cursor: pointer;
 }
+  input.next[type="submit"]:focus {
+    color: black;
+  }
   .next.disabled {
     background-color: #acaa90;
   }

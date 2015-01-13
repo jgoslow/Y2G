@@ -20,86 +20,143 @@ var mongoose = require('mongoose'),
 
 /* Main Account Page. */
 router.get('/', function(req, res) {
-  res.send('account page');
+  res.send('account page', {
+    user: req.user
+  });
 });
 
 
 /*Send a Message Page */
 router.get('/send', function(req, res) {
-  console.log(req);
-  res.render('message/message', {
+  console.log(req.query);
+  res.render('messages/message', {
     user: req.user,
-    rcpt: req.rcpt
+    listingTitle: req.query.listingTitle,
+    listingId: req.query.listingId,
+    to: req.query.owner,
+    ownerName: req.query.ownerName,
   });
 });
 router.post('/send', function(req, res) {
-  var messageInfo = req.body;
-  console.log(req);
-  console.log(messageInfo);
-  var userId = messageInfo.userId;
-  // create a user a new user
-  /*async.waterfall([
-    function(done) {
-
+  async.waterfall([
+    function(done) { // If not a user, check Captcha
+      var messageInfo = req.body,
+          rc = messageInfo['g-recaptcha-response'],
+          userId = messageInfo.userId;
+          ip = req.connection.remoteAddress,
+          secret = config.google.recaptcha,
+          url = 'https://www.google.com/recaptcha/api/siteverify?secret='+secret+'&response='+rc+'&remoteip='+ip;
+      if (req.user) {
+        done(null, messageInfo);
+      } else {
+        request.post(url, function (err, response, body) {
+          var passed = JSON.parse(body)["success"];
+          if (passed == true) {
+            console.log('new message: sender is human');
+            done(err, messageInfo)
+          } else {
+            return res.status('406').send('You failed the captcha, please reload the page and try again');
+          }
+        });
+      }
     },
-    function(userInfo, done) {
+    function(messageInfo, done) { // Get Sender User Info
+      if (messageInfo.from.indexOf("@") > -1) { // If not logged in
+        var sender = [];
+        sender.email = messageInfo.from;
+        sender.name = messageInfo.fromName;
+        console.log('new message: get sender info');
+        done(null, messageInfo, sender);
+      } else {
+        //console.log(messageInfo.from);
+        User.findById(messageInfo.from, function(err, sender){
+          //console.log(messageInfo);
+          //console.log(user);
+          console.log('new message: get sender info');
+          done(err, messageInfo, sender);
+        });
+      }
+    },
+    function(messageInfo, sender, done) { // Get Sender User Info
+      User.findById(messageInfo.to, function(err, rcpt){
+        //console.log(messageInfo);
+        //console.log(user);
+        console.log('new message: get recipient info');
+        done(err, messageInfo, sender, rcpt);
+      });
+    },
+    function(messageInfo, sender, rcpt, done) {
+      crypto.randomBytes(20, function(err, buf) {
+        var token = buf.toString('hex');
+        messageInfo.token = token;
+        done(err, messageInfo, sender, rcpt, token);
+      });
+    },
+    function(messageInfo, sender, rcpt, token, done) { // Creat and Save the new message
+      if (messageInfo.phone) { sender.phone = messageInfo.phone; } // include phone if they've entered it
+      if (!messageInfo.fromName) { messageInfo.fromName = ''; }
       var newMessage = new Message({
-        to: messageInfo.to,
-        from: messageInfo,
-        listing: { type: String, required: true },
-        message: { type: String, required: true },
-        dateSent: { type: Date, required: true },
-        dateRead: Date,
-        name: userInfo.name,
-        email: userInfo.email,
-        password: userInfo.password,
-        activationToken: token,
-        active: false
+        to: rcpt.id, //rcpt.name + ' <' + rcpt.email + '>',
+        from: messageInfo.from, //messageInfo.fromName + ' <' + messageInfo.from + '>',
+        listing: messageInfo.listingTitle,
+        message: messageInfo.message,
+        respondAddress: token
       });
-      newUser.save(function(err, user) {
-        var newUser = user;
-        done(err, token, newUser, 'done');
+      newMessage.save(function(err, message){
+        //console.log(message);
+        console.log('new message: saved');
+        done(err, messageInfo, sender, rcpt);
       });
     },
-    function(token, newUser, done) {
+    function(messageInfo, sender, rcpt, done) { // Send Email and End Function
+      //console.log(messageInfo);
+      //console.log(sender);
+      //console.log(rcpt);
+
       var url = 'https://mandrillapp.com/api/1.0/messages/send-template.json';
-      var options = require('../lib/email/confirmation');
-      options.message.to[0].email = newUser.email;
-      options.message.to[0].name = newUser.name;
-      options.message.merge_vars[0].rcpt = newUser.email;
-      options.message.merge_vars[0].vars[0].content = 'http://'+req.headers.host+'/account/activate/?token='+newUser.activationToken;
-      options.message.merge_vars[0].vars[1].content = newUser.name;
-      request.post({
+      var options = require('../lib/email/message');
+      options.message.from_name = sender.name;
+      options.message.from_email = messageInfo.token+'@messages.y2g.org';
+      options.message.subject = 'Response to your listing: "' + messageInfo.listingTitle + '"';
+      options.message.to[0].email = rcpt.email;
+      options.message.to[0].name = rcpt.name;
+
+      options.message.headers['Reply-To'] = messageInfo.token+'@messages.y2g.org';
+      options.message.merge_vars[0].rcpt = rcpt.email;
+
+      options.message.merge_vars[0].vars[0].content = rcpt.name; // NAME
+      options.message.merge_vars[0].vars[1].content = messageInfo.message; // MESSAGE
+      options.message.merge_vars[0].vars[2].content = rcpt.email; // TOEMAIL
+      options.message.merge_vars[0].vars[3].content = sender.name; // FROMNAME
+      options.message.merge_vars[0].vars[4].content = config.url+'messages/respond?token='+messageInfo.token; // RESPONDLINK
+      options.message.merge_vars[0].vars[5].content = messageInfo.listingTitle; // LISTINGTITLE
+      options.message.merge_vars[0].vars[6].content = config.url+'?listing='+messageInfo.listingId; // LISTINGLINK
+      
+      if (sender.phone) { sender.phone = 'phone: '+sender.phone; } else { sender.phone = ''; }
+      options.message.merge_vars[0].vars[7].content = sender.phone; // PHONE
+
+      var postOpts = {
         url:     url,
         form:    options
-      }, function(error, response, body){
-        console.log(body);
+      };
+
+      request.post( postOpts, function(err, response){
+        console.log('new message: sent');
+        //console.log(response, rcpt.name);
+        done(err, response, rcpt.name, 'done')
       });
-      /*request.post(url+ options, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          console.log(body) // Print the body of response.
-        }
-      });
-    }], function(err, newUser) {
+    }
+    ],
+    function(err, response, name, body) {
       //if (err) return next(err);
       if (err) {
         console.log(err);
         res.status(409).send(err);
       } else {
-        res.status(200).send(newUser.email);
+        res.status(200).send(name);
       }
     }
-  );*/
-
-  /*NAME
-  MESSAGE
-  TOEMAIL -
-  FROMNAME
-  FROMEMAIL
-  RESPONDLINK
-  LISTINGNAME
-  LISTINGLINK
-  */
+  );
 });
 
 /* GET users listing. */

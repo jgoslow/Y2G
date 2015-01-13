@@ -155,7 +155,8 @@ var listings = function(location, user) {
         infoWindow.close();
       });
       markersArray.push(marker);
-      var content = '<div id="window-'+id+'" class="info-window"><div class="info-window_inner_wrap"><h4>'+title+'</h4><div class="info">'+image_html+'<span class="author"><strong>BY:</strong> <a href="#" onclick="user.contact('+owner+'); return false;">'+ownerName+'</a></span><span class="date"><strong>DATE:</strong> '+created+'</span><span class="date"><strong>TYPE:</strong> '+type+'</span></div><div class="description">'+desc+'</div><a href="#'+owner+'" onclick="user.contact('+owner+'); return false;" class="contact" title="Contact '+name+'"><span class="fa">&#xf003;</span> Send a Note</a><a href="#'+id+'" onclick="listings.flag('+id+'); return false;" class="flag" title="flag this post">flag this post</a></div></div>';
+      var contactModal = 'onclick="openModal(this, \'/messages/send?owner='+owner+'&ownerName='+ownerName+'&listingId='+id+'&listingTitle='+title+'\', \'message\'); return false;" href="/messages/send?to='+owner+'" data-modal-type="message"',
+          content = '<div id="window-'+id+'" class="info-window"><div class="info-window_inner_wrap"><h4>'+title+'</h4><div class="info">'+image_html+'<span class="author"><strong>BY:</strong><a href="#" '+contactModal+'>'+ownerName+'</a></span><span class="date"><strong>DATE:</strong> '+created+'</span><span class="date"><strong>TYPE:</strong> '+type+'</span></div><div class="description">'+desc+'</div><a '+contactModal+' class="contact openmodal" title="Contact '+name+'"><span class="fa">&#xf003;</span> Send a Note</a><a href="#'+id+'" onclick="listings.flag('+id+'); return false;" class="flag" title="flag this post">flag this post</a></div></div>';
 
       google.maps.event.addListener(marker, 'click', function() {
         console.log($('#window-'+id));

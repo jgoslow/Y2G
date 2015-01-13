@@ -173,23 +173,28 @@ router.get('/restricted', restrict, function(req, res){
 /* GET Activation Page. */
 router.get('/activate/', function(req, res) {
   User.findOne({ activationToken: req.query.token }, function(err, user) {
-    if (user.active == true) {
-      req.flash('error', 'Your account is already activated, please login or request a password reset.');
+    if (!user) {
+      req.flash('error', 'There has been an error - please try to login or recreate your account.');
       return res.redirect('/');
     } else {
-      if (user.activationToken == req.query.token) {
-        user.active = true;
-        console.log(user);
-        user.save(function(err, user) {
-          req.logIn(user, function(err) {
-            if (err) return next(err);
-            req.flash('success', 'Your account is now active.  We went ahead and logged you in.');
-            return res.redirect('/');
-          });
-        });
-      } else {
-        req.flash('error', 'There has been an error - please try to login or recreate your account.');
+      if (user.active == true) {
+        req.flash('error', 'Your account is already activated, please login or request a password reset.');
         return res.redirect('/');
+      } else {
+        if (user.activationToken == req.query.token) {
+          user.active = true;
+          console.log(user);
+          user.save(function(err, user) {
+            req.logIn(user, function(err) {
+              if (err) return next(err);
+              req.flash('success', 'Your account is now active.  We went ahead and logged you in.');
+              return res.redirect('/');
+            });
+          });
+        } else {
+          req.flash('error', 'There has been an error - please try to login or recreate your account.');
+          return res.redirect('/');
+        }
       }
     }
   });

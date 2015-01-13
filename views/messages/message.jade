@@ -1,9 +1,41 @@
-h2 Message
-form#login-form(method="post", action="/account/login", onsubmit="account.login($(this)); return false;")
-    .field
-      input(type='email', name='email', value='', placeholder='email address', required, data-parsley-type="email", data-required-message="We need a valid email to activate your account.")
-    .field
-      input(type='password', name="password" placeholder='password')
-    input.next.submit(type='submit', value='login')
-    p Don't have an account?
-      a.actually-sign-up(href='#', onclick="openModal( '', '/account/sign-up/', 'sign-up'); return false;", value='signup', data-modaltype='signup openmodal') Create one here!
+if !to
+  h2 There has been an error.
+  p
+    a(href="/") Return home.
+else
+  - if (ownerName == 'undefined') { ownerName = to } // Set Name
+  h2 Send a note
+  form#message-form(method="post", action="/messages/send", onsubmit="messages.send(this); return false;")
+      input(type="hidden", name="to", value="#{to}")
+      input(type="hidden", name="listingId", value="#{listingId}")
+      input(type="hidden", name="listingTitle", value="#{listingTitle}")
+      .field
+        .text listing:&nbsp;
+          = listingTitle
+      .field
+        .text to:&nbsp;
+          = ownerName
+      .field
+        textarea(name='message', value='', placeholder='type your note.', required)
+      if user
+        input(type="hidden", name="from", value="#{user.id}")
+      else
+        .field
+          input(type="text", name="fromName", value="", required, placeholder="Your Name")
+        .field
+          input(type="email", name="from", value="", required, placeholder="Your Email")
+        .field
+          p Want to send anonymously?  Login or Create an Account.
+      .field
+        input(type="text", name="phone", value="", placeholder="Optional: your phone number")
+      if !user
+        .field
+          .g-recaptcha(data-sitekey="6Lf9XwATAAAAAPuqxBekRTPy_e7n-jMqGkNNyMnk")
+          script(type="text/javascript" src="https://www.google.com/recaptcha/api.js")
+      input.next.submit(type='submit', value='send')
+      p Don't have an account?
+        a.actually-sign-up(href='#', onclick="openModal( '', '/account/sign-up/', 'sign-up'); return false;", value='signup', data-modaltype='signup openmodal') Create one here!
+
+script(type="text/javascript", src="/javascripts/page/message.js")
+
+include ../snippets/footer-lite.jade
