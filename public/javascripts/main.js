@@ -199,7 +199,7 @@ messages.send = function(form){
 			setTimeout(function(){
 				document.getElementById('heidi').play();
 				y2g.message('Or else...', 'error', 5);
-			}, 5000);
+			}, 6000);
 		})
 		.done(function(data) {
 			//closeModal('sign-up');

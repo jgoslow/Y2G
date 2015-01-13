@@ -55,12 +55,6 @@ function openModal(obj, target, type) {
 		console.log('modal exists');
 		$('.modal_bg, .modal-'+type).fadeIn();
 	}
-	/*if (obj != '') {
-		if (obj.attr('data-function') != undefined) {
-			var func = obj.attr('data-function');
-			executeFunctionByName(func, window);
-		}
-	}*/
 
 	setTimeout(function(){
 		var w = $(window).width(),

@@ -21,7 +21,10 @@ Profile - add edit profile button
 
 Create Account
 - after first time logging in - ask if they want to list as a master gardener
+<<<<<<< HEAD
 - after deleting account - delete all listings
+=======
+>>>>>>> 874eb5fafbdd7f447c3e2e5abf1ec66e07d1fb97
 
 Local Storage Save
 - what gets stored? timeouts?
@@ -35,7 +38,10 @@ Add Google Analytics - track:
 - user info
   - contacts
   - listings
+<<<<<<< HEAD
 - errors?
+=======
+>>>>>>> 874eb5fafbdd7f447c3e2e5abf1ec66e07d1fb97
 
 Security:
 - different db user with only read priveleges for "login"

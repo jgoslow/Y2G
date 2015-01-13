@@ -131,7 +131,7 @@ router.post('/send', function(req, res) {
       options.message.merge_vars[0].vars[4].content = config.url+'messages/respond?token='+messageInfo.token; // RESPONDLINK
       options.message.merge_vars[0].vars[5].content = messageInfo.listingTitle; // LISTINGTITLE
       options.message.merge_vars[0].vars[6].content = config.url+'?listing='+messageInfo.listingId; // LISTINGLINK
-      
+
       if (sender.phone) { sender.phone = 'phone: '+sender.phone; } else { sender.phone = ''; }
       options.message.merge_vars[0].vars[7].content = sender.phone; // PHONE
 
@@ -157,6 +157,7 @@ router.post('/send', function(req, res) {
       }
     }
   );
+
 });
 
 /* GET users listing. */

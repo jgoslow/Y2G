@@ -61,7 +61,6 @@ router.get('/add', function(req, res) {
       newUpdated = moment().format("YYYY-MM-DDTHH:mm:ssZ"),
       newExpires = moment(date, "YYYY-MM-DDTHH:mm:ssZ").add(1, 'years').format("YYYY-MM-DDTHH:mm:ssZ"); //'YYYY-MM-DD hh:mma'
   var newLatLng = JSON.parse(decodeURI(listingInfo.latLng));
-  console.log('owner:'+listingInfo.ownerName);
   var newListing = new Listing({
       owner: listingInfo.owner,
       ownerName: listingInfo.ownerName,
