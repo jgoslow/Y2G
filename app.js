@@ -50,7 +50,29 @@ mailin.on('message', function (connection, data, content) {
   console.log(data);
   /* Do something useful with the parsed message here.
    * Use parsed message `data` directly or use raw message `content`. */
+   async.waterfall([
+     function(done) {
+       // get response token
+       // get message from response token
+       // get sender, rcpt
+       // use send API function (needs different constructor to give body context...  maybe not.)
+
+
+       var response = '';
+       done(err, response, 'done');
+     }
+     ],
+     function(err, response) {
+       //if (err) return next(err);
+       if (err) {
+         console.log(err);
+         res.status(400).send(err);
+       } else {
+         res.status(200).send(response);
+       }
+     });
 });
+
 
 // Passport Funcs
 passport.use(new LocalStrategy({
