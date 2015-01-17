@@ -118,6 +118,8 @@ router.post('/send', function(req, res) {
       //console.log(sender);
       //console.log(rcpt);
 
+      console.log('message content: '+newMessage.message);
+
       var url = 'https://mandrillapp.com/api/1.0/messages/send-template.json';
       var options = require('../lib/email/message');
       options.message.from_name = newMessage.fromName;

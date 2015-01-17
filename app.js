@@ -77,10 +77,12 @@ mailin.on('message', function (connection, data, content) {
       , rcpt
       ;
 
+      console.log('message content: '+newMessage.thread[newMessage.thread.length-1]);
+
       options.message.subject = 'Re: Response to your listing: "' + newMessage.listingTitle + '"';
       options.message.from_email = newMessage.respondToken+'@messages.y2g.org';
       options.message.headers['Reply-To'] = newMessage.respondToken+'@messages.y2g.org';
-      options.message.merge_vars[0].vars[1].content = newMessage.message; // MESSAGE
+      options.message.merge_vars[0].vars[1].content = newMessage.thread[newMessage.thread.length-1]; // MESSAGE
       options.message.merge_vars[0].vars[4].content = config.url+'messages/respond?token='+newMessage.responseToken; // RESPONDLINK
       options.message.merge_vars[0].vars[6].content = config.url+'?listing='+newMessage.listing; // LISTINGLINK
       options.message.merge_vars[0].vars[5].content = newMessage.listingTitle; // LISTINGTITLE
