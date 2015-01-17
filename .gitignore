@@ -4,3 +4,4 @@ config.js
 node_modules
 .git.bfg*
 npm-debug.log
+.tmp*
