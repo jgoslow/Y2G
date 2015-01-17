@@ -143,7 +143,7 @@ account.login = function(form) {
 				closeModal('login');
 				y2g.message('You are now logged in. =)<br><br>reloading..', 'success', 2);
 				setTimeout(function(){
-					setTimeout(function(){location.reload();},1000);
+					setTimeout(function(){location.reload();},500);
 				},1000);
 			}
 		})
