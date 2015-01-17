@@ -194,7 +194,7 @@ var listings = function(location, user) {
       })
       .done(function() {
         closeModal('new-listing');
-        y2g.message('Your listing has been created!<br><br> Click "View Listings" or search in your area to see it!', 'success', 5);
+        y2g.message('Your listing has been created!<br><br> Click "Edit listings" or search in your area to see it!', 'success', 5);
       })
       .fail(function(XMLHttpRequest, textStatus, errorThrown){
         alert('status:' + XMLHttpRequest.status + ', status text: ' + XMLHttpRequest.statusText);

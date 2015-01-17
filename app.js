@@ -9,11 +9,13 @@ var flash = require('express-flash');
 var stylus = require('stylus');
 var hash = require('pwd').hash;
 var mongoose = require('mongoose');
-var nodemailer = require('nodemailer');
 var passport = require('passport');
+var Message = require('./lib/db/message-model');
+var request = require('request');
+var nodemailer = require('nodemailer');
 var LocalStrategy = require('passport-local').Strategy;
 var bcrypt = require('passport');
-var async = require('passport');
+var async = require('async');
 var crypto = require('crypto');
 var connect = require('connect');
 var http = require('http');
@@ -23,6 +25,7 @@ var connStr = 'mongodb://'+config.db.user+':'+config.db.pass+'@'+config.db.host+
 var dbURL = config.db.user+':'+config.db.pass+'@'+config.db.host+':'+config.db.port+'/'+config.db.db;
 var collections = ["listings", "users"];
 
+
 var mailin = require('mailin');
 mailin.start({
   port: 25,
@@ -31,53 +34,105 @@ mailin.start({
 mailin.on('authorizeUser', function(connection, username, password, done) {
   done(null, true);
   /*if (username == "johnsmith" && password == "mysecret") {
-    done(null, true);
-  } else {
-    done(new Error("Unauthorized!"), false);
-  }*/
+  done(null, true);
+} else {
+done(new Error("Unauthorized!"), false);
+}*/
 });
 mailin.on('startMessage', function (connection) {
   /* connection = {
-      from: 'sender@somedomain.com',
-      to: 'someaddress@yourdomain.com',
-      id: 't84h5ugf',
-      authentication: { username: null, authenticated: false, status: 'NORMAL' }
-  }
-  }; */
-  console.log(connection);
+  from: 'sender@somedomain.com',
+  to: 'someaddress@yourdomain.com',
+  id: 't84h5ugf',
+  authentication: { username: null, authenticated: false, status: 'NORMAL' }
+}
+}; */
+console.log(connection);
 });
 mailin.on('message', function (connection, data, content) {
   console.log(data);
+  var to;
+  data.to.forEach(function(rcpt){
+    if (rcpt.address.indexOf("messages.y2g.org") > -1) {
+      to = String(rcpt.address).replace('@messages.y2g.org','');
+    }
+  });
   /* Do something useful with the parsed message here.
-   * Use parsed message `data` directly or use raw message `content`. */
-   async.waterfall([
-     function(done) {
-       // get response token
-       // get message from response token
-       // get sender, rcpt
-       // use send API function (needs different constructor to give body context...  maybe not.)
+  * Use parsed message `data` directly or use raw message `content`. */
+  async.waterfall([
+    // Get Respond Message from DB and add message to thread
+    function(done) {
+      console.log(to);
+      Message.findOne({respondToken: to}, function(err, message){
+        message.thread.push({message:data.html});
+        message.save( function(err, message) {
+          done(err, message);
+        });
+      });
+    },
+    function(newMessage, done) {
+      console.log(newMessage);
+      var url = 'https://mandrillapp.com/api/1.0/messages/send-template.json'
+      , options = require('./lib/email/message-reply')
+      , rcpt
+      ;
 
+      options.message.subject = 'Re: Response to your listing: "' + newMessage.listingTitle + '"';
+      options.message.from_email = newMessage.respondToken+'@messages.y2g.org';
+      options.message.headers['Reply-To'] = newMessage.respondToken+'@messages.y2g.org';
+      options.message.merge_vars[0].vars[1].content = newMessage.message; // MESSAGE
+      options.message.merge_vars[0].vars[4].content = config.url+'messages/respond?token='+newMessage.responseToken; // RESPONDLINK
+      options.message.merge_vars[0].vars[6].content = config.url+'?listing='+newMessage.listing; // LISTINGLINK
+      options.message.merge_vars[0].vars[5].content = newMessage.listingTitle; // LISTINGTITLE
 
-       var response = '';
-       done(err, response, 'done');
-     }
-     ],
-     function(err, response) {
-       //if (err) return next(err);
-       if (err) {
-         console.log(err);
-         res.status(400).send(err);
-       } else {
-         res.status(200).send(response);
-       }
-     });
+      if (newMessage.thread.length%2 == 0) { // Check who the recipient is based on number of messages
+        options.message.from_name = newMessage.toName;
+        options.message.to[0].email = newMessage.from;
+        options.message.to[0].name = newMessage.fromName;
+        options.message.merge_vars[0].rcpt = newMessage.from;
+        options.message.merge_vars[0].vars[0].content = newMessage.fromName; // NAME
+        options.message.merge_vars[0].vars[2].content = newMessage.from; // TOEMAIL
+        options.message.merge_vars[0].vars[3].content = newMessage.toName; // FROMNAME
+        rcpt = newMessage.fromName;
+      } else {
+        options.message.from_name = newMessage.fromName;
+        options.message.to[0].email = newMessage.to;
+        options.message.to[0].name = newMessage.toName;
+        options.message.merge_vars[0].rcpt = newMessage.to;
+        options.message.merge_vars[0].vars[0].content = newMessage.toName; // NAME
+        options.message.merge_vars[0].vars[2].content = newMessage.to; // TOEMAIL
+        options.message.merge_vars[0].vars[3].content = newMessage.fromName; // FROMNAME
+        rcpt = newMessage.toName;
+      }
+
+      var postOpts = {
+        url:     url,
+        form:    options
+      };
+
+      request.post( postOpts, function(err, response){
+        console.log('new message: sent');
+        //console.log(response, rcpt.name);
+        done(err, response, rcpt, 'done')
+      });
+    }
+    ],
+    function(err, response, name) {
+      //if (err) return next(err);
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('Message Reply Success!')
+      }
+    }
+  ); // End Async
 });
 
 
 // Passport Funcs
 passport.use(new LocalStrategy({
-    usernameField: 'email'
-  },function(email, password, done) { // NOTE: Email is username
+  usernameField: 'email'
+},function(email, password, done) { // NOTE: Email is username
   console.log(email, password);
   User.findOne({ email: email }, function(err, user) {
     if (err) {
@@ -128,7 +183,10 @@ app.use(cookieParser());
 app.use(session({
   resave: false, // don't save session if unmodified
   saveUninitialized: false, // don't create session until something stored
-  secret: 'The 1adsecret to the whole B$7sHod world is one thing'
+  secret: 'The 1adsecret to the whole B$7sHod world is one thing',
+  cookie: {
+    maxAge: 14 * 24 * 60 * 60 * 1000 // 14 days
+  }
 }));
 app.use(flash());
 app.use(passport.initialize());

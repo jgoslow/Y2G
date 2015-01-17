@@ -133,7 +133,8 @@ router.post('/sign-up/', function(req, res) {
         done(err, response, 'done')
       });
     }
-    ], function(err, response, body) {
+    ], function(err, response) {
+	  console.log(err, response);
       if (err) {
         console.log(err, response);
         res.status(409).send(err);

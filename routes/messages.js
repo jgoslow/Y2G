@@ -69,10 +69,11 @@ router.post('/send', function(req, res) {
         done(null, messageInfo, sender);
       } else {
         //console.log(messageInfo.from);
-        User.findById(messageInfo.from, function(err, sender){
+        User.find({email: messageInfo.from}, function(err, user){
           //console.log(messageInfo);
           //console.log(user);
-          console.log('new message: get sender info');
+          sender = user;
+          if (!err) console.log('new message: get sender info');
           done(err, messageInfo, sender);
         });
       }
@@ -81,7 +82,7 @@ router.post('/send', function(req, res) {
       User.findById(messageInfo.to, function(err, rcpt){
         //console.log(messageInfo);
         //console.log(user);
-        console.log('new message: get recipient info');
+        if (!err) console.log('new message: get recipient info');
         done(err, messageInfo, sender, rcpt);
       });
     },
@@ -89,48 +90,52 @@ router.post('/send', function(req, res) {
       crypto.randomBytes(20, function(err, buf) {
         var token = buf.toString('hex');
         messageInfo.token = token;
-        done(err, messageInfo, sender, rcpt, token);
-      });
-    },
-    function(messageInfo, sender, rcpt, token, done) { // Creat and Save the new message
-      if (messageInfo.phone) { sender.phone = messageInfo.phone; } // include phone if they've entered it
-      if (!messageInfo.fromName) { messageInfo.fromName = ''; }
-      var newMessage = new Message({
-        to: rcpt.id, //rcpt.name + ' <' + rcpt.email + '>',
-        from: messageInfo.from, //messageInfo.fromName + ' <' + messageInfo.from + '>',
-        listing: messageInfo.listingTitle,
-        message: messageInfo.message,
-        respondAddress: token
-      });
-      newMessage.save(function(err, message){
-        //console.log(message);
-        console.log('new message: saved');
         done(err, messageInfo, sender, rcpt);
       });
     },
-    function(messageInfo, sender, rcpt, done) { // Send Email and End Function
+    function(messageInfo, sender, rcpt, done) { // Creat and Save the new message
+      if (messageInfo.phone) { messageInfo.message += '\n \n phone: ' + messageInfo.phone; } // include phone if they've entered it
+      if (!messageInfo.fromName) { messageInfo.fromName = ''; }
+      var newMessage = new Message({
+        to: rcpt.email,
+		    toName: rcpt.name,
+        from: messageInfo.from,
+		    fromName: sender.name,
+		    listing: messageInfo.listingId,
+        listingTitle: messageInfo.listingTitle,
+        thread: [
+			   { message: messageInfo.message }
+		    ],
+        respondToken: messageInfo.token
+      });
+      newMessage.save(function(err, message){
+        if (!err) console.log('new message: saved');
+        done(err, message, messageInfo, sender, rcpt);
+      });
+    },
+    function(newMessage, messageInfo, sender, rcpt, done) { // Send Email and End Function
       //console.log(messageInfo);
       //console.log(sender);
       //console.log(rcpt);
 
       var url = 'https://mandrillapp.com/api/1.0/messages/send-template.json';
       var options = require('../lib/email/message');
-      options.message.from_name = sender.name;
-      options.message.from_email = messageInfo.token+'@messages.y2g.org';
-      options.message.subject = 'Response to your listing: "' + messageInfo.listingTitle + '"';
-      options.message.to[0].email = rcpt.email;
-      options.message.to[0].name = rcpt.name;
+      options.message.from_name = newMessage.fromName;
+      options.message.from_email = newMessage.respondToken+'@messages.y2g.org';
+      options.message.subject = 'Response to your listing: "' + newMessage.listingTitle + '"';
+      options.message.to[0].email = newMessage.to;
+      options.message.to[0].name = newMessage.toName;
 
-      options.message.headers['Reply-To'] = messageInfo.token+'@messages.y2g.org';
-      options.message.merge_vars[0].rcpt = rcpt.email;
+      options.message.headers['Reply-To'] = newMessage.respondToken+'@messages.y2g.org';
+      options.message.merge_vars[0].rcpt = newMessage.to;
 
-      options.message.merge_vars[0].vars[0].content = rcpt.name; // NAME
-      options.message.merge_vars[0].vars[1].content = messageInfo.message; // MESSAGE
-      options.message.merge_vars[0].vars[2].content = rcpt.email; // TOEMAIL
-      options.message.merge_vars[0].vars[3].content = sender.name; // FROMNAME
-      options.message.merge_vars[0].vars[4].content = config.url+'messages/respond?token='+messageInfo.token; // RESPONDLINK
-      options.message.merge_vars[0].vars[5].content = messageInfo.listingTitle; // LISTINGTITLE
-      options.message.merge_vars[0].vars[6].content = config.url+'?listing='+messageInfo.listingId; // LISTINGLINK
+      options.message.merge_vars[0].vars[0].content = newMessage.toName; // NAME
+      options.message.merge_vars[0].vars[1].content = newMessage.message; // MESSAGE
+      options.message.merge_vars[0].vars[2].content = newMessage.to; // TOEMAIL
+      options.message.merge_vars[0].vars[3].content = newMessage.fromName; // FROMNAME
+      options.message.merge_vars[0].vars[4].content = config.url+'messages/respond?token='+newMessage.responseToken; // RESPONDLINK
+      options.message.merge_vars[0].vars[5].content = newMessage.listingTitle; // LISTINGTITLE
+      options.message.merge_vars[0].vars[6].content = config.url+'?listing='+newMessage.listing; // LISTINGLINK
 
       if (sender.phone) { sender.phone = 'phone: '+sender.phone; } else { sender.phone = ''; }
       options.message.merge_vars[0].vars[7].content = sender.phone; // PHONE
@@ -141,13 +146,13 @@ router.post('/send', function(req, res) {
       };
 
       request.post( postOpts, function(err, response){
-        console.log('new message: sent');
+        if (!err) console.log('new message: sent');
         //console.log(response, rcpt.name);
         done(err, response, rcpt.name, 'done')
       });
     }
     ],
-    function(err, response, name, body) {
+    function(err, response, name) {
       //if (err) return next(err);
       if (err) {
         console.log(err);

@@ -187,7 +187,6 @@ var messages = function(){};
 
 messages.send = function(form){
 	var form = $(form);
-	debugger;
 	if ( form.parsley().isValid() ) {
 		$.post('/messages/send', form.serialize(), function(data){
 			console.log(data);

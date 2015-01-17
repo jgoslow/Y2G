@@ -45,6 +45,7 @@ Security:
 Launch
 -Make sure Mandrill only works from server IP
 -Remove users page (and other extraneous db calls)
+-Change mailserver in DNS to y2g.org
 
 
 .

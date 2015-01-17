@@ -81,13 +81,15 @@ router.get('/add', function(req, res) {
       active: true
   });
 
-  newListing.save(function(err) {
+  newListing.save(function(err, listing) {
+	console.log('listing saved..');
+	console.log(err, listing);
     if (err) {
       console.log(err);
       res.status(409).send(err);
     } else {
-      console.log(newListing);
-      res.status(200).send('success', newListing);
+      console.log(listing);
+      res.status(200).send('success');
     }
   });
 

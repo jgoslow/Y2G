@@ -18,7 +18,8 @@ else
       .field
         textarea(name='message', value='', placeholder='type your note.', required)
       if user
-        input(type="hidden", name="from", value="#{user.id}")
+        input(type="hidden", name="from", value="#{user.email}")
+        input(type="hidden", name="fromName", value="#{user.name}")
       else
         .field
           input(type="text", name="fromName", value="", required, placeholder="Your Name")
