@@ -36,16 +36,19 @@ router.post('/login', function(req, res, next){
   console.log(req.body);
 
   passport.authenticate('local', function(err, user, info) {
-    console.log(err, user, info);
+    console.log('error: ' +err)
+    console.log('user: '+ user)
+    console.log('info: '+info)
     if (err) return next(err)
-      if (!user) {
-        return res.redirect('/account/login')
-      }
+    if (!user) {
+      return res.status(405).send('Wrong Username or Password');
+    } else {
       req.logIn(user, function(err) {
         if (err) return next(err);
         return res.status(200).send('success!');
       });
-    })(req, res, next);
+    }
+  })(req, res, next);
     /*User.findOne({ email: req.body.email }, function(err, user) {
     if (err) throw err;
     console.log(user);

@@ -68,17 +68,17 @@ var listings = function(location, user) {
     /*var latLng = {}; // Save Location for next visit
     latLng.lat = location.k;
     latLng.lng = location.D;*/
-    latLng = JSON.stringify(location);
-    localStorage.setItem('location', latLng);
+    var latLng = JSON.stringify(location);
 
     console.log(document.location+'listings/?lat='+location.k+'&lng='+location.D+'&radius='+radius);
     $.getJSON('/listings/?lat='+location.k+'&lng='+location.D+'&radius='+radius, function(data){
       console.log(data.length);
-      if (data.length == 0) {
+      if ((data.length == 0) && (localStorage.getItem('location') != latLng)) {
         y2g.message('There are no listings in your area.<br><br> Y2G would love your help destroying the lawns in your area.  Since we don\'t have any alien megaships, we put together this little <br><a href="#">Y2G - SheepNoMore Guide</a><br>Check it out.<br><br> Also, <a href="/listings/new" onclick="openModal( \'new-listing\', \'/listings/new/\', \'new-listing\'); return false;" value="new-listing" data-modaltype="new-listing openmodal">create the first listing!</a>', 'error', null);
       } else {
         if(typeof callback == "function") return callback(data);
       }
+      localStorage.setItem('location', latLng);
     });
 
     if (user != null) {
@@ -195,6 +195,7 @@ var listings = function(location, user) {
       .done(function() {
         closeModal('new-listing');
         y2g.message('Your listing has been created!<br><br> Click "Edit listings" or search in your area to see it!', 'success', 5);
+        $('.modal-new-listing').remove();
       })
       .fail(function(XMLHttpRequest, textStatus, errorThrown){
         alert('status:' + XMLHttpRequest.status + ', status text: ' + XMLHttpRequest.statusText);

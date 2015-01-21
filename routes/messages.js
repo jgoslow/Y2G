@@ -10,6 +10,7 @@ var async = require('async');
 var crypto = require('crypto');
 var pass = require('pwd');
 var url = require('url');
+var parseReply = require('parse-reply');
 pass.iterations(13000);
 
 var mongoose = require('mongoose'),
@@ -94,7 +95,7 @@ router.post('/send', function(req, res) {
       });
     },
     function(messageInfo, sender, rcpt, done) { // Creat and Save the new message
-      if (messageInfo.phone) { messageInfo.message += '\n \n phone: ' + messageInfo.phone; } // include phone if they've entered it
+      //if (messageInfo.phone) { messageInfo.message += '\n \n phone: ' + messageInfo.phone; } // include phone if they've entered it
       if (!messageInfo.fromName) { messageInfo.fromName = ''; }
       var newMessage = new Message({
         to: rcpt.email,
@@ -118,8 +119,6 @@ router.post('/send', function(req, res) {
       //console.log(sender);
       //console.log(rcpt);
 
-      console.log('message content: '+newMessage.message);
-
       var url = 'https://mandrillapp.com/api/1.0/messages/send-template.json';
       var options = require('../lib/email/message');
       options.message.from_name = newMessage.fromName;
@@ -132,15 +131,12 @@ router.post('/send', function(req, res) {
       options.message.merge_vars[0].rcpt = newMessage.to;
 
       options.message.merge_vars[0].vars[0].content = newMessage.toName; // NAME
-      options.message.merge_vars[0].vars[1].content = newMessage.message; // MESSAGE
+      options.message.merge_vars[0].vars[1].content = newMessage.thread[0].message; // MESSAGE
       options.message.merge_vars[0].vars[2].content = newMessage.to; // TOEMAIL
       options.message.merge_vars[0].vars[3].content = newMessage.fromName; // FROMNAME
       options.message.merge_vars[0].vars[4].content = config.url+'messages/respond?token='+newMessage.responseToken; // RESPONDLINK
       options.message.merge_vars[0].vars[5].content = newMessage.listingTitle; // LISTINGTITLE
       options.message.merge_vars[0].vars[6].content = config.url+'?listing='+newMessage.listing; // LISTINGLINK
-
-      if (sender.phone) { sender.phone = 'phone: '+sender.phone; } else { sender.phone = ''; }
-      options.message.merge_vars[0].vars[7].content = sender.phone; // PHONE
 
       var postOpts = {
         url:     url,
@@ -168,11 +164,119 @@ router.post('/send', function(req, res) {
 });
 
 /* GET users listing. */
-router.get('/users/', function(req, res) {
-  db.users.find({}).limit(5000, function(err, response) {
-    res.send(response);
-  });
+router.post('/reply/', function(req, res) {
+  var replies = JSON.parse(req.body.mandrill_events);
+  async.each(
+    replies,
+    function(reply, callback) {
+      if (reply.event === 'inbound') {
+        processReply(reply, callback);
+      } else {
+        callback();
+      }
+    },
+    function(err) {
+      if (err) {
+        res.status(200).send(err);
+      } else {
+        res.status(200).send('success!');
+      }
+
+    }
+  );
 });
 
 
 module.exports = router;
+
+
+function processReply(reply, processCallback) {
+
+  var to
+    , emailObj = reply.msg
+    , msg = parseReply(emailObj.text)
+    //, msg = emailObj.text.split(emailObj.email)[0]
+    , to = String(emailObj.email).replace('@messages.y2g.org','')
+    , from = emailObj.from_email
+    ;
+
+  console.log(msg);
+
+  async.waterfall([
+    // Get Respond Message from DB and add message to thread
+    function(done) {
+      Message.findOne({respondToken: to}, function(err, message) {
+        if (!message) {
+          done('there was an error - no listings match');
+        } else {
+          done(err, message);
+        }
+      });
+    },
+    function(newMessage, done) {
+      //console.log(newMessage);
+      newMessage.thread.push({message:msg});
+      newMessage.save( function(err, message) {
+        done(err, message);
+      });
+    },
+    function(newMessage, done) {
+      //console.log(newMessage);
+      var url = 'https://mandrillapp.com/api/1.0/messages/send-template.json'
+      , options = require('../lib/email/message-reply')
+      , rcpt
+      ;
+
+      options.message.subject = 'Re: Response to your listing: "' + newMessage.listingTitle + '"';
+      options.message.from_email = newMessage.respondToken+'@messages.y2g.org';
+      options.message.headers['Reply-To'] = newMessage.respondToken+'@messages.y2g.org';
+      options.message.merge_vars[0].vars[1].content = newMessage.thread[newMessage.thread.length-1].message; // MESSAGE
+      options.message.merge_vars[0].vars[4].content = config.url+'messages/respond?token='+newMessage.responseToken; // RESPONDLINK
+      options.message.merge_vars[0].vars[6].content = config.url+'?listing='+newMessage.listing; // LISTINGLINK
+      options.message.merge_vars[0].vars[5].content = newMessage.listingTitle; // LISTINGTITLE
+
+      if (newMessage.to == from) { // Check who the recipient is based on number of messages
+        options.message.from_name = newMessage.toName;
+        options.message.to[0].email = newMessage.from;
+        options.message.to[0].name = newMessage.fromName;
+        options.message.merge_vars[0].rcpt = newMessage.from;
+        options.message.merge_vars[0].vars[0].content = newMessage.fromName; // NAME
+        options.message.merge_vars[0].vars[2].content = newMessage.from; // TOEMAIL
+        options.message.merge_vars[0].vars[3].content = newMessage.toName; // FROMNAME
+        rcpt = newMessage.fromName;
+      } else {
+        options.message.from_name = newMessage.fromName;
+        options.message.to[0].email = newMessage.to;
+        options.message.to[0].name = newMessage.toName;
+        options.message.merge_vars[0].rcpt = newMessage.to;
+        options.message.merge_vars[0].vars[0].content = newMessage.toName; // NAME
+        options.message.merge_vars[0].vars[2].content = newMessage.to; // TOEMAIL
+        options.message.merge_vars[0].vars[3].content = newMessage.fromName; // FROMNAME
+        rcpt = newMessage.toName;
+      }
+
+      var postOpts = {
+        url:     url,
+        form:    options
+      };
+
+      request.post( postOpts, function(err, response){
+        console.log('new message: sent');
+        //console.log(response, rcpt.name);
+        done(err, response, rcpt, 'done')
+      });
+    }
+    ],
+    function(err, response, name) {
+      //if (err) return next(err);
+      if (err) {
+        console.log(err);
+        processCallback(err);
+      } else {
+        console.log('Message Reply Success!')
+        processCallback();
+      }
+    }
+  ); // End Async
+
+}

@@ -25,17 +25,11 @@ else
           input(type="text", name="fromName", value="", required, placeholder="Your Name")
         .field
           input(type="email", name="from", value="", required, placeholder="Your Email")
-        .field
-          p Want to send anonymously?  Login or Create an Account.
-      .field
-        input(type="text", name="phone", value="", placeholder="Optional: your phone number")
       if !user
         .field
           .g-recaptcha(data-sitekey="6Lf9XwATAAAAAPuqxBekRTPy_e7n-jMqGkNNyMnk")
           script(type="text/javascript" src="https://www.google.com/recaptcha/api.js")
       input.next.submit(type='submit', value='send')
-      p Don't have an account?
-        a.actually-sign-up(href='#', onclick="openModal( '', '/account/sign-up/', 'sign-up'); return false;", value='signup', data-modaltype='signup openmodal') Create one here!
 
 script(type="text/javascript", src="/javascripts/page/message.js")
 

@@ -135,7 +135,11 @@ account.login = function(form) {
 
 	if ( form.parsley().isValid() ) {
 		$.post('/account/login', form.serialize(), function(data){
-			if (data == 'email exists') {
+			console.log(data);
+			if (data == 'Wrong Username or Password') {
+
+			}
+			/*if (data == 'email exists') {
 
 			} else if (data == 'username exists') {
 
@@ -145,14 +149,17 @@ account.login = function(form) {
 				setTimeout(function(){
 					setTimeout(function(){location.reload();},500);
 				},1000);
-			}
+			}*/
 		})
 		.done(function(data) {
-			//closeModal('sign-up');
+			closeModal('login');
+			y2g.message('You are now logged in. =)<br><br>reloading..', 'success', 2);
+			setTimeout(function(){
+				setTimeout(function(){location.reload();},500);
+			},1000);
 		})
 		.fail(function(XMLHttpRequest, textStatus, errorThrown){
-			console.log('status:' + XMLHttpRequest.status + ', status text: ' + XMLHttpRequest.statusText);
-			alert('There has been an error, please contact Y2G support or try again later.');
+			y2g.message('Wrong Username or Password', 'error', 2)
 		})
 		.always(function() {
 
