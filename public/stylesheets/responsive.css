@@ -32,6 +32,9 @@
     display: inline-block;
     margin-left: 10px;
   }
+  .login_button:hover:after, .profile > a:first-child:hover:after {
+    color: black;
+  }
   .signup:after, .logout:after {
     content: '';
     margin-left: 0;

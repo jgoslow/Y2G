@@ -128,6 +128,12 @@ router.post('/flag', function(req, res) {
   });
 });
 
+/* GET Edit Listings Page. */
+router.get('/edit', function(req, res) {
+  res.render('listings/edit', {
+    user: req.user
+  });
+});
 
 
 function getListings(type, number, lat, lng, distance, res, callback) {

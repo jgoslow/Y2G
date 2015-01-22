@@ -74,7 +74,14 @@ select:-webkit-autofill:focus, select:-webkit-autofill, option:-webkit-autofill:
   .editable, .editable:nth-child(2n) {
     margin-right: 9px;
   }
-  .field a.fa-edit, .field a.fa-save, .field a.fa-remove {
+  .field a.fa {
+    -webkit-transition:all .25s ease-in-out;
+    -moz-transition:all .25s ease-in-out;
+    -o-transition:all .25s ease-in-out;
+    transition:all .25s ease-in-out;
+  }
+  .field a.fa-edit, .field a.fa-save, .field a.fa-remove, .field a.fa-thumbs-down,
+  .field a.fa-thumbs-up, .field .fa-plus {
     color: #c6c6c6;
     width: 15px;
     height: 15px;
@@ -90,22 +97,30 @@ select:-webkit-autofill:focus, select:-webkit-autofill, option:-webkit-autofill:
     right: -20px;
     display: none;
   }
-  .field.editing a.fa-save, .field.editing a.fa-remove {
+  .field.editing .fa-save, .field.editing .fa-remove, .field.saved  a.fa-edit {
     display: block;
   }
-  .field.editing a.fa-edit {
+  .field.editing .fa-edit, .field.editing .fa-plus, .field.saved .fa-plus,
+  .field.editing .add-field, .field.saved .add-field, .field.editing.saved .fa-edit {
     display: none;
   }
-  .field a.fa-edit:hover, .field a.fa-save:hover, .field a.fa-remove:hover {
+  .field .fa-edit:hover, .field .fa-save:hover, .field .fa-remove:hover {
     color: #2ebadb;
     text-decoration: none;
   }
-  .field a.fa-remove:hover {
+  .field .fa-remove:hover, .field .fa-thumbs-down {
     color: #f05139;
   }
-  .field a.fa-save:hover {
+  .field .fa-save:hover, .field a.fa-thumbs-up {
     color: #3ea947;
   }
+  .field.saved .fa-plus + span.editable + .fa-edit {
+    display: block;
+  }
+  .field .fa-plus + span.editable + .fa-edit, .field.editing.saved .fa-plus + span.editable + .fa-edit {
+    display: none;
+  }
+
 
 textarea {
   min-height:100px;

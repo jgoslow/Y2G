@@ -176,29 +176,71 @@ account.editItem = function(name) {
 		,	target = $('span.editable[name='+name+']')
 		, val = target.html()
 		, inputType = target.data('input-type')
-		, inputHTML = '<input class="editable" name="'+val+'" value='+val+'>'
+		, inputHTML = '<input class="editable" name="'+name+'" value='+val+' data-initial-value="'+val+'">'
 		, editBtn = container.find('.fa-edit')
 		, saveBtn = container.find('.fa-save')
 		, cancelBtn = container.find('.fa-remove')
+
 	if (inputType == 'textarea') {
-		inputHTML = '<textarea class="editable" name="'+name+'" value="'+val+'"></textarea>'
+		inputHTML = '<textarea class="editable" name="'+name+'" data-initial-value="'+val+'">'+val+'</textarea>'
 	}
 	container.addClass('editing')
 	target.after(inputHTML).remove()
 	return false
 }
 account.saveItem = function(name) {
+	var container = $('.field.'+name)
+		,	input = container.find('[name='+name+']')
+		, type = 'input'
+		, val = input.val()
+		, initial = input.data('initial-value')
+		, editBtn = container.find('.fa-edit')
+		, saveBtn = container.find('.fa-save')
+		, cancelBtn = container.find('.fa-remove')
+		, data = {}
+	if (input.is('textarea')) type = 'textarea'
+
+	var cancelHTML = '<span name="'+name+'" data-input-type="'+type+'" class="editable">'+initial+'</span>'
+		,	saveHTML = '<span name="'+name+'" data-input-type="'+type+'" class="editable">'+val+'</span>'
+	data.field = name
+	data.val = val
+	$.post('/account/updateItem', data, function(response){
+
+	})
+	.fail(function(){
+		container.removeClass('editing')
+		input.after(cancelHTML).remove()
+		editBtn.addClass('fa-thumbs-down').removeClass('fa-edit')
+		setTimeout(function(){
+			editBtn.removeClass('fa-thumbs-down').addClass('fa-edit')
+		}, 2000)
+	})
+	.done(function(){
+		container.addClass('saved').removeClass('editing')
+		input.after(saveHTML).remove()
+		editBtn.addClass('fa-thumbs-up').removeClass('fa-edit')
+		setTimeout(function(){
+			editBtn.removeClass('fa-thumbs-up').addClass('fa-edit')
+		}, 2000)
+	});
 
 }
 account.cancelEditItem = function(name) {
 	var container = $('.field.'+name)
 		,	input = container.find('[name='+name+']')
+		, type = 'input'
+		, initial = input.data('initial-value')
 		, editBtn = container.find('.fa-edit')
 		, saveBtn = container.find('.fa-save')
 		, cancelBtn = container.find('.fa-remove')
-		, cancelHTML = '<span name="'+name+'" class="editable">'+input.attr('value')+'</span>'
-	console.log(input)
-	debugger
+		, val = input.val()
+	if (input.is('textarea')) {
+		type = 'textarea'
+	}
+
+	if (!val) val = ''
+	var cancelHTML = '<span name="'+name+'" class="editable" data-input-type="'+type+'">'+initial+'</span>'
+
 	container.removeClass('editing')
 	input.after(cancelHTML).remove()
 }
@@ -206,6 +248,21 @@ account.updateItem = function(item) {
 
 }
 
+
+// Keyboard Add Shortcuts to Forms
+function formKeyCodes() {
+	$(document).keydown(function(e){
+		if (e.keyCode == 13) {
+			console.log('enter!')
+			if ($(document.activeElement).hasClass('editable')) {
+				var field = $(document.activeElement)
+				,	save = field.siblings('.fa-save')
+				console.log(field,save)
+				save.click()
+			}
+		}
+	})
+} formKeyCodes()
 
 function login() {
 	localStorage.setItem('login', true);

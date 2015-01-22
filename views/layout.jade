@@ -64,6 +64,7 @@ body.home.page.page-id-6.page-template-default
             if user
               span.logout.profile
                 a.login_button.openmodal.logout(href='/account/profile/', data-modaltype='profile') Profile
+                a.login_button.openmodal.messages.fa-envelope.fa(href='/messages/', data-modaltype='messages', title="messages")
                 a.login_button.logout(href='/account/logout') logout
             else
               span.login

@@ -173,33 +173,18 @@ router.get('/restricted', restrict, function(req, res){
 })
 
 /* Update Profile */
-router.post('/update', function(req, res) {
+router.post('/updateItem', function(req, res) {
   var user = req.user
-    , field = req.body.field
-    , value = req.body.value
+    , fieldName = String(req.body.field)
+    , field = {}
+  field[fieldName] = req.body.val
 
-  async.waterfall([
-    function(done) {
-      User.findOne({id: user.id}, function(err, user){
-        if (err) res.status(404).send('user not found')
-        if (user) done(err, user, done)
-      })
-    },
-    function(user, done) {
-      user[field] = value
-      user.save(function(err, user){
-        done(user, 'done')
-      })
-    }
-  ], function(err, user) {
+  console.log(field, fieldName, req.body.val, user.id);
+  User.findByIdAndUpdate(user.id, field, function(err, user){
     console.log(err, user)
-    if (err) {
-      console.log(err, response)
-      res.status(409).send(err)
-    } else {
-      res.status(200).send(user)
-    }
-  });
+    if (err) res.status(404).send('user not found')
+    if (user) res.status(200).send('success!')
+  })
 
 })
 

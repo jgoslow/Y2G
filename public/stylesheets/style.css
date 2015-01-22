@@ -362,6 +362,17 @@ header .logo img {
   font-weight: 300;
   text-transform: uppercase;
 }
+  .login_button.fa-envelope-o {
+  }
+    .login_button.fa-envelope:before {
+      text-indent: 0;
+      display: inline-block;
+      color: black;
+      font-size: 13px;
+    }
+    .login_button.fa-envelope:hover:before {
+      color: #2ebadb;
+    }
 header .social {
   padding-top:12px;
   display:inline-block;

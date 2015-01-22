@@ -3,6 +3,7 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 var dbURL = config.db.user+':'+config.db.pass+'@'+config.db.host+':'+config.db.port+'/'+config.db.db;
+var collections = ["listings", "users"];
 var db = require("mongojs").connect(dbURL, collections);
 
 var mongoose = require('mongoose'),
