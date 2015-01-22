@@ -11,6 +11,7 @@ var mongoose = require('mongoose'),
     passport = require('passport'),
     Message = require('../lib/db/message-model'),
     User = require('../lib/db/user-model'),
+    Flag = require('../lib/db/flag-model'),
     Listing = require('../lib/db/listing-model');
 
 moment().format();
@@ -96,6 +97,36 @@ router.get('/add', function(req, res) {
 });
 
 
+/* GET Flag Listing form. */
+router.get('/flag', function(req, res) {
+  res.render('listings/flag', {
+    user: req.user,
+    listing: req.query.id,
+    listingTitle: req.query.title
+  });
+});
+/* Flag listing. */
+router.post('/flag', function(req, res) {
+  var newFlag = new Flag({
+    user: req.user.id,
+    listing: req.body.listing,
+    message: req.body.message
+  });
+  console.log(newFlag);
+  newFlag.save(function(err, flag){
+    if (err) {
+      console.log(err);
+      if (err == 'Error: This user has already flagged this listing') {
+        res.status(200).send('duplicate');
+      } else {
+        res.status(400).send(err);
+      }
+    } else {
+      console.log(flag);
+      res.status(200).send('success');
+    }
+  });
+});
 
 
 

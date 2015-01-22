@@ -4,12 +4,16 @@ else
   - if (user.masterGardener == true) { masterGardener = 'checked'; } else { masterGardener = 'false' }
   h2 Profile for #{user.name}
   .profile
-    .field
-      .username username:
-        span.editable(name='username') user.name
-    .field
-      .email email:
-        span.editable(name='email') user.email
+    .field.username
+      label username:
+      span.editable(name='username') #{user.name}
+      a.fa-edit.fa(href="#", onClick="account.editItem('username'); return false;")
+      a.fa-save.fa(href="#", onClick="account.saveItem('username'); return false;")
+      a.fa-remove.fa(href="#", onClick="account.cancelEditItem('username'); return false;")
+    .field.email
+      label email:
+      span.editable(name='email') #{user.email}
+      a.fa-edit.fa(href="#", onClick="account.editItem('email'); return false;")
     .field
       a.password change password?
         form.new-password(method="post", action="/account/newpass")
@@ -20,27 +24,30 @@ else
           .field
             input(name="password-confirm", placeholder="confirm new password")
   .bio
-    .field
-      .location Location:
-        if user.location
-          span.editable(name="location") user.location
-        else
-          a.add-field(name="location") add location
-    .field
-      .reasons Reasons for Gardening:
-        if user.reasons
-          span.editable(name="reasons") user.reasons
-        else
-          a.add-field(name="reasons") add reasons
-    .field
-      .bio Gardener Bio:
-        if user.bio
-          span.editable(name="bio") user.bio
-        else
-          a.add-field(name="bio") add location
-    .field
-      .location Master Gardener?
-        input.editable(type="checkbox", masterGardener, name="masterGardener")
+    .field.location
+      label Location:
+      if user.location
+        span.editable(name="location") #{user.location}
+        a.fa-edit.fa(href="#", onClick="account.editItem('location'); return false;")
+      else
+        a.add-field(name="location") add location
+    .field.reasons
+      label Reasons for Gardening:
+      if user.reasons
+        span.editable(name="reasons", data-input-type="textarea") #{user.reasons}
+        a.fa-edit.fa(href="#", onClick="account.editItem('reasons'); return false;")
+      else
+        a.add-field(name="reasons") add reasons
+    .field.bio
+      label Gardener Bio:
+      if user.bio
+        span.editable(name="bio", data-input-type="textarea") #{user.bio}
+        a.fa-edit.fa(href="#", onClick="account.editItem('bio'); return false;")
+      else
+        a.add-field(name="bio") add location
+    .field.location
+      label Master Gardener?
+      input.editable(type="checkbox", masterGardener, name="masterGardener")
 
 
 include ../snippets/footer-lite.jade

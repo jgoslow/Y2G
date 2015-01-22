@@ -16,7 +16,6 @@ $(function(){
 
 	$('#logo').click(function(){
 		localStorage.clear();
-		return false;
 	});
 
 

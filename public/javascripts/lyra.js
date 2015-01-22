@@ -64,6 +64,7 @@ function openModal(obj, target, type) {
     TweenMax.to($('.modal-'+type), .8, { height: h - 100 - h2, top: t, ease: Back.easeOut.config(.8) });
 	}, 500);
 
+
 	return false;
 }
 

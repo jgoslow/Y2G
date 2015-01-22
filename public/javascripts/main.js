@@ -90,6 +90,9 @@ $('#message .close').click(function(){
 	$('#message').fadeOut();
 });
 $('body > .alert').append('<a class="close">').fadeIn();
+$('.alert .close').click(function(){
+	$('.alert').fadeOut();
+});
 setTimeout(function(){ $('body > .alert').fadeOut(); }, 5000);
 
 
@@ -166,6 +169,41 @@ account.login = function(form) {
 		});
 	}
 	return false;
+}
+
+account.editItem = function(name) {
+	var container = $('.field.'+name)
+		,	target = $('span.editable[name='+name+']')
+		, val = target.html()
+		, inputType = target.data('input-type')
+		, inputHTML = '<input class="editable" name="'+val+'" value='+val+'>'
+		, editBtn = container.find('.fa-edit')
+		, saveBtn = container.find('.fa-save')
+		, cancelBtn = container.find('.fa-remove')
+	if (inputType == 'textarea') {
+		inputHTML = '<textarea class="editable" name="'+name+'" value="'+val+'"></textarea>'
+	}
+	container.addClass('editing')
+	target.after(inputHTML).remove()
+	return false
+}
+account.saveItem = function(name) {
+
+}
+account.cancelEditItem = function(name) {
+	var container = $('.field.'+name)
+		,	input = container.find('[name='+name+']')
+		, editBtn = container.find('.fa-edit')
+		, saveBtn = container.find('.fa-save')
+		, cancelBtn = container.find('.fa-remove')
+		, cancelHTML = '<span name="'+name+'" class="editable">'+input.attr('value')+'</span>'
+	console.log(input)
+	debugger
+	container.removeClass('editing')
+	input.after(cancelHTML).remove()
+}
+account.updateItem = function(item) {
+
 }
 
 

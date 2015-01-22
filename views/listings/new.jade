@@ -1,13 +1,7 @@
 if !user
   h1 Please Log in
   p You must be logged in to create a listing.  Please log in or create an account.
-  .btn-options
-    button.login.show-login.btn-option(onclick="jQuery('#login-wrap').slideDown(); jQuery('#signup-wrap').slideUp();return false;") Login
-    button.login.show-signup.btn-option(onclick="jQuery('#signup-wrap').slideDown(); jQuery('#login-wrap').slideUp();return false;") Sign Up
-  #login-wrap(style="display:none;")
-    include ../account/login.jade
-  #signup-wrap(style="display:none;")
-    include ../account/signup.jade
+  include ../account/mustlogin.jade
 
 else
   - if (!listingType) listingType = 'gardener';

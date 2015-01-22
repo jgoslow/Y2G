@@ -27,7 +27,7 @@
     font-weight: normal;
     display: inline-block;
   }
-  .login_button:after, .profile a:first-child:after {
+  .login_button:after, .profile > a:first-child:after {
     content: '|';
     display: inline-block;
     margin-left: 10px;

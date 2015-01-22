@@ -78,6 +78,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
+  store: require('mongoose-session')(mongoose),
   resave: false, // don't save session if unmodified
   saveUninitialized: false, // don't create session until something stored
   secret: 'The 1adsecret to the whole B$7sHod world is one thing',
@@ -93,13 +94,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 var routes = require('./routes/index');
-account = require('./routes/account');
-listings = require('./routes/listings');
-messages = require('./routes/messages');
 app.use('/', routes);
+account = require('./routes/account');
 app.use('/account', account);
+listings = require('./routes/listings');
 app.use('/listings', listings);
+messages = require('./routes/messages');
 app.use('/messages', messages);
+admin = require('./routes/admin');
+app.use('/admin', admin);
 
 
 // NEW

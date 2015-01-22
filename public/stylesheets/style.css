@@ -8,14 +8,12 @@ MAP
 - "Now Showing" note
 - show search circle?
 
-Create listing - if not logged-in, ask for account info)
-- Sanitize the titles and other inputs...  ugh
+Create listing
 - Integrate pieces of listing (square footage, other info);
 - Bulk create
 - Green Check? (need from Jesse) for selecting location
 
 Message
-- enable reply addresses
 - allow message sending through website? yeah - mostly the same as any old send
 
 Profile - add edit profile button
@@ -63,10 +61,10 @@ body { height: 100%; margin: 0; padding: 0;
 /* General Styles */
 a {
   text-decoration: none;
-  color: black;
+  color: #2ebadb;
 }
 a:hover {
-  color: black;
+  color: #2ebadb;
   text-decoration:underline;
 }
 
@@ -75,7 +73,7 @@ h1 {
   font-size:35px;
   font-weight:bold;
   line-height:35px;
-  margin-bottom:10px;
+  margin-bottom:15px;
 }
 
 .left {
@@ -95,7 +93,7 @@ h1 {
 .lc { text-transform:lowercase; }
 
 .fa {
-  font-family:'Font Awesome';
+  font-family:'FontAwesome';
 }
 
 .success, .alert-success {
@@ -137,6 +135,7 @@ h1 {
   display:inline-block;
   font-weight:bold;
   text-transform:uppercase;
+  color: black;
 }
 .menu li:first-child a {
   padding-left:0;
@@ -152,7 +151,7 @@ h1 {
   padding: 10px 8px 10px 30px;
   font-size: 20px;
   line-height: 20px;
-  width: 298px;
+  width: 273px;
   background: url(../../images/layout/y2g_sprites.png) -9px -11px no-repeat white;
 }
 .map_wrap .location_tool input:-webkit-autofill, .address_input, .map_wrap .location_tool input:-webkit-autofill:focus {
@@ -160,10 +159,10 @@ h1 {
    -webkit-text-fill-color: #000;
 }
 
-.map_wrap .location_tool .address_input::-webkit-input-placeholder { font-size: 20px; line-height: 20px;}
-.map_wrap .location_tool .address_input:-moz-placeholder { font-size: 20px; line-height: 20px; }
-.map_wrap .location_tool .address_input::-moz-placeholder { font-size: 20px; line-height: 20px; }
-.map_wrap .location_tool .address_input:-ms-input-placeholder { font-size: 20px; line-height: 20px; }
+.map_wrap .location_tool .address_input::-webkit-input-placeholder { font-size: 18px; line-height: 20px;}
+.map_wrap .location_tool .address_input:-moz-placeholder { font-size: 18px; line-height: 20px; }
+.map_wrap .location_tool .address_input::-moz-placeholder { font-size: 18px; line-height: 20px; }
+.map_wrap .location_tool .address_input:-ms-input-placeholder { font-size: 18px; line-height: 20px; }
 
 .map_wrap .location_tool .address_input:focus {
 
@@ -172,6 +171,7 @@ h1 {
   padding: 15px 8px 12px;
   width: 30px;
   float:right;
+  display:none;
 }
 
 
@@ -273,6 +273,9 @@ footer {
 header {
   padding:10px 10px 0 ;
 }
+  header a {
+    color: black;
+  }
 
 header .logo {
   z-index: 101;
@@ -368,7 +371,7 @@ header .social a {
   font-size:25px;
   line-height:20px;
   display:inline-block;
-  font-family:Font Awesome;
+  font-family:FontAwesome;
 }
 
 header .social a.fb {
@@ -640,11 +643,11 @@ min-height:100px;
   display:none;
 }
 .map_wrap .location_tool .tools .close {
-  position:absolute;
-  top:-11px;
-  right:-9px;
-  font-size:11px;
-  color:white;
+  position: absolute;
+  top: -3px;
+  right: -5px;
+  font-size: 17px;
+  color: white;
 }
 .map_wrap .location_tool input {
   box-shadow: none;
@@ -704,7 +707,7 @@ min-height:100px;
 
 .radius_slider {
   float:left;
-  width:240px;
+  width:200px;
   margin: 4px 8px 26px 20px;
   height:45px;
   cursor: pointer;
@@ -906,7 +909,7 @@ min-height:100px;
   }
     .new-listing .steps li:after {
       content: '\f04b';
-      font-family: "Font Awesome";
+      font-family: "FontAwesome";
       margin: 0 10px;
       color: #acaa90;
       font-size: 10px;
@@ -1097,7 +1100,7 @@ min-height:100px;
   margin:35px auto 100px;
 }
 .home .content_wrap .content .post{
-  width:310px;
+  width:300px;
 }
 
 .post {
@@ -1177,7 +1180,7 @@ min-height:100px;
   top: 100px;
   left: 50%;
   width: 280px;
-  margin-left: -100px;
+  margin-left: -140px;
   min-height: 35px;
   position: fixed;
   z-index: 130;
@@ -1204,7 +1207,7 @@ min-height:100px;
   }
   .message .close:after, .alert .close:after {
     content: '';
-    font-family:'Font Awesome';
+    font-family:'FontAwesome';
     padding:10px;
   }
 

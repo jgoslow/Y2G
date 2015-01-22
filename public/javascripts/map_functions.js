@@ -136,6 +136,7 @@ var listings = function(location, user) {
       var image_html = '';
       var latlngset = new google.maps.LatLng(lat, lng);
       var fullIcon = new typeIcon(type);
+      titleStrip = title.replace(/\x27/g, "");
       //console.log(type, fullIcon.shadow);
       var marker = new google.maps.Marker({
           map: map,
@@ -155,8 +156,8 @@ var listings = function(location, user) {
         infoWindow.close();
       });
       markersArray.push(marker);
-      var contactModal = 'onclick="openModal(this, \'/messages/send?owner='+owner+'&ownerName='+ownerName+'&listingId='+id+'&listingTitle='+title+'\', \'message\'); return false;" href="/messages/send?to='+owner+'" data-modal-type="message"',
-          content = '<div id="window-'+id+'" class="info-window"><div class="info-window_inner_wrap"><h4>'+title+'</h4><div class="info">'+image_html+'<span class="author"><strong>BY:</strong><a href="#" '+contactModal+'>'+ownerName+'</a></span><span class="date"><strong>DATE:</strong> '+created+'</span><span class="date"><strong>TYPE:</strong> '+type+'</span></div><div class="description">'+desc+'</div><a '+contactModal+' class="contact openmodal" title="Contact '+name+'"><span class="fa">&#xf003;</span> Send a Note</a><a href="#'+id+'" onclick="listings.flag('+id+'); return false;" class="flag" title="flag this post">flag this post</a></div></div>';
+      var contactModal = 'onclick="openModal(this, \'/messages/send?owner='+owner+'&ownerName='+ownerName+'&listingId='+id+'&listingTitle='+titleStrip+'\', \'message\'); return false;" href="/messages/send?to='+owner+'" data-modal-type="message"',
+          content = '<div id="window-'+id+'" class="info-window"><div class="info-window_inner_wrap"><h4>'+title+'</h4><div class="info">'+image_html+'<span class="author"><strong>BY:</strong><a href="#" '+contactModal+'>'+ownerName+'</a></span><span class="date"><strong>DATE:</strong> '+created+'</span><span class="date"><strong>TYPE:</strong> '+type+'</span></div><div class="description">'+desc+'</div><a '+contactModal+' class="contact openmodal" title="Contact '+name+'"><span class="fa">&#xf003;</span> Send a Note</a><a href="#'+id+'" onclick="listings.flag(\''+id+'\', \''+titleStrip+'\'); return false;" class="flag" title="flag this post">flag this post</a></div></div>';
 
       google.maps.event.addListener(marker, 'click', function() {
         console.log($('#window-'+id));
@@ -196,6 +197,35 @@ var listings = function(location, user) {
         closeModal('new-listing');
         y2g.message('Your listing has been created!<br><br> Click "Edit listings" or search in your area to see it!', 'success', 5);
         $('.modal-new-listing').remove();
+      })
+      .fail(function(XMLHttpRequest, textStatus, errorThrown){
+        alert('status:' + XMLHttpRequest.status + ', status text: ' + XMLHttpRequest.statusText);
+      })
+      .always(function() {
+
+      });
+    }
+    return false;
+  }
+
+  listings.flag = function(listing, listingTitle) {
+    openModal('', '/listings/flag?id='+listing+'&title='+listingTitle,'flag');
+  }
+  listings.submitFlag = function(form) {
+    var form = $(form);
+    if ( form.parsley().isValid() ) {
+      $.post('/listings/flag', form.serialize(), function(data){
+      })
+      .done(function(data) {
+        if(data == 'duplicate') {
+          closeModal('flag');
+          y2g.message('You have already flagged this listing', 'error', 3);
+          $('.modal-flag').remove();
+        } else {
+          closeModal('flag');
+          y2g.message('this listing has been flagged!', 'success', 3);
+          $('.modal-flag').remove();
+        }
       })
       .fail(function(XMLHttpRequest, textStatus, errorThrown){
         alert('status:' + XMLHttpRequest.status + ', status text: ' + XMLHttpRequest.statusText);
@@ -304,7 +334,7 @@ function locationToolOpen() {
   TweenLite.to($('#location_tool'), .5, {top: 100, right: r, marginRight: -165, width: 330, height: 30});
   setTimeout(function(){
     $('#location_tool .tools').show()
-    TweenLite.to($('#location_tool .tools'), .5, {width: 330, marginLeft: -165, height: 100});
+    TweenLite.to($('#location_tool .tools'), .5, {width: 285, marginLeft: -153, height: 100});
     setTimeout(function(){
       $('#location_tool .tools .wrap').fadeIn();
       $('#address_input').focus();

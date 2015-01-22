@@ -1,3 +1,68 @@
 extends layout
 
+block header
+
+block map
+  #map_wrap.map_wrap(style='height:350px;')
+      #map_tools_top.map_tools_top
+        .top_right
+          a#show_listings.show_listings(href='#')
+            span.fa &#xF103;
+            span.text Show Listings
+
+          #listings_wrap.listings_wrap
+            .top
+            #listings.listings
+            .bottom
+
+        #location_tool.location_tool
+          .wrap
+            a.icon(href='#')
+
+            .tools
+              .wrap
+                form#location_filter.location_filter
+                  input#address_input.address_input(placeholder='Type location and hit enter.')
+                  input#location_tool_submit.submit.fa(type='submit', value='', href='#')
+
+                  #radius_box.radius_box
+                    label(for='radius') within:
+
+                    input#radius_input.radius_input(name='radius', value='5')
+                    span.lc mi
+
+                    .clear
+
+                  input#radius_slider.radius_slider(type='range', min="1", max="99", value="5", step="1", oninput="updateRadius(value);")
+
+
+                  a.close.fa(href='#') &#xF00D;
+
+      #map_container.map_container
+        #map_canvas.map_canvas
+
+      #map_spacer.map_spacer
+
+      #map_tools_bottom.map_tools_bottom
+        .lower_left
+          a#expand_map.expand_map.fa(title='Expand Map', href='#') &#xF103;
+
+          if user
+            a#edit_listing.edit_listings.openmodal(href='/profile/listings', data-modaltype='edit-listings')
+              span.fa &#xF044;
+              |  Edit Your Listings
+
+          a#map_new_listing.new_listing.openmodal(href='/listings/new', data-modaltype='new-listing')
+            span
+            | Create a Listing
+
+      .map_modal_bg(style='')
+
+
 block content
+  h1 Here's How it Works
+  p Yards to Gardens lets you share or find all things gardening. Whether you have extra space in your yard, extra tools in the garage, extra seeds or seedings, or just looking for a space to garden, Y2G makes it easy to share what you&rsquo;ve got or find what you&rsquo;re looking for.
+  p To post a listing just click on one of the categories, enter the information requested, verify your email and your listing will appear on the Y2G map.
+
+block sidebar
+  p sidebar content

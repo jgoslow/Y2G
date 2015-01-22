@@ -38,6 +38,7 @@
     "url": "*",
     "mailstrip": "*",
     "xregexp": "*",
-    "parse-reply": "*"
+    "parse-reply": "*",
+    "mongoose-session-store": "*"
   }
 }

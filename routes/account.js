@@ -169,9 +169,39 @@ router.get('/profile/', function(req, res) {
 
 /* GET Restricted Page. */
 router.get('/restricted', restrict, function(req, res){
-  res.send('Wahoo! restricted area, click to <a href="/logout">logout</a>');
-});
+  res.send('Wahoo! restricted area, click to <a href="/logout">logout</a>')
+})
 
+/* Update Profile */
+router.post('/update', function(req, res) {
+  var user = req.user
+    , field = req.body.field
+    , value = req.body.value
+
+  async.waterfall([
+    function(done) {
+      User.findOne({id: user.id}, function(err, user){
+        if (err) res.status(404).send('user not found')
+        if (user) done(err, user, done)
+      })
+    },
+    function(user, done) {
+      user[field] = value
+      user.save(function(err, user){
+        done(user, 'done')
+      })
+    }
+  ], function(err, user) {
+    console.log(err, user)
+    if (err) {
+      console.log(err, response)
+      res.status(409).send(err)
+    } else {
+      res.status(200).send(user)
+    }
+  });
+
+})
 
 
 /* GET Activation Page. */
