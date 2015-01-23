@@ -4,7 +4,7 @@ $(function(){
 	if (location) {
 		if (!radius) { radius = 5; }
 		location = JSON.parse(location);
-		console.log(location, radius);
+		//console.log(location, radius);
 		var latLng = {}; // Save Location for next visit
 		latLng.lat = location.k;
 		latLng.lng = location.D;

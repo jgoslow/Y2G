@@ -51,8 +51,7 @@ function y2g_resize() {
 	} else {
 		var m = $('.modal'),
 				mW = m.width(),
-				cmh = h; // Container Min Height
-		console.log(mW);
+				cmh = h; // Container Min Height=
 
 		m.css('margin-left',-20-mW/2);
 		if (w < 960) {

@@ -4,7 +4,7 @@ console.log('.choose-type .'+listingType);
 $('.choose-type .'+listingType).addClass('active');
 $('.new-listing .choose-type a').click(function(){
   var type = $(this).data('type');
-  $('#new-listing').data('type', type).removeClass('gardener garden organic tools').addClass(type);
+  $('#new-listing').data('type', type).removeClass('gardener space organic tools').addClass(type);
   $(this).siblings().removeClass('active');
   $(this).addClass('active');
   $('#listingType').val(type);
@@ -32,6 +32,8 @@ $(document).keydown(function(e){
     if ($(document.activeElement).is('.location')) {
       var address = $('.new-listing input.location').val();
       getLocation(address, null, selectLocation);
+      $('.location-results div').remove();
+      $('#location-results').addClass('searching');
       return false;
     }
   }
@@ -39,13 +41,15 @@ $(document).keydown(function(e){
 $('.new-listing .get-location').click(function(){
   var address = $('.new-listing input.location').val();
   getLocation(address, null, selectLocation);
+  $('.location-results div').remove();
+  $('#location-results').addClass('searching');
   return false;
 });
 
 function selectLocation(results) {
+  $('#location-results').removeClass('searching');
   var locations = results;
   form.disableNext(3);
-  $('.location-results div').remove();
   results.forEach(function(result){
     var div = document.createElement('div'),
         html = '<a href="#">'+result.formatted_address+'</a>';
@@ -61,6 +65,9 @@ function selectLocation(results) {
       $(this).addClass('active');
       form.enableNext(3);
       form.setLocation(locations[n]);
+      setTimeout(function(){
+        $('button[data-goto="3"]').click()
+      }, 500)
       return false;
     });
   }, 500);

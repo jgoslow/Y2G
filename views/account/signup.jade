@@ -1,17 +1,16 @@
 #signup.content.sign-up
     h2 Sign Up for Y2G
-    p When you sign up with Y2G, you can create listings, setup alerts, and connect with other gardeners nearby (you don&apos;t need an account to respond to existing listings).
-      form#sign-up-form.signup.standard(onsubmit="account.signup('#sign-up-form'); return false;")
+    p.note When you sign up with Y2G, you can create and respond to listings, and connect with gardeners nearby you.
+      form.standard#sign-up-form.signup.standard(onsubmit="account.signup('#sign-up-form'); return false;")
         .field.required
           input(type='text', name="name", value="", placeholder="Display Name", required)
-          <p>Choose any name you like.<br> We recommend just your first name.</p>
+          p.note Choose any name you like.<br> We recommend just your first name.
         .field.required
           input#UserEmail(type='email', name='email', value='', placeholder='email', required, data-parsley-type="email", data-required-message="We need a valid email to activate your account.")
           //, data-ajax-name="email",, data-parsley-remote-options='{ "type": "GET",  "data": { "field": "email" } }', data-parsley-errors-messages-disabled="1", data-parsley-remote-validator="validateEmail", data-parsley-remote="1", data-parsley-trigger="focusout", data-parsley-id="2315")
         .field.required
           input(type='password', name='password', value='', placeholder='password', required)
-        br
-        a.show-gardener-profile-signup(href="#") Wanna create a gardener profile?
+        a.note.show-gardener-profile-signup(href="#") Add your gardener profile &nbsp;=)
         div.gardener-profile-signup
           .field
             input(type='text', name='location', value='', placeholder='location, country, or zip')

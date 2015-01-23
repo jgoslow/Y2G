@@ -74,11 +74,14 @@ p {
   color:black;
   text-align:center;
   overflow:auto;
+  box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
 }
 .modal-login {
   max-width: 600px;
-  max-height: 400px;
-  margin-left: -300px;
+  max-height: 360px;
+  margin-left: -300px !important;
 }
 .modal_bg {
   display:none;
@@ -102,14 +105,17 @@ p {
 .modal .modal_close {
   display:block;
   font-size:20px;
+  line-height: 30px;
   position:absolute;
   top:0;
   right:0;
   cursor: pointer;
+  font-family: 'FontAwesome';
+  z-index: 2;
 }
 .modal .modal_close:after {
   content: '';
-  font-family:'Font Awesome';
+  font-family:'FontAwesome';
   padding:10px;
 }
 
@@ -117,7 +123,6 @@ p {
   position: relative;
   height: 100%;
   width: 100%;
-  padding-bottom: 40px;
   overflow: hidden;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -127,14 +132,27 @@ p {
   height: 100%;
   width: 100%;
   overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
+  .modal_content:after {
+    content: '';
+    height: 30px;
+    display: block;
+    position: relative;
+    background: transparent;
+    opacity: 0;
+  }
   .modal_content .footer-lite {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    position: fixed;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
     font-size: 12px;
     color: #b6b2b3;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    padding: 5px 10px 7px;
+    background: white;
   }
   .modal_content .footer-lite a {
     color: #474747;
@@ -183,6 +201,35 @@ a.download:hover {
 
 
 @media (max-width: 768px) {
+  .modal {
+    padding: 20px 10px;
+  }
+  .modal-new-listing, .modal-profile, .modal-sign-up  {
+    margin-left: 0 !important;
+    left: 8px !important;
+    right: 8px;
+    bottom: 8px;
+    top: 8px !important;
+    height: auto !important;
+    min-width: 0;
+    min-height: 0;
+    max-height: auto;
+    width: auto !important;
+  }
+  .modal-new-listing {
+    padding-top:5px
+  }
+  .modal-login {
+    margin-left: -300px !important;
+  }
+  .modal_content {
+    overflow-x: hidden;
+    overflow-y: scroll; /* has to be scroll, not auto */
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 650px) {
   .modal, .modal-login {
     margin-left: 0 !important;
     left: 8px !important;
@@ -193,4 +240,8 @@ a.download:hover {
     max-height: auto;
     width: auto !important;
   }
+}
+
+@media (max-width: 415px) {
+
 }

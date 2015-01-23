@@ -6,7 +6,7 @@ if !user
 else
   - if (!listingType) listingType = 'gardener';
   div#new-listing(class=listingType+' new-listing', data-type=listingType, data-current-step="1")
-    form#new-listing-form(onsubmit="listings.create('#new-listing-form'); return false;")
+    form#new-listing-form.standard(onsubmit="listings.create('#new-listing-form'); return false;")
       input(type="hidden", name="owner", value="#{user.id}")
       input(type="hidden", name="ownerName", value="#{user.name}")
       ul.steps
@@ -23,15 +23,15 @@ else
           .choose-type.clearfix(class=listingType)
             a.gardener(href="#", data-type="gardener")
               span Gardener
-            a.garden(href="#", data-type="garden")
-              span Garden
+            a.space(href="#", data-type="space")
+              span Available Space
             a.organic(href="#", data-type="organic")
               span Organic Materials
             a.tools(href="#", data-type="tools")
               span Tools & Stuff
           input#listingType(type="hidden", name="type",value=listingType)
           p.gardener You are listing as a Gardener looking for space to garden.
-          p.garden You are listing available space for someone else to garden in.
+          p.space You are listing available space for someone else to garden in.
           p.organic You are listing extra organic materials to share (i.e. Mulch, worms, compost...etc).
           p.tools You are listing extra tools to share.
           button.next.goto(type="button", data-goto='2') next
@@ -51,24 +51,25 @@ else
           button.next.disabled.goto(type="button", data-goto='3', data-error="Please enter and select a location") next
         .step.info
           h3 Tell us about your listings
-          .field
+          .field.required
             input(type='text', name="title", placeholder='title', required, data-parsley-length="[1, 100]")
-          .field
+          .field.required
             textarea(name="description", placeholder="Describe your Listing", required, data-parsley-length="[6, 240]", data-parsley-error-message="Tell us something about your listing, not too short, not too long. =)")
           //.field
             label(for="pic") pic
               input(type="file", name="pic")
-          .field
+          //.field
             input(type="hidden", name="imgData")
           .field
+            input.space(type="number", name="amount", placeholder="square meters.. roughly =)", data-parsley-group="space")
             textarea.gardener(type="text", name="bio", placeholder="Gardener Bio", data-parsley-length="[6, 500]", data-parsley-error-message="Tell us something about your gardening experience (no more than 500 chars).", data-parsley-group="gardener")
-            p.note We take your privacy seriously, and will never share your listed address or email with anyone on the site.
-              a.info(href="#info", data-info="By default, our map will display a marker on random location within a block or two of the location you enter - check this box to display a marker on exact location. This can be useful for things like community gardens or public spaces, or if you just don't care!") more info
           .field
-            label
-              input(type="checkbox", name="marker", value="precise")
-              = 'display precise marker'
-          button.next.disabled.submit(type="submit", data-error="Please fill out all *required fields") Create your Listing!
+            label.checkbox
+              input(type="checkbox", name="preciseMarker", value="true")
+              | use exact location
+            p.note By default, we do not show exact addresses
+              a.info(href="#info", data-info="By default, our map will display a marker on random location within a block or two of the location you enter - check this box to display a marker on exact location. This can be useful for things like community gardens or public spaces, or if you just don't care!") more info
+          button.next.disabled.submit(type="submit", data-error="Please fill out all *required fields") Create Listing
   script(type="text/javascript", src="/javascripts/page/listings.new.js")
 
 include ../snippets/footer-lite.jade

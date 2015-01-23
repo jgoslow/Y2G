@@ -70,15 +70,15 @@ var listings = function(location, user) {
     latLng.lng = location.D;*/
     var latLng = JSON.stringify(location);
 
-    console.log(document.location+'listings/?lat='+location.k+'&lng='+location.D+'&radius='+radius);
+    //console.log(document.location+'listings/?lat='+location.k+'&lng='+location.D+'&radius='+radius);
     $.getJSON('/listings/?lat='+location.k+'&lng='+location.D+'&radius='+radius, function(data){
-      console.log(data.length);
+      //console.log(data.length);
       if ((data.length == 0) && (localStorage.getItem('location') != latLng)) {
         y2g.message('There are no listings in your area.<br><br> Y2G would love your help destroying the lawns in your area.  Since we don\'t have any alien megaships, we put together this little <br><a href="#">Y2G - SheepNoMore Guide</a><br>Check it out.<br><br> Also, <a href="/listings/new" onclick="openModal( \'new-listing\', \'/listings/new/\', \'new-listing\'); return false;" value="new-listing" data-modaltype="new-listing openmodal">create the first listing!</a>', 'error', null);
       } else {
+        localStorage.setItem('location', latLng);
         if(typeof callback == "function") return callback(data);
       }
-      localStorage.setItem('location', latLng);
     });
 
     if (user != null) {
@@ -114,11 +114,14 @@ var listings = function(location, user) {
       arrowPosition: 0
     });
 
+
+
     listings.forEach(function(listing){
+      if (!listing.displayLatLng) listing.displayLatLng = listing.latLng
       var id = listing._id,
           created = moment(listing.created, 'YYYY-MM-DDTHH:mm:ssZ').format('MMM DD YYYY'),
-          lat = listing.latLng.lat,
-          lng = listing.latLng.lng,
+          lat = listing.displayLatLng.lat,
+          lng = listing.displayLatLng.lng,
           desc = listing.description,
           owner = listing.owner,
           ownerName = listing.ownerName,
@@ -179,7 +182,7 @@ var listings = function(location, user) {
   }
 
   function clearMap(){
-    console.log('clear listings');
+    //console.log('clear listings');
     if (markersArray) {
       for (i in markersArray) {
         markersArray[i].setMap(null);
@@ -358,5 +361,5 @@ function locationToolClose() {
   $('.map_modal_bg').fadeOut();
 }
 
-console.log('mapfuncs loaded');
+//console.log('mapfuncs loaded');
 loadScript([{url:'/javascripts/map_interface.js'}]);

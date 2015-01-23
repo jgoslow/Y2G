@@ -15,6 +15,7 @@ Create listing
 
 Message
 - allow message sending through website? yeah - mostly the same as any old send
+- make reply-to email different from "from" address - then you can add a gravatar
 
 Profile - add edit profile button
 - add image to profile?
@@ -40,6 +41,9 @@ Add Google Analytics - track:
 
 Security:
 - different db user with only read priveleges for "login"
+
+Imagery
+- animated gif of plants growing at the bottom of modals
 
 Launch
 -Make sure Mandrill only works from server IP
@@ -82,6 +86,9 @@ h2 {
   line-height: 28px;
   text-transform: Capitalize;
   margin-bottom: 7px;
+}
+h3 {
+  margin-bottom: 6px;
 }
 
 .left {
@@ -342,7 +349,7 @@ header .logo img {
 
 .admin {
   position: absolute;
-  top: 63px;
+  top: 57px;
   left: 10px;
   z-index: 10;
 }
@@ -362,6 +369,7 @@ header .logo img {
 }
 .login_button {
   padding: 5px 5px 5px 0;
+  color: #919191;
   text-align: left;
   font-size: 16px;
   height: 14px;
@@ -370,36 +378,47 @@ header .logo img {
   font-weight: 300;
   text-transform: uppercase;
 }
+  .login_button.messages {
+    display: inline-block;
+  }
   .login_button.fa-envelope-o {
   }
     .login_button.fa-envelope:before {
       text-indent: 0;
       display: inline-block;
-      color: black;
-      font-size: 13px;
+      color: #bbbcbb;
+      font-size: 16px;
+    }
+    .profile .login_button:first-child {
+      display: inline-block;
+      margin-right: 8px;
     }
     .login_button.fa-envelope:hover:before {
       color: #2ebadb;
     }
 header .social {
-  padding-top:12px;
+  padding-top:28px;
   display:inline-block;
 }
 header .social a {
-  margin-right:10px;
+  margin-right:18px;
+  color: #919191;
   font-size:25px;
   line-height:20px;
   display:inline-block;
   font-family:FontAwesome;
 }
+header .social a:hover {
+  text-decoration: none;
+}
 
-header .social a.fb {
+header .social a.fb:hover {
   color:#00195c;
 }
-header .social a.tw {
+header .social a.tw:hover {
   color:#00a5bc;
 }
-header .social a.pi {
+header .social a.pi:hover {
   color:#de343e;
 }
 
@@ -864,8 +883,8 @@ min-height:100px;
   background: #ffceaa;
 }
 
-.listings_wrap .listings > li.garden > a{background-position:7px -101px;} .listings_wrap .listings > li.garden > a:hover {background:url(../../images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:7px -101px;}
-.listings_wrap .listings > li.farmer > a{background-position:6px -69px;} .listings_wrap .listings > li.farmer > a:hover {background:url(../../images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:6px -69px;}
+.listings_wrap .listings > li.gardener > a{background-position:6px -69px;} .listings_wrap .listings > li.gardener > a:hover {background:url(../../images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:6px -69px;}
+.listings_wrap .listings > li.space > a{background-position:7px -101px;} .listings_wrap .listings > li.space > a:hover {background:url(../../images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:7px -101px;}
 .listings_wrap .listings > li.organic > a{background-position:7px -131px;} .listings_wrap .listings > li.organic > a:hover {background:url(../../images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:7px -131px;}
 .listings_wrap .listings > li.tools > a{background-position:6px -161px;} .listings_wrap .listings > li.tools > a:hover {background:url(../../images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:6px -161px;}
 
@@ -912,12 +931,24 @@ min-height:100px;
   width: 100%;
   overflow:hidden;
   height: 100%;
-  padding-bottom: 20px;
+  padding: 40px 0 20px;
 }
   .new-listing .steps {
-    border-top: 1px solid #acaa90;
-    text-align: right;
-    margin: 15px 0 45px;
+    position: fixed;
+    top: 10px;
+    padding-top: 8px;
+    border-bottom: 1px solid #acaa90;
+    text-align: left;
+    margin: 0px 0 15px;
+    padding-bottom: 7px;
+    left: 20px;
+    right: 20px;
+    background: white;
+    z-index: 1;
+    box-shadow: 0 10px 10px white;
+  }
+  .new-listing .step:last-child {
+    padding-left: 2.2%;
   }
   .new-listing .steps li {
     display: inline-block;
@@ -953,7 +984,7 @@ min-height:100px;
     transition:all .25s ease-in-out;
   }
   .new-listing .step {
-    padding: 15px 6.6%;
+    padding: 15px 15px;
     width: 33%;
     float: left;
     box-sizing: border-box;
@@ -965,9 +996,10 @@ min-height:100px;
   }
   .new-listing .choose-type {
     display: block !important;
-    margin-bottom: 25px;
+    margin-bottom: 5px;
   }
   .new-listing .choose-type a {
+    color: black;
     width: 48%;
     margin: 15px 4% 15px 0;
     height:20px;
@@ -985,13 +1017,24 @@ min-height:100px;
     .new-listing .choose-type a span {
       opacity: 0;
       text-decoration: none;
-      font-weight: bold;
-      font-size: 16px;
+      font-weight: normal;
+      line-height: 16px;
+      font-size: 14px;
       -webkit-transition:all .25s ease-in-out;
       -moz-transition:all .25s ease-in-out;
       -o-transition:all .25s ease-in-out;
       transition:all .25s ease-in-out;
     }
+
+    /* remove this to have it be a 4-square */
+    .new-listing .choose-type a {
+      width: 22%;
+      padding-top: 22%;
+    }
+    .new-listing .choose-type a:nth-child(2n) {margin-right: 4%;}
+    .new-listing .choose-type a:last-child {margin-right: 0;}
+    /* end 4-square */
+
     .new-listing .choose-type a:nth-child(2n) {margin-right: 0;}
     .new-listing .choose-type a:hover, .new-listing .choose-type a.active, .new-listing .choose-type a.active span, .new-listing .choose-type a:hover span {
       opacity: 1;
@@ -1000,7 +1043,7 @@ min-height:100px;
       background:url(/images/svg/gardener.svg) top left no-repeat;
       background-size: 100%;
     }
-    .new-listing .choose-type a.garden {
+    .new-listing .choose-type a.space {
       background:url(/images/svg/garden.svg) top left no-repeat;
       background-size: 100%;
     }
@@ -1014,6 +1057,8 @@ min-height:100px;
     }
 
   .new-listing input.location {
+    width: 78%;
+    margin-top: 15px;
   }
     .step.location.results input.location, .step.location.results .get-location, .step.location.results > h3 {
       opacity: .4;
@@ -1029,16 +1074,28 @@ min-height:100px;
       background-color:#acaa90;
     }
   #location-results {
-    display: none;
     position: relative;
+    min-height: 80px;
+    margin-top: 20px;
+    -webkit-transition:all .25s ease-in-out;
+    -moz-transition:all .25s ease-in-out;
+    -o-transition:all .25s ease-in-out;
+    transition:all .25s ease-in-out;
   }
-    .step.location.results #location-results {
+    #location-results.searching {
+      background: url(/images/lyra/loading.gif) center center no-repeat;
+    }
+    #location-results > * {
+      display: none;
+    }
+    .step.location.results #location-results > * {
       display: block;
     }
 
   .location-results {
     margin: 15px 0;
     max-height: 180px;
+    min-height: 25px;
     overflow: auto;
     padding-bottom: 30px;
     width: 99.8%;
@@ -1089,7 +1146,7 @@ min-height:100px;
   .new-listing.gardener .gardener {
     display: inline-block;
   }
-  .new-listing.garden .garden {
+  .new-listing.space .space {
     display: inline-block;
   }
   .new-listing.organic .organic {

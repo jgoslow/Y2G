@@ -63,18 +63,18 @@ jQuery(function($){
         if (src == undefined) { src = $(this).attr('src'); }
         $(this).attr('src', src);
       }
-      console.log('replace images: ' + newW, src);
+      //console.log('replace images: ' + newW, src);
     });
   }
 
   function mobileBind() {
-    console.log('mobileBind()');
+    //console.log('mobileBind()');
     $('.mobile-menu-btn').unbind().click(function(){
       $('header').toggleClass('menu-open');
     });
   }
   function mobileUnbind() {
-    console.log('mobileUnbind()');
+    //console.log('mobileUnbind()');
     $('.mobile-menu-btn').unbind();
   }
 

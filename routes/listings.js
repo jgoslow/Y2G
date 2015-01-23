@@ -2,10 +2,10 @@ var config = require('../config'); // DB Config
 var express = require('express');
 var router = express.Router();
 var request = require('request');
+var async = require('async');
 var dbURL = config.db.user+':'+config.db.pass+'@'+config.db.host+':'+config.db.port+'/'+config.db.db;
 var collections = ["listings", "users"];
 var db = require("mongojs").connect(dbURL, collections);
-var moment = require('moment');
 
 var mongoose = require('mongoose'),
     passport = require('passport'),
@@ -13,8 +13,6 @@ var mongoose = require('mongoose'),
     User = require('../lib/db/user-model'),
     Flag = require('../lib/db/flag-model'),
     Listing = require('../lib/db/listing-model');
-
-moment().format();
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -33,7 +31,8 @@ router.get('/', function(req, res) {
       minlng = lng - rad2deg(distance / radius / Math.cos(deg2rad(lat)));
 
   //console.log('db vars: '+maxlat, minlat, maxlng, minlng);
-  db.listings.find({'latLng.lat': {$gt : minlat, $lt: maxlat}, 'latLng.lng': {$gt : minlng, $lt: maxlng}}).limit(5000, function(err, response) {
+  db.listings.find({'latLng.lat': {$gt : minlat, $lt: maxlat}, 'latLng.lng': {$gt : minlng, $lt: maxlng}})
+  .select('-latLng,-location').limit(5000).exec(function(err, response) {
     if (err) return console.log(err);
     //console.log(response);
     res.send(response);
@@ -56,44 +55,62 @@ router.get('/new', function(req, res) {
 
 /* GET New User page. */
 router.get('/add', function(req, res) {
-  var listingInfo = req.query,
-      date = moment().format("YYYY-MM-DDTHH:mm:ssZ"),
-      newCreated = moment().format("YYYY-MM-DDTHH:mm:ssZ"),
-      newUpdated = moment().format("YYYY-MM-DDTHH:mm:ssZ"),
-      newExpires = moment(date, "YYYY-MM-DDTHH:mm:ssZ").add(1, 'years').format("YYYY-MM-DDTHH:mm:ssZ"); //'YYYY-MM-DD hh:mma'
-  var newLatLng = JSON.parse(decodeURI(listingInfo.latLng));
-  var newListing = new Listing({
-      owner: listingInfo.owner,
-      ownerName: listingInfo.ownerName,
-      type: listingInfo.type,
-      title: listingInfo.title,
-      description: listingInfo.description,
-      location: listingInfo.location,
-      city: listingInfo.city,
-      state: listingInfo.state,
-      zip: listingInfo.zip,
-      created: newCreated,
-      updated: newCreated,
-      expires: newExpires,
-      latLng: {
-        lat: newLatLng.lat,
-        lng: newLatLng.lng
-      },
-      active: true
-  });
+  var listingInfo = req.query
+    , newLatLng = JSON.parse(decodeURI(listingInfo.latLng))
 
-  newListing.save(function(err, listing) {
-	console.log('listing saved..');
-	console.log(err, listing);
-    if (err) {
-      console.log(err);
-      res.status(409).send(err);
-    } else {
-      console.log(listing);
-      res.status(200).send('success');
+  listingInfo.typeInfo = {}
+  async.waterfall([
+    // Get Respond Message from DB and add message to thread
+    function(done) {
+      if (listingInfo.type == 'gardener') {
+        listingInfo.typeInfo.bio = listingInfo.bio;
+      } else if (listingInfo.type == 'space') {
+        console.log('amount:'+listingInfo.amount)
+        listingInfo.typeInfo.amount = listingInfo.amount;
+      } else if (listingInfo.type == 'organic') {
+      } else if (listingInfo.type == 'tools') {
+      }
+      done(null, listingInfo);
+    },
+    function(listingInfo, done) {
+      console.log(listingInfo)
+      var newListing = new Listing({
+        owner: listingInfo.owner
+        , ownerName: listingInfo.ownerName
+        , type: listingInfo.type
+        , typeFields: listingInfo.typeFields
+        , title: listingInfo.title
+        , description: listingInfo.description
+        , location: listingInfo.location
+        , preciseMarker: listingInfo.preciseMarker
+        , city: listingInfo.city
+        , state: listingInfo.state
+        , zip: listingInfo.zip
+        , latLng: {
+          lat: newLatLng.lat
+          , lng: newLatLng.lng
+        }
+        , active: true
+      });
+
+      newListing.save(function(err, listing) {
+        if (err) done(err)
+        if (listing) done(err, listing, 'done')
+      });
+    },
+    ],
+    function(err, listing) {
+      console.log('listing saved..');
+      console.log(err, listing);
+      if (err) {
+        console.log(err);
+        res.status(409).send(err);
+      } else {
+        console.log(listing);
+        res.status(200).send('success');
+      }
     }
-  });
-
+  ); // End Async
 });
 
 

@@ -45,6 +45,7 @@
 
   header .social {
     bottom: -2px;
+    padding-top: 14px;
     position: relative;
   }
   header .social a {
@@ -123,6 +124,14 @@
     border-left:2px solid black;
     font-size: 14px;
   }
+  .new-listing .choose-type {
+    margin-bottom: 15px;
+  }
+  .new-listing .choose-type a span {
+    line-height: 22px;
+    font-weight: bold;
+    font-size: 16px;
+  }
 }
 
 
@@ -146,6 +155,15 @@
   .new-listing .choose-type a:nth-child(2n) {margin-right: 4%;}
   .new-listing .choose-type a:last-child {margin-right: 0;}
 
+  .new-listing {
+    padding-top: 0;
+  }
+  .new-listing .steps {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+  }
 
 
 }
