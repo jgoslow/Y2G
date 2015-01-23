@@ -20,6 +20,7 @@ Profile - add edit profile button
 - add image to profile?
 
 Create Account
+- if clicked "create a listing" - open up that screen when they click their confirmation link
 - after first time logging in - ask if they want to list as a master gardener
 - after deleting account - delete all listings
 
@@ -74,6 +75,13 @@ h1 {
   font-weight:bold;
   line-height:35px;
   margin-bottom:15px;
+}
+h2 {
+  font-size: 22px;
+  font-weight: 200;
+  line-height: 28px;
+  text-transform: Capitalize;
+  margin-bottom: 7px;
 }
 
 .left {

@@ -37,7 +37,7 @@ head
 
   block header
 
-body.home.page.page-id-6.page-template-default
+body(class=bodyClasses)
   if messages.error
     .alert.error
       div= messages.error
@@ -71,24 +71,11 @@ body.home.page.page-id-6.page-template-default
                 a#show_login.login_button.login.openmodal(data-modaltype='login', href='/account/login/') Login
                 a.login_button.openmodal.signup(href='/account/sign-up/', data-modaltype='sign-up') Sign Up
             #social.social
-              a.outside_link.tw(href='twitter') &#xF081;
-              a.outside_link.fb(href='Facebook') &#xF082;
-              a.outside_link.pi(href='pinterest') &#xF0D3;
+              a.outside_link.tw(href='https://twitter.com/yardstogardens') &#xF081;
+              a.outside_link.fb(href='https://www.facebook.com/yardstogardens') &#xF082;
+              a.outside_link.pi(href='http://www.pinterest.com/yardstogardens/') &#xF0D3;
 
-          #nav.nav.right
-            #menu.menu-main-container(class='.menu-wrap')
-              ul#menu-main.menu-main.menu
-                li.menu-item.menu-item-type-post_type.menu-item-object-page.current-menu-item.page_item.page-item-6.current_page_item.menu-item-10
-                  a(href='index.html') Home
-
-                li.menu-item.menu-item-type-post_type.menu-item-object-page.menu-item-274
-                  a(href='about.html') About Y2G
-
-                li.menu-item.menu-item-type-post_type.menu-item-object-page.menu-item-279
-                  a(href='resources.html') Resources
-
-                li.menu-item.menu-item-type-post_type.menu-item-object-page.menu-item-273
-                  a(href='contact.html') Contact Us
+          include snippets/menu.jade
 
           .clear
 
