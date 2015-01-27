@@ -309,7 +309,10 @@ a.note {
 form.new-password {
   display: none;
 }
-
+form.new-listing-form {
+  margin: 0;
+  padding: 0;
+}
 
 
 

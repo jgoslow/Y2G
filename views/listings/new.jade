@@ -6,7 +6,7 @@ if !user
 else
   - if (!listingType) listingType = 'gardener';
   div#new-listing(class=listingType+' new-listing', data-type=listingType, data-current-step="1")
-    form#new-listing-form.standard(onsubmit="listings.create('#new-listing-form'); return false;")
+    form#new-listing-form.new-listing-form(onsubmit="listings.create('#new-listing-form'); return false;")
       input(type="hidden", name="owner", value="#{user.id}")
       input(type="hidden", name="ownerName", value="#{user.name}")
       ul.steps

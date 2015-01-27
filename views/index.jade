@@ -65,4 +65,16 @@ block content
   p To post a listing just click on one of the categories, enter the information requested, verify your email and your listing will appear on the Y2G map.
 
 block sidebar
-  p sidebar content
+  .box-listing-buttons
+    a.box-dotted.gardener.openmodal(href='/listings/new?type=gardener', data-modaltype='new-listing')
+      strong.title Gardener
+      span.description Are you a gardener looking for space to plant a garden?
+    a.box-dotted.space.openmodal(href='/listings/new?type=space', data-modaltype='new-listing')
+      strong.title Space
+      span.description Do you have extra space in your yard for a garden?
+    a.box-dotted.organic.openmodal(href='/listings/new?type=organic', data-modaltype='new-listing')
+      strong.title Organic Matter
+      span.description Got any mulch, straw, compost, woodchips, manure or soil?
+    a.box-dotted.tools.openmodal(href='/listings/new?type=tools', data-modaltype='new-listing')
+      strong.title Tools & Stuff
+      span.description Got any extra seeds, gardening supplies, or transplants to share?

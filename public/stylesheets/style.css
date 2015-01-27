@@ -9,6 +9,8 @@ MAP
 - show search circle?
 
 Create listing
+- Clicking on specific item should set the listing type
+- Should integrate the account creation and login process
 - Integrate pieces of listing (square footage, other info);
 - Bulk create
 - Green Check? (need from Jesse) for selecting location
@@ -167,7 +169,7 @@ h3 {
   font-size: 20px;
   line-height: 20px;
   width: 273px;
-  background: url(../../images/layout/y2g_sprites.png) -9px -11px no-repeat white;
+  background: url(/images/layout/y2g_sprites.png) -9px -11px no-repeat white;
 }
 .map_wrap .location_tool input:-webkit-autofill, .address_input, .map_wrap .location_tool input:-webkit-autofill:focus {
    -webkit-box-shadow: 0 0 0 50px white inset;
@@ -196,7 +198,7 @@ h3 {
 .container {
   padding:45px 0 0;
   position:relative;
-  background:url(../../images/layout/mobile/footer-grass-sheep.gif) bottom center repeat-x;
+  background:url(/images/layout/mobile/footer-grass-sheep.gif) bottom center repeat-x;
   background-size:100%;
 }
 body.search .container {
@@ -308,7 +310,7 @@ header .logo img {
   right: 10px;
   width: 26px;
   height: 23px;
-  background: url(../../images/svg/mobile-menu.svg) no-repeat top left 100%;
+  background: url(/images/svg/mobile-menu.svg) no-repeat top left 100%;
   z-index: 101;
 }
 .mobile-menu {
@@ -570,7 +572,7 @@ min-height:100px;
   height:23px;
   width:22px;
   border:1px solid #000;
-  background:url(../../images/layout/y2g_sprites.png) no-repeat;
+  background:url(/images/layout/y2g_sprites.png) no-repeat;
   background-position:0 -229px;
   position:absolute;
   bottom:32px;
@@ -653,7 +655,7 @@ min-height:100px;
   width:100%;
 }
 .map_wrap .location_tool .icon {
-  background:url(../../images/layout/y2g_sprites.png) center 5px no-repeat black;
+  background:url(/images/layout/y2g_sprites.png) center 5px no-repeat black;
   width:28px;
   height:30px;
   position:absolute;
@@ -694,13 +696,13 @@ min-height:100px;
 .address_input {
   width:253px;
   padding-left:25px;
-  background:url(../../images/layout/y2g_sprites.png) no-repeat white;
+  background:url(/images/layout/y2g_sprites.png) no-repeat white;
   background-position:-11px -18px;
   float:left;
   margin-bottom:8px;
 }
   .address_input:focus {
-    background:url(../../images/layout/y2g_sprites.png) no-repeat white;
+    background:url(/images/layout/y2g_sprites.png) no-repeat white;
   }
 .map_wrap .location_tool_submit {
   color:white;
@@ -813,7 +815,7 @@ min-height:100px;
   line-height:20px;
 }
 #map_new_listing {
-  background:url(../../images/layout/y2g_sprites.png) no-repeat #f05139;
+  background:url(/images/layout/y2g_sprites.png) no-repeat #f05139;
   background-position:8px -42px;
   padding-left:20px;
 }
@@ -872,7 +874,7 @@ min-height:100px;
   height:100%;
   width:100%;
   display:block;
-  background:url(../../images/layout/y2g_sprites.png) no-repeat white;
+  background:url(/images/layout/y2g_sprites.png) no-repeat white;
   background-position:0 10px;
 }
 
@@ -883,10 +885,10 @@ min-height:100px;
   background: #ffceaa;
 }
 
-.listings_wrap .listings > li.gardener > a{background-position:6px -69px;} .listings_wrap .listings > li.gardener > a:hover {background:url(../../images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:6px -69px;}
-.listings_wrap .listings > li.space > a{background-position:7px -101px;} .listings_wrap .listings > li.space > a:hover {background:url(../../images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:7px -101px;}
-.listings_wrap .listings > li.organic > a{background-position:7px -131px;} .listings_wrap .listings > li.organic > a:hover {background:url(../../images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:7px -131px;}
-.listings_wrap .listings > li.tools > a{background-position:6px -161px;} .listings_wrap .listings > li.tools > a:hover {background:url(../../images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:6px -161px;}
+.listings_wrap .listings > li.gardener > a{background-position:6px -69px;} .listings_wrap .listings > li.gardener > a:hover {background:url(/images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:6px -69px;}
+.listings_wrap .listings > li.space > a{background-position:7px -101px;} .listings_wrap .listings > li.space > a:hover {background:url(/images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:7px -101px;}
+.listings_wrap .listings > li.organic > a{background-position:7px -131px;} .listings_wrap .listings > li.organic > a:hover {background:url(/images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:7px -131px;}
+.listings_wrap .listings > li.tools > a{background-position:6px -161px;} .listings_wrap .listings > li.tools > a:hover {background:url(/images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:6px -161px;}
 
 .listings_wrap .listings > li a .title, .listings_wrap .listings > li a .desc, .listings_wrap .listings > li a .date {position:absolute;}
 .listings_wrap .listings > li a .title {
@@ -1044,7 +1046,7 @@ min-height:100px;
       background-size: 100%;
     }
     .new-listing .choose-type a.space {
-      background:url(/images/svg/garden.svg) top left no-repeat;
+      background:url(/images/svg/space.svg) top left no-repeat;
       background-size: 100%;
     }
     .new-listing .choose-type a.tools {
@@ -1176,7 +1178,7 @@ min-height:100px;
   margin:35px auto 100px;
 }
 .home .content_wrap .content .post{
-  width:300px;
+  width:100%;
 }
 
 .post {
@@ -1191,59 +1193,70 @@ min-height:100px;
 .post.left, .post.right { width:50%; padding:0;}
 
 
-.home_content_right {
-  width:600px;
+.box-listing-buttons {
+  width:100%;
 }
-.home_content_right .newlisting {
-  height:100px;
-  width:290px;
-  background:url(../../images/layout/y2g_sprites_300.png) no-repeat;
-  background-position:0 0;
+.box-listing-buttons .box-dotted {
+  height:0;
+  padding-top: 33%;
+  width:100%;
+  max-width: 330px;
+  background:url(/images/svg/box-dotted.svg) no-repeat;
+  background-position:center center;
+  background-size: 98%;
   display:block;
   float:left;
-  margin-left:10px;
   margin-bottom:10px;
   position:relative;
+  color: black;
 }
-.home_content_right .newlisting > span {
+.box-listing-buttons .box-dotted:first-child {
+  margin-top: 15px;
+}
+.box-listing-buttons .box-dotted:nth-child(2n) {
+}
+.box-listing-buttons .box-dotted:before {
+  content: '';
   position:absolute;
   top:0;
   left:0;
   right:0;
   bottom:0;
-  background:url(../../images/layout/y2g_sprites_300.png) no-repeat;
-  background-position:0 20px;
   display:block;
 }
-.home_content_right .newlisting span.farmer {
-  background-position:15px -137px;
+.box-listing-buttons .box-dotted.gardener:before {
+  background:url(/images/svg/gardener.svg) 20px center no-repeat;
+  background-size: 20%;
 }
-.home_content_right .newlisting span.garden {
-  background-position:15px -230px;
+.box-listing-buttons .box-dotted.space:before {
+  background:url(/images/svg/space.svg) 20px center no-repeat;
+  background-size: 20%;
 }
-.home_content_right .newlisting span.organic {
-  background-position:20px -330px;
+.box-listing-buttons .box-dotted.organic:before {
+  background:url(/images/svg/organic.svg) 20px center no-repeat;
+  background-size: 20%;
 }
-.home_content_right .newlisting span.tools {
-  background-position:15px -430px;
+.box-listing-buttons .box-dotted.tools:before {
+  background:url(/images/svg/tools.svg) 20px center no-repeat;
+  background-size: 20%;
 }
 
-.home_content_right .newlisting > span .title {
+.box-listing-buttons .box-dotted .title {
   position:absolute;
-  top:25px;
-  left:95px;
+  top:20%;
+  left: 28%;
   text-transform:uppercase;
   font-weight:bold;
   font-size:17px;
 }
-.home_content_right .newlisting > span .description {
+.box-listing-buttons .box-dotted .description {
   position:absolute;
-  top:50px;
-  left:95px;
+  top: 44%;
+  left: 28%;
   line-height:17px;
   font-size:13px;
   font-weight:500;
-  padding-right:20px;
+  padding-right:12%;
 }
 
 
@@ -1321,7 +1334,7 @@ min-height:100px;
   /* Footer Styles */
 
   .footer_wrap {
-    min-height:30px;
+    min-height:17px;
     position:absolute;
     bottom:0;
   }
@@ -1347,12 +1360,13 @@ min-height:100px;
   footer .credit {
     float:right;
     font-size:10px;
-    font-weight:bold;
     letter-spacing:.5px;
     color:white;
     text-transform:uppercase;
+    margin-right: 7%;
   }
   footer .credit a {
     color:white;
+    font-weight:bold;
     text-transform:uppercase;
   }
