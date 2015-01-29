@@ -20,9 +20,7 @@ function initialize() {
   loadScript([
     {url:'/javascripts/map_functions.js'},
     {url:'/javascripts/infobubble.js'},
-    {url:'/javascripts/icons.js'},
-    {url:'/javascripts/parsley.js'},
-    {url:'/javascripts/parsley.remote.min.js'}
+    {url:'/javascripts/icons.js'}
   ]);
 
   //moment().format(); // Date Formatting Tool
@@ -33,7 +31,7 @@ var libs = [ {url: 'https://maps.googleapis.com/maps/api/js?v=3.exp&'+'callback=
 
 
 window.onload = function(){
-  loadScript(libs);
+  loadScript(libs)
 }
 
 

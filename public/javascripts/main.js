@@ -1,26 +1,28 @@
-//SETUP VARIABLES
-
-var loggedin;
-
-
 jQuery(function($){
 
 
-	// Modal Windows
-	$('.openmodal').click(function(){
-		var type = '', url = '';
-		if ($(this).attr('href') != '') { url = $(this).attr('href'); }
-		if ($(this).attr('data-modal') != '') { type = $(this).attr('data-modaltype'); }
-		openModal($(this), url, type);
-		return false;
-	});
-
-	// if Logged In
-	if (localStorage.getItem('login') == 'true') {
-		$('body').addClass('logged-in');
+	//Interpret URL
+	var params = {};
+	if (location.search) {
+		var parts = location.search.substring(1).split('&');
+		for (var i = 0; i < parts.length; i++) {
+			var nv = parts[i].split('=');
+			if (!nv[0]) continue;
+			params[nv[0]] = nv[1] || true;
+		}
+	}
+	if (params.modal) {
+		var modal = params.modal
+			,	url
+		if (params.modal == 'profile') url = '/account/profile'
+		else if (params.modal == 'new-listing') url = '/listings/new'
+		openModal('', url, params.modal)
+		newUrl = window.location.protocol+"//"+window.location.host
+		window.location.origin = window.location.protocol+"//"+window.location.host
+		window.history.pushState( '', '', newUrl);
 	}
 
-
+	bindJS();
 
 
 	// Window Width Functions
@@ -39,6 +41,31 @@ jQuery(function($){
 
 
 });
+
+
+// Bind Function (to initialize later)
+function bindJS() {
+
+	// Add Tooltips
+	$('[data-tooltip!=""]').qtip({ // Grab all elements with a non-blank data-tooltip attr.
+		style: { classes: 'qtip-bootstrap' }
+		,	content: { attr: 'data-tooltip' }
+	})
+
+
+	// Modal Windows
+	$('.openmodal').click(function(){
+		var type = '', url = '';
+		if ($(this).attr('href') != '') { url = $(this).attr('href'); }
+		if ($(this).attr('data-modal') != '') { type = $(this).attr('data-modaltype'); }
+		openModal($(this), url, type);
+		return false;
+	});
+	$('.modal_close').click(function(){ closeModal(); });
+
+}
+
+
 
 function y2g_resize() {
 	var w = $(window).width();
@@ -246,6 +273,48 @@ account.cancelEditItem = function(name) {
 account.updateItem = function(item) {
 
 }
+account.updatePass = function(form) {
+	var form = $(form)
+		, pass = form.find('#newPassword-confirm').val()
+		, data = {}
+		, thumb = $('.updatePassField .fa-thumbs-up')
+	data.newPass = pass
+	$.post('/account/updatePass', data, function(response){  })
+	.fail(function(){
+		y2g.message('There has been an error.  Please try again.', 'error', 5)
+	})
+	.done(function(){
+		form.removeClass('ready')
+		form.find('input').val('')
+		form.find('button[type=submit]').removeClass('disabled')
+		TweenMax.to(form, .5, {height: 0})
+		setTimeout(function(){
+			form.siblings('a.password').show();
+			TweenMax.to(thumb, .5, {opacity: 1})
+		}, 500)
+		setTimeout(function(){
+			TweenMax.to(thumb, .5, {opacity: 0})
+		}, 3000)
+	})
+	return false;
+}
+
+account.forgot = function(form){
+	var form = $(form)
+	, email = form.find('input[type=email]').val()
+	, data = {}
+	data.email = email
+	$.post('/account/forgot', data, function(response){  })
+	.fail(function(err){
+		y2g.message(err, 'error', 5)
+	})
+	.done(function(email){
+		closeModal('forgot-pass')
+		y2g.message('A password-reset link has been sent to '+email+'.  The link will expire in 1 hour.  <br><br>If no email arrives within several minutes, check your spam folder.', 'success', null)
+		form.find('input[type=email]').val('')
+	})
+	return false
+}
 
 
 // Keyboard Add Shortcuts to Forms
@@ -314,6 +383,8 @@ messages.send = function(form){
 	}
 	return false;
 }
+
+
 
 // Create Listing
 function createListing() {

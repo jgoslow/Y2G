@@ -1,36 +1,28 @@
 jQuery(function($){
 
-  if (localStorage.getItem('login') == 'true') {
+  var password = $('input[name="newPassword"]')
+    , form = $('form.new-password')
+    , submit = form.find('button[type=submit]')
 
-    if (localStorage.getItem('y2g-name')) {$('.y2g-name').html(localStorage.getItem('y2g-name'));}
-    if (localStorage.getItem('y2g-location')) {$('.y2g-location').html(localStorage.getItem('y2g-location'));}
-    if (localStorage.getItem('y2g-bio')) {$('.y2g-bio').html(localStorage.getItem('y2g-bio'));}
-    if (localStorage.getItem('y2g-reasons')) {$('.y2g-reasons').html(localStorage.getItem('y2g-reasons'));}
-    if (localStorage.getItem('y2g-name')) {$('.y2g-name').html(localStorage.getItem('y2g-name'));}
+  form.parsley()
 
-  } else {
-    // If Not logged in - load login form and hide profile
-    $.ajax({ url: '/login.html',
-      data: {/*action: action, distance: distance*/},
-      type: 'post',
-      success: function(output) {
-        $('#profile').hide();
-        $('#login_profile').html(output);
-        setTimeout(function(){
-          $('#login_form .submit').click(function(){
-            $('#login_profile').fadeOut();
-            setTimeout(function(){ $('#profile').fadeIn(); login(); return false; }, 500 );
-          });
-        }, 500);
-      },
-      error: function(output) {
-        alert(output);
-        return false;
-      },
-    });
+  $('#newPassword-confirm').bind("propertychange change keyup input paste", function(){
+    if (form.parsley().isValid()) {
+      form.addClass('ready')
+      $('.new-password .btn-update').removeClass('disabled')
+    } else {
+      form.removeClass('ready')
+      $('.new-password .btn-update').addClass('disabled')
+    }
+  })
 
-  }
+  submit.click(function(){
+    submit.addClass('disabled')
+  })
 
-  showListings();
+})
 
-});
+function newPass() {
+  $('a.password').hide()
+  TweenMax.to($('.new-password'), .5, {opacity: 1, height:150})
+}

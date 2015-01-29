@@ -9,8 +9,7 @@ MAP
 - show search circle?
 
 Create listing
-- Clicking on specific item should set the listing type
-- Should integrate the account creation and login process
+- Clicking on specific item-btn should set the listing type (on re-open)
 - Integrate pieces of listing (square footage, other info);
 - Bulk create
 - Green Check? (need from Jesse) for selecting location
@@ -23,7 +22,6 @@ Profile - add edit profile button
 - add image to profile?
 
 Create Account
-- if clicked "create a listing" - open up that screen when they click their confirmation link
 - after first time logging in - ask if they want to list as a master gardener
 - after deleting account - delete all listings
 
@@ -41,8 +39,10 @@ Add Google Analytics - track:
   - listings
 - errors?
 
-Security:
+Security & Errors:
+- Add errors for when people aren't connected to the internet (disable buttons?)
 - different db user with only read priveleges for "login"
+- remove console logs of passwords/account info
 
 Imagery
 - animated gif of plants growing at the bottom of modals
@@ -51,6 +51,7 @@ Launch
 -Make sure Mandrill only works from server IP
 -Remove users page (and other extraneous db calls)
 -Change mailserver in DNS to y2g.org
+-always redirect to https
 
 
 .
@@ -121,10 +122,10 @@ h3 {
     color: white;
   }
 .error, .alert-error {
-  color: #f05139;
+  color: #c92128;
 }
   .error-box {
-    border: 1px solid #f05139;
+    border: 1px solid #c92128;
   }
 
 .clearfix:after {
@@ -917,6 +918,14 @@ min-height:100px;
 
 
 /* Forms */
+.new-password {
+  height: 0;
+  overflow: hidden;
+  opacity: 0;
+}
+  .new-password .field:first-child {
+    margin-top: 0;
+  }
 
 /* Sign Up */
 .sign-up {

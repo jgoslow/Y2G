@@ -16,16 +16,14 @@ else
       a.fa-edit.fa(href="#", onClick="account.editItem('email'); return false;")
       a.fa-save.fa(href="#", onClick="account.saveItem('email'); return false;")
       a.fa-remove.fa(href="#", onClick="account.cancelEditItem('email'); return false;")
-    .field
+    .field.updatePassField
       label password:
-      a.password.editable(href="#", onClick="") change password?
-      form.new-password(method="post", action="/account/newpass", )
-        .field
-          input(name="old-password", placeholder="old password")
-        .field
-          input(name="password", placeholder="new password")
-        .field
-          input(name="password-confirm", placeholder="confirm new password")
+      a.password.editable(href="#", onClick="newPass(); return false;") change password
+      a.fa-thumbs-up.fa(href="", onClick="return false;")
+      form.new-password(method="post", action="/account/newpass", onsubmit="account.updatePass($(this)); return false;")
+        input.field.editable(type="password", required, id="newPassword", name="newPassword", placeholder="new password", data-parsley-trigger="focusout", data-parsley-minlength="6", data-parsley-error-message="Password must be at least 6 characters")
+        input.field.editable(type="password", required, id="newPassword-confirm", name="newPassword-confirm", placeholder="confirm password", data-parsley-trigger="focusout", data-parsley-equalto="#newPassword", data-parsley-error-message="Passwords must match")
+        button.btn-update.editable.disabled(type="submit") update
   .bio
     .field.location
       label Location:
@@ -55,8 +53,11 @@ else
       a.fa-save.fa(href="#", onClick="account.saveItem('bio'); return false;")
       a.fa-remove.fa(href="#", onClick="account.cancelEditItem('bio'); return false;")
     .field.location
-      label Master Gardener?
-      input.editable(type="checkbox", masterGardener, name="masterGardener")
+      label List as a Master Gardener?
+      .editable
+        input(type="checkbox", masterGardener, name="masterGardener")
+        | &nbsp;&nbsp;
+        a.note(data-tooltip="If you list as a master gardener, then people looking for gardening advice nearby will be able to message you with questions. It's a great way to meet people in the neighborhood!") (more info)
+    script(type="text/javascript", src="/javascripts/page/profile.js")
 
-
-include ../snippets/footer-lite.jade
+  include ../snippets/footer-profile.jade

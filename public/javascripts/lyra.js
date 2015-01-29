@@ -42,9 +42,9 @@ function openModal(obj, target, type) {
 			data: {/*action: action, distance: distance*/},
 			type: 'get',
 			success: function(output) {
-				$('.modal_bg, .modal-'+type).fadeIn();
+				$('.modal_bg, .modal-'+type).addClass('open').fadeIn();
 				$('.modal-'+type+' .modal_content').html(output);
-				$('.modal_close').click(function(){ closeModal(); });
+				bindJS();
 			},
 			error: function(output) {
 				alert(output);
@@ -52,7 +52,7 @@ function openModal(obj, target, type) {
 			},
 		});
 	} else {
-		console.log('modal exists');
+		console.log('modal type '+type+' exists');
 		$('.modal_bg, .modal-'+type).fadeIn();
 	}
 

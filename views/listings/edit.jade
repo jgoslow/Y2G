@@ -1,15 +1,10 @@
-else if !user
+if !user
   h2 You must be logged in to view listings
   include ../account/mustlogin.jade
+  include ../snippets/footer-lite.jade
 else
   h2 Your Listings
-  form#flag-form(method="post", action="/listings/flag", onsubmit="listings.submitFlag($(this)); return false;")
-      input(type="hidden", name="listing", value="#{listing}")
-      .field
-        p.note Flag a listing if it is inappropriate or inaccurate, contains marketing or sales information for a third party, or has been posted against the owner's wishes
-      p Tell us why you are flagging this listing:
-      .field
-        textarea(name="message" placeholder='message')
-      input.next.submit(type='submit', value='flag this listing')
-
-include ../snippets/footer-lite.jade
+  each listing, i in listings
+    h3= listing.title
+    h4= listing.latLng.lat
+  include ../snippets/footer-profile.jade

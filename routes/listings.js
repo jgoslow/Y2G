@@ -31,8 +31,8 @@ router.get('/', function(req, res) {
       minlng = lng - rad2deg(distance / radius / Math.cos(deg2rad(lat)));
 
   //console.log('db vars: '+maxlat, minlat, maxlng, minlng);
-  db.listings.find({'latLng.lat': {$gt : minlat, $lt: maxlat}, 'latLng.lng': {$gt : minlng, $lt: maxlng}})
-  .select('-latLng,-location').limit(5000).exec(function(err, response) {
+  Listing.find({'latLng.lat': {$gt : minlat, $lt: maxlat}, 'latLng.lng': {$gt : minlng, $lt: maxlng}})
+  .select('-latLng -location').limit(5000).exec(function(err, response) {
     if (err) return console.log(err);
     //console.log(response);
     res.send(response);
@@ -147,9 +147,21 @@ router.post('/flag', function(req, res) {
 
 /* GET Edit Listings Page. */
 router.get('/edit', function(req, res) {
-  res.render('listings/edit', {
-    user: req.user
-  });
+  if (req.user) {
+    Listing.find({owner: req.user.id})
+    .select().limit(5000).exec(function(err, listings) {
+      console.log(listings)
+      res.render('listings/edit', {
+        listings: listings,
+        user: req.user
+      });
+    })
+  } else {
+    res.render('listings/edit', {
+      user: req.user
+    });
+  }
+
 });
 
 

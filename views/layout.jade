@@ -3,6 +3,7 @@ head
   meta(charset='UTF-8')
   meta(name='viewport', content='width=device-width, initial-scale=1')
   title= title
+    | &nbsp;| Yards to Gardens
 
   link(rel='pingback', href='http://map/xmlrpc.php')
   link(rel='icon', type='image/ico', href='/images/layout/favicon.ico')
@@ -25,7 +26,8 @@ head
   link(href='http://fonts.googleapis.com/css?family=Roboto:400,900,700,500,300,100,300italic,400italic', rel='stylesheet', type='text/css')
   link(rel='stylesheet', type='text/css', media='all', href='/stylesheets/form.css')
   link(rel='stylesheet', type='text/css', media='all', href='/stylesheets/responsive.css')
-  link(rel='stylesheet', type='text/css', media='all', href='/stylesheets/jquery.ui.css')
+  link(rel='stylesheet', type='text/css', media='all', href='/stylesheets/lib/jquery.ui.css')
+  link(rel='stylesheet', type='text/css', media='all', href='/stylesheets/lib/qtip.css')
 
   script.
     // declare vars used throughout App
@@ -116,6 +118,9 @@ body(class=bodyClasses)
 
   script(type='text/javascript', src='/javascripts/tweenmax.js')
 
+  script(type='text/javascript', src='/javascripts/parsley.js')
+  script(type='text/javascript', src='/javascripts/parsley.remote.min.js')
+  script(type='text/javascript', src='/javascripts/jquery/jquery-qtip.min.js')
   script(type='text/javascript', src='/javascripts/jquery/jquery-ui.js')
   // <script type="text/javascript" src="http://mapjs/jquery/jquery-tools.js"></script>
   script(type='text/javascript', src='/javascripts/lyra.js')
@@ -124,12 +129,6 @@ body(class=bodyClasses)
 
   script(type='text/javascript', src='/javascripts/responsive.js')
 
-  script.
-    jQuery(function($){
-      $('h1').click(function(){
-        $('#select').val('Option 4');
-      });
-    });
   // <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7oM_im_K8XAFd25v4ZTAgnk2pAXHLblM"></script>
   //
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHfWHqA0vkS16oU6Qi0xAT-6-RQ51edD4&amp;sensor=false">

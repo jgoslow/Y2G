@@ -54,6 +54,9 @@
     margin-right: 0;
   }
 
+  .modal_content .footer-lite {
+    position: absolute;
+  }
 
 
 }
@@ -206,7 +209,7 @@
     margin-left: 5%;
   }
   .box-listing-buttons .box-dotted {
-    width: 30%;
+    width: 32%;
     padding-top: 10%;
   }
 }

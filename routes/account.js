@@ -127,7 +127,8 @@ router.post('/sign-up/', function(req, res) {
       options.message.to[0].email = newUser.email;
       options.message.to[0].name = newUser.name;
       options.message.merge_vars[0].rcpt = newUser.email;
-      options.message.merge_vars[0].vars[0].content = 'http://'+req.headers.host+'/account/activate/?token='+newUser.activationToken;
+      if (userInfo.createListing) options.message.merge_vars[0].vars[0].content = 'http://'+req.headers.host+'/account/activate/?token='+newUser.activationToken+'&createListing=true';
+      else options.message.merge_vars[0].vars[0].content = 'http://'+req.headers.host+'/account/activate/?token='+newUser.activationToken;
       options.message.merge_vars[0].vars[1].content = newUser.name;
       request.post({
         url:     url,
@@ -187,10 +188,23 @@ router.post('/updateItem', function(req, res) {
   })
 
 })
+router.post('/updatePass', function(req, res) {
+  var user = req.user
+  , newPass = String(req.body.newPass)
 
+  User.findById(user.id, function(err, user){
+    user.password = newPass
+    user.save(function(err, user){
+      if (err) res.status(400).send(err)
+      if (user) res.status(200).send(user)
+    })
+  })
+})
 
 /* GET Activation Page. */
 router.get('/activate/', function(req, res) {
+  var url = '/'
+  if (req.query.createListing) url = '/?modal=new-listing'
   User.findOne({ activationToken: req.query.token }, function(err, user) {
     if (!user) {
       req.flash('error', 'There has been an error - please try to login or recreate your account.');
@@ -202,15 +216,16 @@ router.get('/activate/', function(req, res) {
       } else {
         if (user.activationToken == req.query.token) {
           user.active = true;
-          console.log(user);
           user.save(function(err, user) {
             req.logIn(user, function(err) {
               if (err) return next(err);
+              console.log('createListing:'+req.query.createListing)
               req.flash('success', 'Your account is now active.  We went ahead and logged you in.');
-              return res.redirect('/');
+              return res.redirect(url);
             });
           });
         } else {
+          console.log('createListing:'+req.query.createListing)
           req.flash('error', 'There has been an error - please try to login or recreate your account.');
           return res.redirect('/');
         }
@@ -221,12 +236,11 @@ router.get('/activate/', function(req, res) {
 
 /* RESET Password */
 router.get('/forgot', function(req, res){
-  res.render('account/forgot', {
-    user: req.user
-  });
+  res.render('account/forgot');
 });
 /* RESET Password */
 router.post('/forgot', function(req, res){
+  console.log(req.body)
   async.waterfall([
     function(done) {
       crypto.randomBytes(20, function(err, buf) {
@@ -236,54 +250,54 @@ router.post('/forgot', function(req, res){
     },
     function(token, done) {
       User.findOne({ email: req.body.email }, function(err, user) {
-        if (!user) {
-          req.flash('error', 'No account with that email address exists.');
-          return res.redirect('/account/forgot');
+        if (err) done(err)
+        if (user) {
+          user.resetPasswordToken = token;
+          user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+          user.save(function(err) {
+            done(err, token, user);
+          });
+        } else {
+          done(err)
         }
-
-        user.resetPasswordToken = token;
-        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
-
-        user.save(function(err) {
-          done(err, token, user);
-        });
       });
     },
     function(token, user, done) {
-      var smtpTransport = nodemailer.createTransport('SMTP', {
-        service: 'SendGrid',
-        auth: {
-          user: '!!! YOUR SENDGRID USERNAME !!!',
-          pass: '!!! YOUR SENDGRID PASSWORD !!!'
-        }
-      });
-      var mailOptions = {
-        to: user.email,
-        from: 'passwordreset@demo.com',
-        subject: 'Node.js Password Reset',
-        text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
-        'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-        'http://' + req.headers.host + '/reset/' + token + '\n\n' +
-        'If you did not request this, please ignore this email and your password will remain unchanged.\n'
-      };
-      smtpTransport.sendMail(mailOptions, function(err) {
-        req.flash('info', 'An e-mail has been sent to ' + user.email + ' with further instructions.');
-        done(err, 'done');
-      });
+      var url = 'https://mandrillapp.com/api/1.0/messages/send-template.json'
+      var options = require('../lib/email/default')
+      options.message.subject = 'Here\'s a link to reset your password!'
+      options.message.to[0].email = user.email
+      options.message.to[0].name = user.name
+      options.message.tags = 'password-reset'
+      options.message.merge_vars[0].rcpt = user.email;
+      options.message.merge_vars[0].vars[0].content = 'Password reset link from Y2G.org'
+      options.message.merge_vars[0].vars[1].content = user.name
+      options.message.merge_vars[0].vars[2].content = 'You are receiving this because you (or someone else) has requested to reset your password on Y2G.org.<br><br>' +
+        'Please click on the following link, or paste this into your browser to complete the process:<br><br>' +
+        'http://' + req.headers.host + '/account/reset/' + token + '<br><br>' +
+        'If you did not request this, please ignore this email and your password will remain unchanged. The link will expire in an hour.<br>'
+
+      request.post({
+        url:     url,
+        form:    options
+      }, function(err, response){
+        done(err, user.email, 'done')
+      })
     }
-    ], function(err) {
-      if (err) return next(err);
-      res.redirect('/account/forgot');
+    ], function(err, email) {
+      if (err) res.status(400).send(err)
+      res.status(200).send(email)
     });
 });
 router.get('/reset/:token', function(req, res) {
   User.findOne({ resetPasswordToken: req.params.token, resetPasswordExpires: { $gt: Date.now() } }, function(err, user) {
     if (!user) {
       req.flash('error', 'Password reset token is invalid or has expired.');
-      return res.redirect('/account/forgot');
+      return res.redirect('/');
     }
-    res.render('reset', {
-      user: req.user
+    req.logIn(user, function(err) {
+      if (err) return next(err);
+      return res.redirect('/?modal=profile');
     });
   });
 });
