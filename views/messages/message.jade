@@ -5,7 +5,7 @@ if !to
 else
   - if (ownerName == 'undefined') { ownerName = to } // Set Name
   h2 Send a note
-  form#message-form(method="post", action="/messages/send", onsubmit="messages.send(this); return false;")
+  form#message-form(method="post", action="/messages/send", onsubmit="Messages.send(this); return false;")
       input(type="hidden", name="to", value="#{to}")
       input(type="hidden", name="listingId", value="#{listingId}")
       input(type="hidden", name="listingTitle", value="#{listingTitle}")

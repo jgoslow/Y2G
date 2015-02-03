@@ -7,20 +7,21 @@ else
     .field.name
       label Display Name:
       span.editable(name='name') #{user.name}
-      a.fa-edit.fa(href="#", onClick="account.editItem('name'); return false;")
-      a.fa-save.fa(href="#", onClick="account.saveItem('name'); return false;")
-      a.fa-remove.fa(href="#", onClick="account.cancelEditItem('name'); return false;")
+      a.fa-edit.fa(href="#", onClick="Account.editItem('name'); return false;")
+      a.fa-save.fa(href="#", onClick="Account.saveItem('name'); return false;")
+      a.fa-remove.fa(href="#", onClick="Account.cancelEditItem('name'); return false;")
     .field.email
       label email:
       span.editable(name='email') #{user.email}
-      a.fa-edit.fa(href="#", onClick="account.editItem('email'); return false;")
-      a.fa-save.fa(href="#", onClick="account.saveItem('email'); return false;")
-      a.fa-remove.fa(href="#", onClick="account.cancelEditItem('email'); return false;")
+      a.fa-edit.fa(href="#", onClick="Account.editItem('email'); return false;")
+      a.fa-save.fa(href="#", onClick="Account.saveItem('email'); return false;")
+      a.fa-remove.fa(href="#", onClick="Account.cancelEditItem('email'); return false;")
     .field.updatePassField
       label password:
       a.password.editable(href="#", onClick="newPass(); return false;") change password
       a.fa-thumbs-up.fa(href="", onClick="return false;")
-      form.new-password(method="post", action="/account/newpass", onsubmit="account.updatePass($(this)); return false;")
+      a.fa-remove.fa(href="#", onClick="Account.cancelEditItem('updatePassField'); return false;")
+      form.new-password(method="post", action="/account/newpass", onsubmit="Account.updatePass($(this)); return false;")
         input.field.editable(type="password", required, id="newPassword", name="newPassword", placeholder="new password", data-parsley-trigger="focusout", data-parsley-minlength="6", data-parsley-error-message="Password must be at least 6 characters")
         input.field.editable(type="password", required, id="newPassword-confirm", name="newPassword-confirm", placeholder="confirm password", data-parsley-trigger="focusout", data-parsley-equalto="#newPassword", data-parsley-error-message="Passwords must match")
         button.btn-update.editable.disabled(type="submit") update
@@ -28,36 +29,36 @@ else
     .field.location
       label Location:
       if !user.location
-        a.add-field(href="#", onClick="account.editItem('location'); return false;") add location
-        a.fa-plus.fa(href="#", onClick="account.editItem('location'); return false;")
+        a.add-field(href="#", onClick="Account.editItem('location'); return false;") add location
+        a.fa-plus.fa(href="#", onClick="Account.editItem('location'); return false;")
       span.editable(name="location") #{user.location}
-      a.fa-edit.fa(href="#", onClick="account.editItem('location'); return false;")
-      a.fa-save.fa(href="#", onClick="account.saveItem('location'); return false;")
-      a.fa-remove.fa(href="#", onClick="account.cancelEditItem('location'); return false;")
+      a.fa-edit.fa(href="#", onClick="Account.editItem('location'); return false;")
+      a.fa-save.fa(href="#", onClick="Account.saveItem('location'); return false;")
+      a.fa-remove.fa(href="#", onClick="Account.cancelEditItem('location'); return false;")
     .field.reasons
       label Reasons for Gardening:
       if !user.reasons
-        a.add-field(href="#", onClick="account.editItem('reasons'); return false;") add reasons
-        a.fa-plus.fa(href="#", onClick="account.editItem('reasons'); return false;")
+        a.add-field(href="#", onClick="Account.editItem('reasons'); return false;") add reasons
+        a.fa-plus.fa(href="#", onClick="Account.editItem('reasons'); return false;")
       span.editable(name="reasons", data-input-type="textarea") #{user.reasons}
-      a.fa-edit.fa(href="#", onClick="account.editItem('reasons'); return false;")
-      a.fa-save.fa(href="#", onClick="account.saveItem('reasons'); return false;")
-      a.fa-remove.fa(href="#", onClick="account.cancelEditItem('reasons'); return false;")
+      a.fa-edit.fa(href="#", onClick="Account.editItem('reasons'); return false;")
+      a.fa-save.fa(href="#", onClick="Account.saveItem('reasons'); return false;")
+      a.fa-remove.fa(href="#", onClick="Account.cancelEditItem('reasons'); return false;")
     .field.bio
       label Gardener Bio:
       if !user.bio
-        a.add-field(href="#", onClick="account.editItem('bio'); return false;") add bio
-        a.fa-plus.fa(href="#", onClick="account.editItem('bio'); return false;")
+        a.add-field(href="#", onClick="Account.editItem('bio'); return false;") add bio
+        a.fa-plus.fa(href="#", onClick="Account.editItem('bio'); return false;")
       span.editable(name="bio", data-input-type="textarea") #{user.bio}
-      a.fa-edit.fa(href="#", onClick="account.editItem('bio'); return false;")
-      a.fa-save.fa(href="#", onClick="account.saveItem('bio'); return false;")
-      a.fa-remove.fa(href="#", onClick="account.cancelEditItem('bio'); return false;")
+      a.fa-edit.fa(href="#", onClick="Account.editItem('bio'); return false;")
+      a.fa-save.fa(href="#", onClick="Account.saveItem('bio'); return false;")
+      a.fa-remove.fa(href="#", onClick="Account.cancelEditItem('bio'); return false;")
     .field.location
       label List as a Master Gardener?
       .editable
         input(type="checkbox", masterGardener, name="masterGardener")
         | &nbsp;&nbsp;
-        a.note(data-tooltip="If you list as a master gardener, then people looking for gardening advice nearby will be able to message you with questions. It's a great way to meet people in the neighborhood!") (more info)
+        a.note(href="#", data-tooltip="If you list as a master gardener, then people looking for gardening advice nearby will be able to message you with questions. It's a great way to meet people in the neighborhood!") (more info)
     script(type="text/javascript", src="/javascripts/page/profile.js")
 
   include ../snippets/footer-profile.jade

@@ -4,4 +4,5 @@
     | you are logged in as #{user.name}
   else
     a#show_login.login_button.login.openmodal(data-modaltype='login', href='/account/login/') Login
+    | &nbsp;&nbsp;|&nbsp;&nbsp;
     a.login_button.openmodal.signup(href='/account/sign-up/', data-modaltype='sign-up') Sign Up

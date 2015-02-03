@@ -10,7 +10,7 @@ function getLocation(address, radius, callback) {
         map.setLocation(latLng, radius);
       }
       if (callback == 'getListings') {
-        listings.get(latLng, parseFloat(radius/1000).toFixed(1), '', listings.display);
+        Listings.get(latLng, parseFloat(radius/1000).toFixed(1), '', Listings.display);
       } else {
         if(typeof callback == "function") return callback(results);
       }
@@ -28,7 +28,7 @@ map.setLocation = function(latLng, radius) {
     var circleOptions = {
         center: latLng,
         fillOpacity: 0,
-        strokeOpacity:.05,
+        strokeOpacity:0, // .05
         map: this,
         radius: radius
     }
@@ -41,7 +41,7 @@ map.setLocation = function(latLng, radius) {
 }
 
 
-var listings = function(location, user) {
+var Listings = function(location, user) {
   var _location = location,
       _radius = options.radius
       _type = options.type;
@@ -49,9 +49,9 @@ var listings = function(location, user) {
   /*  METHODS
   - testListings
   - get *db
-    - by location
+    - by location (/get)
      - radius
-    - by user
+    - by user (/edit)
   - display
     - map
       - resize
@@ -64,7 +64,7 @@ var listings = function(location, user) {
     - searchTerm '
   */
 }
-  listings.get = function(location, radius, user, callback) {
+  Listings.get = function(location, radius, user, callback) {
     /*var latLng = {}; // Save Location for next visit
     latLng.lat = location.k;
     latLng.lng = location.D;*/
@@ -87,36 +87,38 @@ var listings = function(location, user) {
 
     }
   }
-  listings.test = function(number) {
+  Listings.test = function(number) {
     db = connect("localhost:27017/y2g");
     y2g = new Mongo().getDB("y2g");
   }
 
-  listings.display = function(listings) {
-    console.log('listings.display', listings);
-    clearMap();
+  Listings.display = function(listings) {
+    //console.log('Listings.display', listings);
+    currentListings = listings
+    clearMap()
+    $("#listings").html('')
     infoWindow = new InfoBubble({
-      map: map,
-      maxWidth: 300,
-      maxHeight: 300,
-      closeImage: 'google.com',
-      shadowStyle: 0,
-      padding: 0,
-      backgroundColor: '#fff',
-      borderRadius: 0,
-      borderWidth: 0,
-      borderColor: '#000',
-      disableAutoPan: false,
-      hideCloseButton: false,
-      backgroundClassName: 'info-window-wrap',
-      arrowStyle: false,
-      arrowSize: 0,
-      arrowPosition: 0
-    });
+        map: map
+      , maxWidth: 280
+      , minWidth: 280
+      , maxHeight: 280
+      , minHeight: 240
+      , closeImage: 'google.com'
+      , shadowStyle: 0
+      , padding: 0
+      , backgroundColor: '#fff'
+      , borderRadius: 0
+      , borderWidth: 0
+      , borderColor: '#000'
+      , disableAutoPan: false
+      , hideCloseButton: false
+      , backgroundClassName: 'info-window-wrap'
+      , arrowStyle: false
+      , arrowSize: 0
+      , arrowPosition: 80
+    })
 
-
-
-    listings.forEach(function(listing){
+    listings.forEach(function(listing, i){
       if (!listing.displayLatLng) listing.displayLatLng = listing.latLng
       var id = listing._id,
           created = moment(listing.created, 'YYYY-MM-DDTHH:mm:ssZ').format('MMM DD YYYY'),
@@ -159,10 +161,32 @@ var listings = function(location, user) {
         infoWindow.close();
       });
       markersArray.push(marker);
-      var contactModal = 'onclick="openModal(this, \'/messages/send?owner='+owner+'&ownerName='+ownerName+'&listingId='+id+'&listingTitle='+titleStrip+'\', \'message\'); return false;" href="/messages/send?to='+owner+'" data-modal-type="message"',
-          content = '<div id="window-'+id+'" class="info-window"><div class="info-window_inner_wrap"><h4>'+title+'</h4><div class="info">'+image_html+'<span class="author"><strong>BY:</strong><a href="#" '+contactModal+'>'+ownerName+'</a></span><span class="date"><strong>DATE:</strong> '+created+'</span><span class="date"><strong>TYPE:</strong> '+type+'</span></div><div class="description">'+desc+'</div><a '+contactModal+' class="contact openmodal" title="Contact '+name+'"><span class="fa">&#xf003;</span> Send a Note</a><a href="#'+id+'" onclick="listings.flag(\''+id+'\', \''+titleStrip+'\'); return false;" class="flag" title="flag this post">flag this post</a></div></div>';
+      var contactModal = 'onclick="openModal(this, \'/messages/send?owner='+owner+'&ownerName='+ownerName+'&listingId='+id+'&listingTitle='+titleStrip+'\', \'message\'); return false;" href="/messages/send?to='+owner+'" data-modal-type="message"'
+        , content = ''
+        , listItem = ''
+
+      content += '<div id="window-'+id+'" class="info-window">'+
+                  '<div class="info-window_inner_wrap"><h4>'+title+'</h4>'+
+                  '<div class="info">'+image_html+
+                  '<span class="author"><strong>BY:</strong>'+
+                  '<a href="#" '+contactModal+'>'+ownerName+'</a></span>'+
+                  '<span class="date"><strong>DATE:</strong> '+created+'</span>'+
+                  '<span class="date"><strong>TYPE:</strong> '+type+'</span></div>'+
+                  '<div class="description">'+desc+'</div>'+
+                  '<a '+contactModal+' class="contact openmodal" title="Contact '+name+'"><span class="fa">&#xf003;</span> Send a Note</a>'+
+                  '<a href="#'+id+'" onclick="Listings.flag(\''+id+'\', \''+titleStrip+'\'); return false;" class="flag" title="flag this post">flag this post</a>'+
+                  '</div></div>'
+      listItem += '<li class="listing '+type+'" id="listing-'+id+'"><a href="#" onclick="Listing.openMarker('+i+'); return false;">'+
+                  '<span class="title">'+title.trunc(35)+'</span>'+
+                  '<span class="desc">'+desc.trunc(50)+'</span>'+
+                  '<span class="date">'+created+'</span>'+
+                  '</a></li>'
+
+      $('#listings').append(listItem)
 
       google.maps.event.addListener(marker, 'click', function() {
+        $("#listings li.current").removeClass('current')
+        $('#listings li').eq(i).addClass("current")
         console.log($('#window-'+id));
         infoWindow.setContent(content); // Set content for infowindow
         setTimeout(function(){
@@ -190,7 +214,7 @@ var listings = function(location, user) {
       markersArray.length = 0;
     }
   }
-  listings.create = function(form){
+  Listings.create = function(form){
     var form = $(form);
     if ( form.parsley().isValid() ) {
       $.get('/listings/add', form.serialize(), function(data){
@@ -211,10 +235,10 @@ var listings = function(location, user) {
     return false;
   }
 
-  listings.flag = function(listing, listingTitle) {
+  Listings.flag = function(listing, listingTitle) {
     openModal('', '/listings/flag?id='+listing+'&title='+listingTitle,'flag');
   }
-  listings.submitFlag = function(form) {
+  Listings.submitFlag = function(form) {
     var form = $(form);
     if ( form.parsley().isValid() ) {
       $.post('/listings/flag', form.serialize(), function(data){
@@ -239,8 +263,27 @@ var listings = function(location, user) {
     }
     return false;
   }
+  Listings.showHideBar = function() {
+    var l = $('#listings_wrap');
+    if (l.height() == '0') {
+      $("#show_listings .fa").html('&#xf102;');
+      $('#show_listings .text').html('Hide Listings');
+      $(".map_wrap").addClass("show-listings")
+      setTimeout(function(){
+        var h = $('#map_wrap').height() - 40;
+        TweenLite.to(l, .5, {height:h});
+      }, 500);
+    } else {
+      TweenLite.to(l, .5, {height:0});
+      setTimeout(function(){
+        $("#show_listings .fa").html('&#xf103;');
+        $('#show_listings .text').html('Show Listings');
+        $(".map_wrap").removeClass("show-listings")
+      }, 1000);
+    }
+  }
 
-var listing = function(id, type, location) {
+var Listing = function(id, type, location) {
   var type
 
   /*  METHODS
@@ -253,8 +296,15 @@ var listing = function(id, type, location) {
   - save *db
   */
 }
+  Listing.openMarker = function(i){
+    var w = $(window).width()
+    google.maps.event.trigger( markersArray[i], 'click' )
+    $('#listings .listing.current').removeClass('current')
+    $('#listing-'+i).addClass('current')
+    if (w < 650) { Listings.showHideBar(); console.log()}
+  }
 
-var user = function(id) {
+var User = function(id) {
   /*  METHODS
   - get *db
   - update *db
@@ -282,10 +332,8 @@ function kToM(kilometers) {
   return kilometers*.625;
 }
 
-
 function y2gBounds(myMap, bounds) {
     myMap.fitBounds(bounds); // calling fitBounds() here to center the map for the bounds
-
     var overlayHelper = new google.maps.OverlayView();
     overlayHelper.draw = function () {
         if (!this.ready) {
@@ -300,54 +348,55 @@ function y2gBounds(myMap, bounds) {
     overlayHelper.setMap(myMap);
 }
 
+// Function for custom map search results zoom
 function getExtraZoom(projection, expectedBounds, actualBounds) {
-
     // in: LatLngBounds bounds -> out: height and width as a Point
     function getSizeInPixels(bounds) {
         var sw = projection.fromLatLngToContainerPixel(bounds.getSouthWest());
         var ne = projection.fromLatLngToContainerPixel(bounds.getNorthEast());
         return new google.maps.Point(Math.abs(sw.y - ne.y), Math.abs(sw.x - ne.x));
     }
-
     var expectedSize = getSizeInPixels(expectedBounds),
         actualSize = getSizeInPixels(actualBounds);
-
     if (Math.floor(expectedSize.x) == 0 || Math.floor(expectedSize.y) == 0) {
         return 0;
     }
-
     var qx = actualSize.x / expectedSize.x;
     var qy = actualSize.y / expectedSize.y;
     var min = Math.max(qx, qy);
-
     if (min < 1) {
         return 0;
     }
-
     return Math.floor(Math.log(min) / Math.LN2 /* = log2(min) */);
 }
 
 
 function locationToolOpen() {
-  var r,
-    h = $('#listings_wrap').height();
+  $('#location_tool').removeClass('closed')
+  var r
+    , h = $('#listings_wrap').height()
   if ( h > 10 ) {
-    r = '70%';
-  } else {r = '50%';}
-  TweenLite.to($('#location_tool'), .5, {top: 100, right: r, marginRight: -165, width: 330, height: 30});
+    r = '70%'
+  } else {
+    r = '50%'
+  }
+  TweenLite.to($('#location_tool'), .5, {top: 100, right: r, marginRight: -165, width: 330, height: 30})
   setTimeout(function(){
     $('#location_tool .tools').show()
-    TweenLite.to($('#location_tool .tools'), .5, {width: 285, marginLeft: -153, height: 100});
+    TweenLite.to($('#location_tool .tools'), .5, {width: 285, marginLeft: -153, height: 100})
     setTimeout(function(){
-      $('#location_tool .tools .wrap').fadeIn();
-      $('#address_input').focus();
-    }, 500);
-  }, 500);
+      $('#location_tool .tools .wrap').fadeIn()
+      $('#address_input').focus()
+    }, 500)
+  }, 500)
   $('.map_modal_bg').fadeIn().click(function(){
-    locationToolClose();
+    locationToolClose()
   });
 }
 function locationToolClose() {
+  $('#location_tool').addClass('closed')
+  var search = localStorage.getItem('search')
+  $('#current_location .location').html(search)
   var r;
   var r1 = $('#show_listings').css('right');
   if ( r1 == '317px') { r = 431; }
@@ -361,5 +410,53 @@ function locationToolClose() {
   $('.map_modal_bg').fadeOut();
 }
 
+function updateRadius(radius) {
+  document.querySelector('#radius_input').value = radius;
+  localStorage.setItem('radius', radius);
+}
+
+
 //console.log('mapfuncs loaded');
 loadScript([{url:'/javascripts/map_interface.js'}]);
+
+
+function offsetCenter(latlng,offsetx,offsety) {
+  // latlng is the apparent centre-point
+  // offsetx is the distance you want that point to move to the right, in pixels
+  // offsety is the distance you want that point to move upwards, in pixels
+  // offset can be negative
+  // offsetx and offsety are both optional
+
+  var scale = Math.pow(2, map.getZoom());
+  var nw = new google.maps.LatLng(
+    map.getBounds().getNorthEast().lat(),
+    map.getBounds().getSouthWest().lng()
+  );
+
+  var worldCoordinateCenter = map.getProjection().fromLatLngToPoint(latlng);
+  var pixelOffset = new google.maps.Point((offsetx/scale) || 0,(offsety/scale) ||0)
+
+  var worldCoordinateNewCenter = new google.maps.Point(
+    worldCoordinateCenter.x - pixelOffset.x,
+    worldCoordinateCenter.y + pixelOffset.y
+  );
+
+  var newCenter = map.getProjection().fromPointToLatLng(worldCoordinateNewCenter);
+
+  map.setCenter(newCenter);
+
+}
+
+google.maps.Map.prototype.panToWithOffset = function(latlng, offsetX, offsetY) {
+  var map = this;
+  var ov = new google.maps.OverlayView();
+  ov.onAdd = function() {
+    var proj = this.getProjection();
+    var aPoint = proj.fromLatLngToContainerPixel(latlng);
+    aPoint.x = aPoint.x+offsetX;
+    aPoint.y = aPoint.y+offsetY;
+    map.panTo(proj.fromContainerPixelToLatLng(aPoint));
+  };
+  ov.draw = function() {};
+  ov.setMap(this);
+};

@@ -1,6 +1,16 @@
 $(function(){
-	var location = localStorage.getItem('location'),
-			radius = localStorage.getItem('radius');
+
+
+	// Parse URL Params for listing
+	if (params.listing) {
+		var listing = params.listing
+		
+	}
+
+	// Set Location
+	var location = localStorage.getItem('location')
+		,	radius = localStorage.getItem('radius')
+		,	search = localStorage.getItem('search')
 	if (location) {
 		if (!radius) { radius = 5; }
 		location = JSON.parse(location);
@@ -9,7 +19,10 @@ $(function(){
 		latLng.lat = location.k;
 		latLng.lng = location.D;
 		map.setLocation(latLng, radius*1000);
-		listings.get(location, radius, '', listings.display);
+		Listings.get(location, radius, '', Listings.display);
+		$('#location_tool').addClass('closed')
+		console.log(location)
+		$('#current_location .location').html(search)
 	} else {
 		locationToolOpen();
 	}
@@ -23,67 +36,32 @@ $(function(){
 
 	// Show Listings
 	$('#show_listings').click(function(){
-		showHideListings();
-	});
+		Listings.showHideBar()
+	})
+	$('#map_wrap').click(function(){
+		if (!$(this).hasClass("fullsize")) $('#expand_map').click()
+	})
 
-	function showHideListings() {
-		var l = $('#listings_wrap');
-		if (l.height() == '0') {
-			$("#show_listings .fa").html('&#xf102;');
-			$('#show_listings .text').html('Hide Listings');
-			TweenLite.to($('#show_listings'), .5, {right:317});
-			if ($('#location_tool .tools').is(':visible')) {
-				TweenLite.to($('#location_tool'), .5, {right:'70%'});
-				setTimeout(function(){
-					var h = $('#map_wrap').height() - 20;
-					TweenLite.to(l, .5, {height:h});
-				}, 500);
-			} else {
-				TweenLite.to($('#location_tool'), .5, {right:431});
-				setTimeout(function(){
-					var h = $('#map_wrap').height() - 20;
-					TweenLite.to(l, .5, {height:h});
-				}, 500);
-			}
-		} else {
-			TweenLite.to(l, .5, {height:0});
-			setTimeout(function(){
-				$("#show_listings .fa").html('&#xf103;');
-				$('#show_listings .text').html('Show Listings');
-				TweenLite.to($('#show_listings'), .5, {right:10});
-				if ($('#location_tool .tools').is(':visible')) {
-					TweenLite.to($('#location_tool'), .5, {right:'50%'});
-				} else {
-					TweenLite.to($('#location_tool'), .5, {right:132});
-				}
-			}, 500);
-		}
-	}
+
 	// Expand Map
 	$('#expand_map').click(function(){
-		var mw = $('#map_wrap, #map_canvas');
-		var h = $(window).height();
-		var w = $(window).width();
-		var mh = h - 120;
-		var mtt = $('#map_tools_top');
+		var mw = $('#map_wrap, #map_canvas')
+			, h = $(window).height()
+			, w = $(window).width()
+			, mh = h - 120
+			, mtt = $('#map_tools_top')
 		if (h > 430) {
 			if (mw.height() == 350) {
-				var w = mtt.width();
-				var w2 = $(window).width();
+				$('#map_wrap').addClass('fullsize')
+				var w = mtt.width()
+					, w2 = $(window).width()
+				if (h < 737) mh = h - 55
 				TweenLite.to(mw, .5, {height: mh});
 				$(this).html('&#xf102;');
-				TweenLite.set(mtt, {width: w, maxWidth: '100%'})
-				TweenLite.to(mtt, .5, {width: w2});
-				mtt.data('max-width', w).data('map','expanded');
 			} else {
-				var w = mtt.data('max-width');
-				mtt.data('map','reduced');
+				$('#map_wrap').removeClass('fullsize')
 				TweenLite.to(mw, .5, {height: 350});
 				$(this).html('&#xf103;');
-				TweenLite.to(mtt, .5, {width: w});
-				setTimeout(function(){
-					mtt.css('max-width', w).css('width','100%');
-				}, 500);
 				if ($('.map_modal_bg').css('display') == 'block') {
 					$('.map_modal_bg').fadeOut();
 					setTimeout(function(){
@@ -96,7 +74,7 @@ $(function(){
 		return false;
 	});
 
-	$('#location_tool .icon').click(function(){
+	$('#location_tool .icon, #current_location').click(function(){
 		var w = $('#location_tool').width();
 		if (w < 40) {
 			locationToolOpen();
@@ -122,7 +100,7 @@ $(function(){
 	    }
 	    if (e.keyCode == 76) {
 	    	if (!($(document.activeElement).is('input') || $(document.activeElement).is('textarea'))) {
-				showHideListings();
+					Listings.showHideBar();
 	    	}
 	    }
 			if (e.keyCode == 67) {
@@ -153,7 +131,7 @@ $(function(){
 		var radius = mToK($('#radius_input').val()) * 1000,
 			address = $('#address_input').val(),
 			latLng;
-
+		localStorage.setItem('search', address.trunc(15));
 
 		getLocation(address, radius, 'getListings').done(function(){ //
 			locationToolClose();
@@ -164,8 +142,3 @@ $(function(){
 
 
 });
-
-function updateRadius(radius) {
-	document.querySelector('#radius_input').value = radius;
-	localStorage.setItem('radius', radius);
-}

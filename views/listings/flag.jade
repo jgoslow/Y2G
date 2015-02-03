@@ -1,11 +1,11 @@
 if !listing
   h2 No listing selected!
 else if !user
-  h2 You must be logged in to flag listings
+  h2 You must have a Y2G account to flag listings
   include ../account/mustlogin.jade
 else
   h2 Flag listing: #{listingTitle}
-  form#flag-form(method="post", action="/listings/flag", onsubmit="listings.submitFlag($(this)); return false;")
+  form#flag-form(method="post", action="/listings/flag", onsubmit="Listings.submitFlag($(this)); return false;")
       input(type="hidden", name="listing", value="#{listing}")
       .field
         p.note Flag a listing if it is inappropriate or inaccurate, contains marketing or sales information for a third party, or has been posted against the owner's wishes

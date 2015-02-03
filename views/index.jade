@@ -37,6 +37,9 @@ block map
 
 
                   a.close.fa(href='#') &#xF00D;
+          #current_location.current_location
+            | Search:
+            span.location
 
       #map_container.map_container
         #map_canvas.map_canvas
@@ -66,15 +69,15 @@ block content
 
 block sidebar
   .box-listing-buttons
-    a.box-dotted.gardener.openmodal(href='/listings/new?type=gardener', data-modaltype='new-listing')
+    a.box-dotted.gardener.openmodal(href='/listings/new?type=gardener', data-modaltype='new-listing', data-listingType="gardener")
       strong.title Gardener
       span.description Are you a gardener looking for space to plant a garden?
-    a.box-dotted.space.openmodal(href='/listings/new?type=space', data-modaltype='new-listing')
+    a.box-dotted.space.openmodal(href='/listings/new?type=space', data-modaltype='new-listing', data-listingType="space")
       strong.title Space
       span.description Do you have extra space in your yard for a garden?
-    a.box-dotted.organic.openmodal(href='/listings/new?type=organic', data-modaltype='new-listing')
+    a.box-dotted.organic.openmodal(href='/listings/new?type=organic', data-modaltype='new-listing', data-listingType="organic")
       strong.title Organic Matter
       span.description Got any mulch, straw, compost, woodchips, manure or soil?
-    a.box-dotted.tools.openmodal(href='/listings/new?type=tools', data-modaltype='new-listing')
+    a.box-dotted.tools.openmodal(href='/listings/new?type=tools', data-modaltype='new-listing', data-listingType="tools")
       strong.title Tools & Stuff
       span.description Got any extra seeds, gardening supplies, or transplants to share?

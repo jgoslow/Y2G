@@ -7,9 +7,9 @@ p Try some&nbsp;
 br
 p ..Or enter your account email below and click "submit."
   <br> We'll send you a link to reset your password.
-form#reset-form(method="post", action="/account/reset", onsubmit="account.forgot($(this)); return false;")
+form#reset-form(method="post", action="/account/reset", onsubmit="Account.forgot($(this)); return false;")
     .field
-      input(type='email', name='email', value='', placeholder='email address', required, data-parsley-type="email", data-required-message="We need a valid email to activate your account.")
+      input(type='email', name='email', value='', placeholder='email address', required, data-parsley-type="email", data-required-message="We need a valid email to activate your Account.")
     input.next.submit(type='submit', value='submit')
     p Don't have an account?&nbsp;
       a.actually-sign-up(href='#', onclick="openModal( '', '/account/sign-up/', 'sign-up'); return false;", value='signup', data-modaltype='signup openmodal') Create one here!

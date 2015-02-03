@@ -23,6 +23,8 @@ jQuery(function($){
 })
 
 function newPass() {
+  $('.field.editing .fa-remove').click()
   $('a.password').hide()
+  $('.updatePassField').addClass('editing')
   TweenMax.to($('.new-password'), .5, {opacity: 1, height:150})
 }

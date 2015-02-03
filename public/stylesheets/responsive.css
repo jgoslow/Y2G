@@ -154,6 +154,19 @@
     font-weight: bold;
     font-size: 16px;
   }
+  .map_wrap.show-listings .location_tool {
+    right: 430px;
+  }
+
+  .map_wrap.show-listings .show_listings {
+    right: 317px;
+  }
+    .map_wrap.show-listings .listings_wrap {
+      border-top: 30px solid black;
+    }
+  .listings_wrap .listings {
+    padding:15px;
+  }
 
   .footer_wrap {
     min-height: 25px;

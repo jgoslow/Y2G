@@ -13,7 +13,7 @@ form.standard:after {
 input, textarea, select, option, input:-webkit-autofill {
   max-width: 280px;
   padding: 6px 8px 5px;
-  font-size:16px;
+  font-size:15px;
   line-height:16px;
   color:#4d4d4d;
   background:white;
@@ -36,6 +36,10 @@ input, textarea, select, option, input:-webkit-autofill {
 }
 input, textarea, select, option {
   width: 97%;
+}
+textarea {
+  font-size: 15px;
+  line-height: 18px;
 }
 
 input[type=range] {
@@ -91,7 +95,7 @@ select:-webkit-autofill:focus, select:-webkit-autofill, option:-webkit-autofill:
 }
 .field label {
   width: 90px;
-  text-align: right;
+  text-align: center;
   display: inline-block;
   margin-right: 15px;
   float: left;
@@ -355,6 +359,18 @@ form.new-listing-form {
   margin: 0;
   padding: 0;
 }
+
+form.edit-listing-form {
+  height: 0;
+  overflow: hidden;
+  -webkit-transition:all .25s ease-in-out;
+  -moz-transition:all .25s ease-in-out;
+  -o-transition:all .25s ease-in-out;
+  transition:all .25s ease-in-out;
+}
+  .open form.edit-listing-form {
+    height: 500px;
+  }
 
 
 .qtip-bootstrap {

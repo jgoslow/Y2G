@@ -1,13 +1,13 @@
 if !user
   h1 Please Log in
-  p You must be logged in to create a listing.  Please log in or create an account.
+  p You must be logged in to create a listing.  Please log in or create an Account.
   - createListing = true
   include ../account/mustlogin.jade
 
 else
   - if (!listingType) listingType = 'gardener';
   div#new-listing(class=listingType+' new-listing', data-type=listingType, data-current-step="1")
-    form#new-listing-form.new-listing-form(onsubmit="listings.create('#new-listing-form'); return false;")
+    form#new-listing-form.new-listing-form(onsubmit="Listings.create('#new-listing-form'); return false;")
       input(type="hidden", name="owner", value="#{user.id}")
       input(type="hidden", name="ownerName", value="#{user.name}")
       ul.steps
@@ -64,12 +64,18 @@ else
           .field
             input.space(type="number", name="amount", placeholder="square meters.. roughly =)", data-parsley-group="space")
             textarea.gardener(type="text", name="bio", placeholder="Gardener Bio", data-parsley-length="[6, 500]", data-parsley-error-message="Tell us something about your gardening experience (no more than 500 chars).", data-parsley-group="gardener")
+          h4 options:
           .field
             label.checkbox
               input(type="checkbox", name="preciseMarker", value="true")
-              | use exact location
-            p.note By default, we do not show exact addresses
-              a.info(href="#info", data-info="By default, our map will display a marker on random location within a block or two of the location you enter - check this box to display a marker on exact location. This can be useful for things like community gardens or public spaces, or if you just don't care!") more info
+              | Use exact location&nbsp;
+            a.note(href="#info", data-tooltip="By default, our map will display a marker on random location within a block or two of the location you enter–check this box to display a marker on your exact location. This can be useful for things like community gardens or public spaces, or if you want people to know your exact location.") (more info)
+          .field
+            label.checkbox
+              input(type="checkbox", name="publicListing", value="true")
+              | Public Listing&nbsp;
+              p.note By clicking this you agree to our
+                a(data-tooltip="TERMS TERMS TERMS") public listing terms
           button.next.disabled.submit(type="submit", data-error="Please fill out all *required fields") Create Listing
   script(type="text/javascript", src="/javascripts/page/listings.new.js")
 

@@ -2,15 +2,6 @@ jQuery(function($){
 
 
 	//Interpret URL
-	var params = {};
-	if (location.search) {
-		var parts = location.search.substring(1).split('&');
-		for (var i = 0; i < parts.length; i++) {
-			var nv = parts[i].split('=');
-			if (!nv[0]) continue;
-			params[nv[0]] = nv[1] || true;
-		}
-	}
 	if (params.modal) {
 		var modal = params.modal
 			,	url
@@ -48,8 +39,16 @@ function bindJS() {
 
 	// Add Tooltips
 	$('[data-tooltip!=""]').qtip({ // Grab all elements with a non-blank data-tooltip attr.
-		style: { classes: 'qtip-bootstrap' }
+			style: { classes: 'qtip-bootstrap' }
 		,	content: { attr: 'data-tooltip' }
+		, show: { event: 'click' }
+		, hide: { event: 'unfocus', delay: 1000 }
+		,	position: {
+				viewport: $(window)
+			,	adjust: {
+					method: 'shift none'
+			}
+		}
 	})
 
 
@@ -123,9 +122,10 @@ setTimeout(function(){ $('body > .alert').fadeOut(); }, 5000);
 
 
 // Login & Signup Functions
-var account = function() {
+var Account = function() {
 }
-account.signup = function(form) {
+
+Account.signup = function(form) {
 	var form = $(form),
 			email = form.find('.email').val(),
 			submit =form.find('input[type="submit"]');
@@ -159,7 +159,7 @@ account.signup = function(form) {
 	}
 	return false;
 }
-account.login = function(form) {
+Account.login = function(form) {
 	var form = $(form);
 
 	if ( form.parsley().isValid() ) {
@@ -197,12 +197,13 @@ account.login = function(form) {
 	return false;
 }
 
-account.editItem = function(name) {
+Account.editItem = function(name) {
+	$('.field.editing .fa-remove').click()
 	var container = $('.field.'+name)
 		,	target = $('span.editable[name='+name+']')
 		, val = target.html()
 		, inputType = target.data('input-type')
-		, inputHTML = '<input class="editable" name="'+name+'" value='+val+' data-initial-value="'+val+'">'
+		, inputHTML = '<input class="editable" name="'+name+'" value="'+val+'" data-initial-value="'+val+'">'
 		, editBtn = container.find('.fa-edit')
 		, saveBtn = container.find('.fa-save')
 		, cancelBtn = container.find('.fa-remove')
@@ -214,7 +215,7 @@ account.editItem = function(name) {
 	target.after(inputHTML).remove()
 	return false
 }
-account.saveItem = function(name) {
+Account.saveItem = function(name) {
 	var container = $('.field.'+name)
 		,	input = container.find('[name='+name+']')
 		, type = 'input'
@@ -251,7 +252,7 @@ account.saveItem = function(name) {
 	});
 
 }
-account.cancelEditItem = function(name) {
+Account.cancelEditItem = function(name) {
 	var container = $('.field.'+name)
 		,	input = container.find('[name='+name+']')
 		, type = 'input'
@@ -263,17 +264,23 @@ account.cancelEditItem = function(name) {
 	if (input.is('textarea')) {
 		type = 'textarea'
 	}
-
-	if (!val) val = ''
-	var cancelHTML = '<span name="'+name+'" class="editable" data-input-type="'+type+'">'+initial+'</span>'
+	if (name = 'updatePassField') {
+		TweenMax.to($('.new-password'), .25, {height: 0})
+		setTimeout(function(){
+			$('.updatePassField a.password').show()
+		}, 250)
+	} else {
+		if (!val) val = ''
+		var cancelHTML = '<span name="'+name+'" class="editable" data-input-type="'+type+'">'+initial+'</span>'
+		input.after(cancelHTML).remove()
+	}
 
 	container.removeClass('editing')
-	input.after(cancelHTML).remove()
 }
-account.updateItem = function(item) {
+Account.updateItem = function(item) {
 
 }
-account.updatePass = function(form) {
+Account.updatePass = function(form) {
 	var form = $(form)
 		, pass = form.find('#newPassword-confirm').val()
 		, data = {}
@@ -299,7 +306,7 @@ account.updatePass = function(form) {
 	return false;
 }
 
-account.forgot = function(form){
+Account.forgot = function(form){
 	var form = $(form)
 	, email = form.find('input[type=email]').val()
 	, data = {}
@@ -316,6 +323,39 @@ account.forgot = function(form){
 	return false
 }
 
+
+// listings funcs
+var Listings = function(){
+}
+Listings.edit = function(item) {
+	console.log(item)
+	debugger
+	var listing = $(item)
+
+	//listingInfo = JSON.parse(listing.data('listing'))
+	console.log(listing.data('listing'))
+
+	/*var form = '<form class="edit listing" onsubmit="updateListing($(this)); return false;">'
+
+	form += '<div class="field"><label>Title:</label'
+	form += '<input type="text" value="'+listingInfo
+	*/
+
+	return false
+}
+
+function showEditListing(link) {
+	var parent = $(link).parents('li')
+	if (parent.hasClass('open')) {
+		parent.removeClass('open')
+	} else {
+		parent.addClass('open')
+	}
+}
+
+Listings.update = function(form) {
+
+}
 
 // Keyboard Add Shortcuts to Forms
 function formKeyCodes() {
@@ -353,9 +393,9 @@ function signup() {
 }
 
 // Message Functions
-var messages = function(){};
+var Messages = function(){};
 
-messages.send = function(form){
+Messages.send = function(form){
 	var form = $(form);
 	if ( form.parsley().isValid() ) {
 		$.post('/messages/send', form.serialize(), function(data){
@@ -431,4 +471,15 @@ function showListings() {
 		var listing = '<li data-listing="'+JSON.stringify(this)+'"><a href="#">'+this.title+'</a> <span class="date">posted '+this.date+'</span> <a href="#" class="edit">edit</a> <a href="#" class="delete">delete</a> </li>';
 		$('#my_listings').append(listing);
 	});
+}
+
+// Get URL Params
+var params = {};
+if (location.search) {
+	var parts = location.search.substring(1).split('&');
+	for (var i = 0; i < parts.length; i++) {
+		var nv = parts[i].split('=');
+		if (!nv[0]) continue;
+		params[nv[0]] = nv[1] || true;
+	}
 }

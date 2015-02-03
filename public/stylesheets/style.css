@@ -1,15 +1,19 @@
 @charset "UTF-8";
 /*
 
-Your listings/Edit Listings - enable edit/delete buttons (create functions for all editing/field replace & submit)
-active states for buttons (or on click)
-
 MAP
-- "Now Showing" note
-- show search circle?
+
+PAGES
+- /resources/sheepnomore - guide to help Y2G
+- /resources/
+- /admin (separate privileges)
+  - view flagged listings
+  - edit any listing
+  - message any user
+  - edit site content
+  -
 
 Create listing
-- Clicking on specific item-btn should set the listing type (on re-open)
 - Integrate pieces of listing (square footage, other info);
 - Bulk create
 - Green Check? (need from Jesse) for selecting location
@@ -22,13 +26,21 @@ Profile - add edit profile button
 - add image to profile?
 
 Create Account
+- Add User to Mailchimp (volunteer list) - checkbox
 - after first time logging in - ask if they want to list as a master gardener
-- after deleting account - delete all listings
+- after deleting account - delete all listings, send email about how to stay involved, remove from mailing list
 
 Local Storage Save
 - what gets stored? timeouts?
     - search center/location, login session id,
 - location saved on getLocation & in account
+
+Url Parameters
+- You must be logged in (flagging = flag after login)
+- Show Individual Listing
+
+Mobile
+- add webkit scroll to body
 
 Add Google Analytics - track:
 - listing info
@@ -48,10 +60,14 @@ Imagery
 - animated gif of plants growing at the bottom of modals
 
 Launch
--Make sure Mandrill only works from server IP
--Remove users page (and other extraneous db calls)
--Change mailserver in DNS to y2g.org
--always redirect to https
+- Make sure Mandrill only works from server IP
+- Remove users page (and other extraneous db calls)
+- Change mailserver in DNS to y2g.org
+- always redirect to https
+- Write article about development process
+- Setup cache
+- Concetate Scripts
+- Bar Listings API from outside sources
 
 
 .
@@ -119,6 +135,13 @@ h3 {
 }
   .success-box {
     background-color: #82c341;
+    color: white;
+  }
+.info, .alert-info {
+  color: #515048;
+}
+  .info-box {
+    background-color: #515048;
     color: white;
   }
 .error, .alert-error {
@@ -466,6 +489,7 @@ min-height:100px;
 }
 .info-window-wrap {
   height: 280px;
+  width: 280px;
   overflow: visible;
   position: relative;
   box-sizing: border-box;
@@ -475,12 +499,12 @@ min-height:100px;
   .info-window-wrap:after {
     content: '';
     display: block;
-    width: 67px;
+    width: 70px;
     height: 49px;
-    background: url(/images/map/infowindow.arrow.png) bottom left no-repeat;
+    background: url(/images/map/infowindow.arrow-reversed.png) bottom right no-repeat;
     position: absolute;
     bottom: -33px;
-    left: 23px;
+    left: 167px;
   }
   .info-window-close-img {
     width: 24px !important;
@@ -622,26 +646,33 @@ min-height:100px;
   z-index: 70;
   background: white;
   display: block;
+  border-top: 0 px solid black;
+  border-bottom: 0 px solid black;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -webkit-transition:all .5s ease-in-out;
+  -moz-transition:all .5s ease-in-out;
+  -o-transition:all .5s ease-in-out;
+  transition:all .5s ease-in-out;
+}
+  .map_wrap.show-listings .listings_wrap {
+    border: 4px solid black;
+    border-top: 30px solid black;
+    border-bottom: 15px solid black;
+    height: 60px;
+    -webkit-transition:all .5s ease-in-out;
+    -moz-transition:all .5s ease-in-out;
+    -o-transition:all .5s ease-in-out;
+    transition:all .5s ease-in-out;
+  }
+.listings_wrap .listings {
+  overflow:auto;
+  height:100%;
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
-.listings_wrap .listings {
-  overflow:auto;
-  height:100%;
-}
-.map_wrap .listings_wrap:before, .map_wrap .listings_wrap:after {
-  content: '';
-  display: block;
-  position:absolute;
-  left:0;
-  height:15px;
-  width:280px;
-  background:black;
-}
-.map_wrap .listings_wrap:before {top:0;}
-.map_wrap .listings_wrap:after {bottom:0;}
-
 
 .map_wrap .location_tool {
   position:absolute;
@@ -649,7 +680,63 @@ min-height:100px;
   min-height:23px;
   right:132px;
   top:0;
+  -webkit-transition:all .5s ease-in-out;
+  -moz-transition:all .5s ease-in-out;
+  -o-transition:all .5s ease-in-out;
+  transition:all .5s ease-in-out;
 }
+  .map_wrap.show-listings .location_tool {
+    right: 315px;
+  }
+.location_tool .current_location {
+  opacity: 0;
+  position:absolute;
+  right: 28px;
+  top: 0;
+  height: 30px;
+  line-height: 16px;
+  font-size: 13px;
+  color: grey;
+  background: white;
+  width: 0;
+  overflow: hidden;
+  padding: 7px 0 5px;
+  cursor: pointer;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -webkit-transition:width .5s ease-in-out 0, opacity 0, border 0, background-color 0 linear 0s;
+  -moz-transition:width .5s ease-in-out 0, opacity 0, border 0, background-color 0 linear 0s;
+  -o-transition:width .5s ease-in-out 0, opacity 0, border 0, background-color 0 linear 0s;
+  transition:width .5s ease-in-out 0, opacity 0, border 0, background-color 0 linear 0s;
+}
+  .location_tool:hover .current_location, .current_location:hover {
+    background: #f7f2b2;
+    -webkit-transition: background-color 0 linear 0s;
+    -moz-transition: background-color 0 linear 0s;
+    -o-transition: background-color 0 linear 0s;
+    transition: background-color 0 linear 0s;
+  }
+  .location_tool.closed .current_location {
+    opacity: 1;
+    padding: 7px 10px 5px;
+    width: 150px;
+    white-space: nowrap;
+    border-left: 2px solid black;
+    border-bottom: 2px solid black;
+    -webkit-transition:width .5s ease-in-out 2.5s, padding .5s ease-in-out 2.5s, opacity 0, border 0s ease-in-out 2.5s, background-color 0 linear 0s;
+    -moz-transition:width .5s ease-in-out 2.5s, padding .5s ease-in-out 2.5s, opacity 0, border 0s ease-in-out 2.5s, background-color 0 linear 0s;
+    -o-transition:width .5s ease-in-out 2.5s, padding .5s ease-in-out 2.5s, opacity 0, border 0s ease-in-out 2.5s, background-color 0 linear 0s;
+    transition:width .5s ease-in-out 2.5s, padding .5s ease-in-out 2.5s, opacity 0, border 0s ease-in-out 2.5s, background-color 0 linear 0s;
+  }
+  .location_tool.closed .current_location .location {
+    display: inline-block;
+    margin-left: 8px;
+    width: 83px;
+    overflow: hidden;
+    color: black;
+    height: 13px;
+  }
 .map_wrap .location_tool .wrap {
   position:relative;
   height:100%;
@@ -756,17 +843,22 @@ min-height:100px;
 }
 
 .map_tools_top {
-  height:40px;
+  height:30px;
+  max-width: 100%;
   margin-bottom:-40px;
   z-index:70;
   overflow:visible;
+  pointer-events: none;
 }
+  .map_tools_top > * {
+    pointer-events: all;
+  }
 .map_wrap .map_spacer {
   height:100%;
 }
 .map_wrap .map_tools_bottom {
   height:20px;
-  margin-top:-20px;
+  margin-top:-10px;
   z-index:75;
 }
 .map_wrap .map_tools_bottom .lower_left {
@@ -834,6 +926,11 @@ min-height:100px;
   width:auto;
   padding:5px 10px;
   height:20px;
+  z-index: 71;
+  -webkit-transition:all .5s ease-out;
+  -moz-transition:all .5s ease-out;
+  -o-transition:all .5s ease-out;
+  transition:all .5s ease-out;
 }
 .map_wrap .show_listings .fa {
   font-size:17px;
@@ -853,12 +950,14 @@ min-height:100px;
   top:0;
   width:300px;
   overflow:auto;
+  overflow-y:scroll
   background:black;
   padding-bottom:0;
+  -webkit-overflow-scrolling: touch;
 }
 .listings_wrap .listings {
   margin:0;
-  padding:15px;
+  padding:30px 15px 15px;
 }
 .listings_wrap .listings > li {
   list-style-type:none;
@@ -879,11 +978,11 @@ min-height:100px;
   background-position:0 10px;
 }
 
-.listings_wrap .listings > li.visited {
+.listings_wrap .listings > li:visited a {
   border-right:4px solid blue;
 }
-.listings_wrap .listings > li.current {
-  background: #ffceaa;
+.listings_wrap .listings > li.current a{
+  background-color: #ffceaa;
 }
 
 .listings_wrap .listings > li.gardener > a{background-position:6px -69px;} .listings_wrap .listings > li.gardener > a:hover {background:url(/images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:6px -69px;}

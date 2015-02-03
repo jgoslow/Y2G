@@ -207,7 +207,7 @@ router.get('/activate/', function(req, res) {
   if (req.query.createListing) url = '/?modal=new-listing'
   User.findOne({ activationToken: req.query.token }, function(err, user) {
     if (!user) {
-      req.flash('error', 'There has been an error - please try to login or recreate your account.');
+      req.flash('error', 'There has been an error - please try to login or recreate your Account.');
       return res.redirect('/');
     } else {
       if (user.active == true) {
@@ -226,7 +226,7 @@ router.get('/activate/', function(req, res) {
           });
         } else {
           console.log('createListing:'+req.query.createListing)
-          req.flash('error', 'There has been an error - please try to login or recreate your account.');
+          req.flash('error', 'There has been an error - please try to login or recreate your Account.');
           return res.redirect('/');
         }
       }

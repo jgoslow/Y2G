@@ -153,9 +153,12 @@ p {
     transform: translate3d(0, 0, 0);
     padding: 5px 10px 7px;
     background: white;
+    z-index: 10;
   }
   .modal_content .footer-lite a {
     color: #474747;
+    font-size: 12px;
+    display: inline-block;
   }
   .modal_content .footer-lite a:hover {
     color: #f05139;

@@ -34,4 +34,23 @@ router.get('/contact', function(req, res) {
   });
 });
 
+
+// Misc. Pages
+/* GET About Public Listings page. */
+router.get('/public-listings', function(req, res) {
+  res.render('pages/public-listings', {
+    title: 'About Public Listings',
+    user: req.user
+  });
+});
+
+/* GET About Privacy Protection page. */
+router.get('/privacy-protect', function(req, res) {
+  res.render('pages/privacy-protect', {
+    title: 'About Privacy Protection',
+    user: req.user
+  });
+});
+
+
 module.exports = router;

@@ -4,23 +4,23 @@ function initialize() {
     zoom: 8,
     center: new google.maps.LatLng(44.983334, -93.26666999999999),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
-    panControl: true,
+    panControl: false,
     zoomControl: true,
     mapTypeControl: false,
     scaleControl: true,
     scrollwheel: false,
-    streetViewControl: true,
+    streetViewControl: false,
     overviewMapControl: true
   };
 
   map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
 
-  var scripts = [ {url: '/javascripts/map_functions.js'}, {url: '/javascripts/map_interface.js'} ]
+  var scripts = [ {url: '/javascripts/y2g_funcs.js'}, {url: '/javascripts/map_functions.js'}, {url: '/javascripts/map_interface.js'} ]
 
   loadScript([
-    {url:'/javascripts/map_functions.js'},
-    {url:'/javascripts/infobubble.js'},
-    {url:'/javascripts/icons.js'}
+      {url: '/javascripts/y2g_functions.js'}
+    , {url:'/javascripts/infobubble.js'}
+    , {url:'/javascripts/icons.js'}
   ]);
 
   //moment().format(); // Date Formatting Tool

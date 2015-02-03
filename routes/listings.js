@@ -14,30 +14,38 @@ var mongoose = require('mongoose'),
     Flag = require('../lib/db/flag-model'),
     Listing = require('../lib/db/listing-model');
 
-/* GET users listing. */
+/* GET listings */
 router.get('/', function(req, res) {
-  var distance = parseInt(req.query.radius),
-      radius = 6371,
-      lat = parseFloat(req.query.lat),
-      lng = parseFloat(req.query.lng);
+  var distance = parseInt(req.query.radius)
+    , radius = 6371
+    , lat = parseFloat(req.query.lat)
+    , lng = parseFloat(req.query.lng)
 
   //console.log(distance, lat, lng)
 
   // latitude boundaries
-  var maxlat = lat + rad2deg(distance / radius),
-      minlat = lat - rad2deg(distance / radius);
+  var maxlat = lat + rad2deg(distance / radius)
+    , minlat = lat - rad2deg(distance / radius)
   // longitude boundaries (longitude gets smaller when latitude increases)
-  var maxlng = lng + rad2deg(distance / radius / Math.cos(deg2rad(lat)));
-      minlng = lng - rad2deg(distance / radius / Math.cos(deg2rad(lat)));
+  var maxlng = lng + rad2deg(distance / radius / Math.cos(deg2rad(lat)))
+    , minlng = lng - rad2deg(distance / radius / Math.cos(deg2rad(lat)))
 
   //console.log('db vars: '+maxlat, minlat, maxlng, minlng);
   Listing.find({'latLng.lat': {$gt : minlat, $lt: maxlat}, 'latLng.lng': {$gt : minlng, $lt: maxlng}})
   .select('-latLng -location').limit(5000).exec(function(err, response) {
-    if (err) return console.log(err);
+    if (err) return console.log(err)
     //console.log(response);
-    res.send(response);
+    res.send(response)
     //if (callback && typeof(callback) == "function") callback(response);
   });
+});
+/* GET single listing. */
+router.get('/single', function(req, res) {
+  var id = req.query.id
+  Listing.findById(id).select('-latLng -location').exec(function(err, listing){
+    if (err) res.status(400).send(err)
+    if (listing) res.status(200).send(listing)
+  })
 });
 
 module.exports = router;
@@ -149,7 +157,7 @@ router.post('/flag', function(req, res) {
 router.get('/edit', function(req, res) {
   if (req.user) {
     Listing.find({owner: req.user.id})
-    .select().limit(5000).exec(function(err, listings) {
+    .limit(5000).exec(function(err, listings) {
       console.log(listings)
       res.render('listings/edit', {
         listings: listings,

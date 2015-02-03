@@ -1,7 +1,7 @@
 h2 Login
-form#login-form.standard(method="post", action="/account/login", onsubmit="account.login($(this)); return false;")
+form#login-form.standard(method="post", action="/account/login", onsubmit="Account.login($(this)); return false;")
     .field
-      input(type='email', name='email', value='', placeholder='email address', required, data-parsley-type="email", data-required-message="We need a valid email to activate your account.")
+      input(type='email', name='email', value='', placeholder='email address', required, data-parsley-type="email", data-required-message="We need a valid email to activate your Account.")
     .field
       input(type='password', name="password" placeholder='password')
     input.next.submit(type='submit', value='login')

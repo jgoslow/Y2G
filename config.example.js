@@ -2,40 +2,54 @@
 var env = 'development';
 
 var config = {
-  development: {
-    //url to be used in link generation
-    url: 'http://localhost/',
-    //mongodb connection settings
-    db: {
-      user:   'dbuser',
-      pass:   'dbpass',
-      host:   'dbhost',
-      port:   'dbport',
-      db:     'dbname'
-    },
-    //server details
-    server: {
-      host: 'host',
-      port: 'serverport'
+    development: {
+      //url to be used in link generation
+      url: 'http://localhost:3000',
+      //mongodb connection settings
+      db: {
+        user:   'dbUSER',
+        pass:   'dbPASS',
+        host:   'localhost',
+        port:   '27017',
+        db:     'dbNAME'
+      },
+      //server details
+      server: {
+        host: 'localhost',
+        port: '3000'
+      },
+      // Mandrill Details
+      mandrill: {
+        key: 'mandrillKEY'
+      },
+      google: {
+        recaptcha: 'googleRECAPTCHA'
+      }
     }
-  },
-  production: {
-    //url to be used in link generation
-    url: 'http://productionurl/',
-    //mongodb connection settings
-    db: {
-      user:   'dbuser',
-      pass:   'dbpass',
-      host:   'dbhost',
-      port:   'dbport',
-      db:     'dbname'
-    },
-    //server details
-    server: {
-      host: 'host',
-      port: 'serverport'
+  , production: {
+      //url to be used in link generation
+      url: 'http://localhost:3000',
+      //mongodb connection settings
+      db: {
+        user:   'dbUSER',
+        pass:   'dbPASS',
+        host:   'localhost',
+        port:   '27017',
+        db:     'dbNAME'
+      },
+      //server details
+      server: {
+        host: 'localhost',
+        port: '3000'
+      },
+      // Mandrill Details
+      mandrill: {
+        key: 'mandrillKEY'
+      },
+      google: {
+        recaptcha: 'googleRECAPTCHA'
+      }
     }
-  }
 };
 
 module.exports = config[env];

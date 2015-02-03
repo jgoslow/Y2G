@@ -4,7 +4,15 @@ if !user
   include ../snippets/footer-lite.jade
 else
   h2 Your Listings
-  each listing, i in listings
-    h3= listing.title
-    h4= listing.latLng.lat
+  h3 This functionality is under development.  Coming soon...
+  if user.role = 'admin'
+    ul.edit-listings
+    each listing, i in listings
+      li
+        a(href=listing.id, onclick='showEditListing($(this)); return false;') #{listing.title}
+        form.edit-listing-form(onsubmit="Listings.update($(this)); return false;")
+          .field.title
+            label Title
+            input(type="text")
+
   include ../snippets/footer-profile.jade

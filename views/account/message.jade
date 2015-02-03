@@ -2,9 +2,9 @@ if rcpt
   h1 hello
 if user
   h2 Send a Message to
-  form#login-form(method="post", action="/account/login", onsubmit="account.login('#login-form'); return false;")
+  form#login-form(method="post", action="/account/login", onsubmit="Account.login('#login-form'); return false;")
     .field
-      input(type='email', name='email', value='', placeholder='email address', required, data-parsley-type="email", data-required-message="We need a valid email to activate your account.")
+      input(type='email', name='email', value='', placeholder='email address', required, data-parsley-type="email", data-required-message="We need a valid email to activate your Account.")
     .field
       input(type='password', name="password" placeholder='password')
     input(type="hidden", name="rcpt", value=rcpt)
