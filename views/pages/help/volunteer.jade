@@ -1,0 +1,28 @@
+extends ../../basic
+
+block content
+  h1 We need your help!
+  h3 Yards to Gardens is re-launching, lend a hand!
+  p Over the past few months we have been developing a new version of the Y2G.org website to help people share extra yard space, tools and other gardening resources, and create more gardens in our cities.  We are still competely free and volunteer run!
+  p Whether you take a quick glance at our website and submit a feedback form, or help us add free gardening resources in your city, everything helps! Below are a few things we could use help with:
+  .box-btns.box-btns-large
+    a.box-dotted.public(href="/help/public-listings")
+      strong.title Public Listings
+      span.description Help us gather public resources like community gardens, tool-shares, seed exchanges, compost programs and any other gardening resources. Read more here.
+    a.box-dotted.spread(href="/help/spread-the-word")
+      strong.title Spread the Word
+      span.description Let people know about Y2G through social media, flyers, emails, list-serves, blogs, t-shirts and other outreach efforts. See what we have put together.
+    a.box-dotted.test(href="/help/beta-test")
+      strong.title Beta Test
+      span.description Take the new site for a ride and let us know how it goes. Send simple feedback or take our full survey - read more.
+    a.box-dotted.team(href="/help/join")
+      strong.title Join the Team!
+      span.description Are you a developer or artist? Y2G is open sourced on Github (node.js, express, mongoDB). Suggest and develop features, design new icons or animations. Learn how to join the dev team.
+
+block sidebar
+  h3 Any Feedback?
+  p Do you have any ideas for how we imrove the site?
+    br
+    | Click the link below and send us your thoughts.
+  p
+    a.action-btn(class="btn-small", target="_blank", href="https://docs.google.com/forms/d/1dWcBTyEpZ7A2f02Kg47JfOpsXm9Ss8P9rfSUPzG3mH4/viewform?usp=send_form") Give Feedback

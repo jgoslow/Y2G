@@ -22,7 +22,7 @@ block map
             .tools
               .wrap
                 form#location_filter.location_filter
-                  input#address_input.address_input(placeholder='Type location and hit enter.')
+                  input#address_input.address_input(placeholder='Type a location')
                   input#location_tool_submit.submit.fa(type='submit', value='', href='#')
 
                   #radius_box.radius_box
@@ -66,9 +66,10 @@ block content
   h1 Here's How it Works
   p Yards to Gardens lets you share or find all things gardening. Whether you have extra space in your yard, extra tools in the garage, extra seeds or seedings, or just looking for a space to garden, Y2G makes it easy to share what you&rsquo;ve got or find what you&rsquo;re looking for.
   p To post a listing just click on one of the categories, enter the information requested, verify your email and your listing will appear on the Y2G map.
-
+  p WE NEED YOUR HELP!&nbsp;
+    a(href="/help") Learn more.
 block sidebar
-  .box-listing-buttons
+  .box-btns
     a.box-dotted.gardener.openmodal(href='/listings/new?type=gardener', data-modaltype='new-listing', data-listingType="gardener")
       strong.title Gardener
       span.description Are you a gardener looking for space to plant a garden?

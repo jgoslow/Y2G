@@ -394,6 +394,31 @@ router.get('/users/', function(req, res) {
   });
 });
 
+/* CSV of users' email */
+router.get('/users/csv', function(req, res) {
+  if (req.user.role != 'admin') res.status(500).send('You do not have permission to access this page.')
+  User.find(function(err, response) {
+    res.render('account/csv', {
+      users: response,
+      user: req.user
+    });
+  });
+});
+function uniq_fast(a) {
+    var seen = {};
+    var out = [];
+    var len = a.length;
+    var j = 0;
+    for(var i = 0; i < len; i++) {
+         var item = a[i];
+         if(seen[item] !== 1) {
+               seen[item] = 1;
+               out[j++] = item;
+         }
+    }
+    return out;
+}
+
 
 module.exports = router;
 

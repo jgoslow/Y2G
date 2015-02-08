@@ -254,6 +254,8 @@ input.parsley-success, textarea.parsley-success {
 }
 .btn-small:hover {
   background-color: black;
+  text-decoration: none;
+  color: white;
 }
 
 .note {

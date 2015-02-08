@@ -1,0 +1,8 @@
+if user && (user.role == 'admin')
+  | username, name, email, phone
+  br
+  each user, i in users
+    | #{user.username}, #{user.name}, #{user.email}, #{user.phone}
+    br
+else
+  Error

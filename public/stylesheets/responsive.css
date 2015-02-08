@@ -63,19 +63,45 @@
 
 
 @media (min-width: 500px) {
-  .box-listing-buttons .box-dotted {
+  .box-btns .box-dotted {
     width: 49%;
     padding: 16% 0 1%;
     margin-right: 1%;
   }
-  .box-listing-buttons .box-dotted:nth-child(2n) {
+    .box-btns-large .box-dotted {
+        padding-top: 28%;
+    }
+  .box-btns .box-dotted:nth-child(2n) {
     margin-right: 0;
   }
-  .box-listing-buttons .box-dotted:first-child {
+  .box-btns .box-dotted:first-child {
     margin-top: 0;
   }
-  .box-listing-buttons .box-dotted .description {
+  .box-btns .box-dotted .description {
     padding-right: 7%;
+  }
+  .content_wrap .content {
+    padding: 0 25px;
+  }
+  .box-btns-large .box-dotted .title {
+    top: 13%;
+  }
+  .box-btns-large .box-dotted .description {
+    font-size: 11px;
+    line-height: 15px;
+    top: 30%;
+  }
+
+}
+
+@media (min-width: 600px) {
+  .box-btns-large .box-dotted .title {
+    top: 18%;
+  }
+  .box-btns-large .box-dotted .description {
+    font-size: 13px;
+    line-height: 17px;
+    top: 32%;
   }
 }
 
@@ -165,14 +191,26 @@
       border-top: 30px solid black;
     }
   .listings_wrap .listings {
-    padding:15px;
   }
+  
 
   .footer_wrap {
     min-height: 25px;
   }
 }
 
+@media (min-width: 710px) {
+  .box-btns-large .box-dotted {
+    padding-top: 193px;
+  }
+  .footer-links {
+    display: inline-block;
+  }
+    .footer-links:before {
+      content:'|';
+      margin: 0 7px;
+    }
+}
 
 /* Above ipad portrait */
 
@@ -189,6 +227,10 @@
 
 /* Above ipad portrait */
 @media (min-width: 769px) {
+
+  .map_wrap .location_tool .submit {
+    display: none;
+  }
 
   /* New Listing Modal */
   .new-listing .choose-type a {
@@ -218,12 +260,24 @@
     width:30%;
     padding-right: 0%;
   }
-  .box-listing-buttons .box-dotted:nth-child(2n-1) {
-    margin-left: 5%;
+  .home .sidebar {
+    float: right;
   }
-  .box-listing-buttons .box-dotted {
-    width: 32%;
-    padding-top: 10%;
+  .post.left {
+    padding-right:330px;
+  }
+  .sidebar {
+    margin-left: -330px;
+    max-width: 300px;
+    margin-top: 0;
+    padding-top: 0;
+    border-top: 0;
+  }
+  .box-btns-large .box-dotted {
+    padding-top: 28%;
+  }
+  .content_wrap .content {
+    padding: 0 10px;
   }
 }
 
@@ -236,6 +290,7 @@
   .footer_wrap {
     min-height: 35px;
   }
+
 
 }
 

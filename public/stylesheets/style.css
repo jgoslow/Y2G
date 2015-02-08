@@ -13,6 +13,9 @@ PAGES
   - edit site content
   -
 
+Sharing
+- Send a note about Y2G to email addresses.
+
 Create listing
 - Integrate pieces of listing (square footage, other info);
 - Bulk create
@@ -22,7 +25,7 @@ Message
 - allow message sending through website? yeah - mostly the same as any old send
 - make reply-to email different from "from" address - then you can add a gravatar
 
-Profile - add edit profile button
+Profile
 - add image to profile?
 
 Create Account
@@ -99,16 +102,64 @@ h1 {
   line-height:35px;
   margin-bottom:15px;
 }
-h2 {
+.post h2 {
   font-size: 22px;
   font-weight: 200;
   line-height: 28px;
   text-transform: Capitalize;
-  margin-bottom: 7px;
+  margin: 0 10% 7px 0;
 }
-h3 {
-  margin-bottom: 6px;
+.post h3 {
+  font-size: 16px;
+  margin: 0 10% 6px 0;
+  text-transform: uppercase;
 }
+
+.post p + h2, .post p + h3, .post ul + h2, .post ul + h3, .post ol + h2, .post ol + h3 {
+  margin-top: 25px;
+}
+.post h3 + p {
+  margin-top: -5px;
+}
+
+.post ul {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 15px;
+}
+  .post ul li {
+    list-style: disc;
+    font-size: 14px;
+    margin-bottom: 5px;
+    margin-left: 25px;
+  }
+  ul.block-items:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+  ul.block-items li {
+    display: inline-block;
+    padding: 2px 8px;
+    margin: 3px 3px;
+    float: left;
+    border: 1px solid #82c341;
+    background: #ffe98a;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+  }
+.post ol {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 15px;
+}
+  .post ol li {
+    list-style: decimal;
+    font-size: 14px;
+    margin-bottom: 5px;
+    margin-left: 25px;
+  }
 
 .left {
   float:left;
@@ -151,6 +202,24 @@ h3 {
     border: 1px solid #c92128;
   }
 
+.green {
+
+}
+.light-green {
+  color: #3fa947;
+}
+.light-blue {
+  color: #2ebadb;
+}
+.orange {
+  color: #e3662b;
+}
+.red {
+  color: #f0523a;
+}
+.purple {
+  color: #c383a7;
+}
 .clearfix:after {
   content: '';
   height: 0;
@@ -211,8 +280,10 @@ h3 {
 .map_wrap .location_tool .submit {
   padding: 15px 8px 12px;
   width: 30px;
-  float:right;
-  display:none;
+  position: absolute;
+  background: #f05139;
+  color: white;
+  right: 12px;
 }
 
 
@@ -238,6 +309,9 @@ header, .content_wrap .content, footer, .map_wrap .map_tools_bottom, .map_tools_
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
 }
+  .content_wrap .content {
+    padding: 0 25px;
+  }
 
 header_wrap {
   position:fixed;
@@ -957,15 +1031,17 @@ min-height:100px;
 }
 .listings_wrap .listings {
   margin:0;
-  padding:30px 15px 15px;
+  padding:0 5px;
+  background: black;
 }
 .listings_wrap .listings > li {
-  list-style-type:none;
-  margin-bottom:5px;
-  height:38px;
-  width:100%;
-  position:relative;
-  margin-bottom:2px;
+  list-style-type: none;
+  margin-bottom: 5px;
+  height: 38px;
+  width: 100%;
+  position: relative;
+  margin: 3px 0;
+  box-sizing: border-box;
 }
 .listings_wrap .listings > li:last-child {
   margin-bottom:15px;
@@ -1290,21 +1366,40 @@ min-height:100px;
 }
 
 .post {
-  font-size:13px;
-  line-height:19px;
-  font-weight:500;
+  font-size:16px;
+  line-height:23px;
+  font-weight:300;
 }
+  .home .post {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 19px;
+  }
 .post p {
   margin-bottom:12px;
 }
+.post .note {
+  max-width: 100%;
+  padding: 0 30px;
+  box-sizing: border-box;
+}
 
-.post.left, .post.right { width:50%; padding:0;}
+.post.left {
+  width:100%;
+  box-sizing: border-box;
+}
 
 
-.box-listing-buttons {
+.box-btns {
   width:100%;
 }
-.box-listing-buttons .box-dotted {
+  .home .box-btns {
+    max-width: 600px;
+  }
+  .box-btns-large {
+    margin-top: 25px;
+  }
+.box-btns .box-dotted {
   height:0;
   padding-top: 33%;
   width:100%;
@@ -1318,12 +1413,17 @@ min-height:100px;
   position:relative;
   color: black;
 }
-.box-listing-buttons .box-dotted:first-child {
+.box-btns-large .box-dotted {
+  background:url(/images/svg/box-dotted-large.svg) no-repeat;
+  padding-top: 53%;
+  max-width: 330px;
+}
+.box-btns .box-dotted:first-child {
   margin-top: 15px;
 }
-.box-listing-buttons .box-dotted:nth-child(2n) {
+.box-btns .box-dotted:nth-child(2n) {
 }
-.box-listing-buttons .box-dotted:before {
+.box-btns .box-dotted:before {
   content: '';
   position:absolute;
   top:0;
@@ -1331,25 +1431,66 @@ min-height:100px;
   right:0;
   bottom:0;
   display:block;
+  font-family: "FontAwesome";
 }
-.box-listing-buttons .box-dotted.gardener:before {
+.box-btns .box-dotted.gardener:before {
   background:url(/images/svg/gardener.svg) 20px center no-repeat;
   background-size: 20%;
 }
-.box-listing-buttons .box-dotted.space:before {
+.box-btns .box-dotted.space:before {
   background:url(/images/svg/space.svg) 20px center no-repeat;
   background-size: 20%;
 }
-.box-listing-buttons .box-dotted.organic:before {
+.box-btns .box-dotted.organic:before {
   background:url(/images/svg/organic.svg) 20px center no-repeat;
   background-size: 20%;
 }
-.box-listing-buttons .box-dotted.tools:before {
+.box-btns .box-dotted.tools:before {
   background:url(/images/svg/tools.svg) 20px center no-repeat;
   background-size: 20%;
 }
 
-.box-listing-buttons .box-dotted .title {
+.box-btns .box-dotted:before {
+  opacity: .6;
+  -webkit-transition:all .25s ease-in-out;
+  -moz-transition:all .25s ease-in-out;
+  -o-transition:all .25s ease-in-out;
+  transition:all .25s ease-in-out;
+}
+.box-btns .box-dotted:hover:before {
+  opacity: 1;
+}
+
+.box-btns .box-dotted.public:before,
+.box-btns .box-dotted.spread:before,
+.box-btns .box-dotted.test:before,
+.box-btns .box-dotted.team:before {
+  top: 28%;
+  left: 8%;
+  font-size: 40px;
+  color: black;
+}
+
+.box-btns .box-dotted.public:before {
+  content: "\f041"; /* "\f19c" bank */
+  color: #3fa947;
+  font-size: 45px;
+  left: 10%;
+}
+.box-btns .box-dotted.spread:before {
+  content: "\f0a1";
+  color: #2ebadb;
+}
+.box-btns .box-dotted.test:before {
+  content: "\f1b3";
+  color: #c383a7;
+}
+.box-btns .box-dotted.team:before {
+  content: "\f0c0";
+  color: #e3662b;
+}
+
+.box-btns .box-dotted .title {
   position:absolute;
   top:20%;
   left: 28%;
@@ -1357,7 +1498,10 @@ min-height:100px;
   font-weight:bold;
   font-size:17px;
 }
-.box-listing-buttons .box-dotted .description {
+  .box-btns-large .box-dotted .title {
+    left: 28%;
+  }
+.box-btns .box-dotted .description {
   position:absolute;
   top: 44%;
   left: 28%;
@@ -1366,7 +1510,48 @@ min-height:100px;
   font-weight:500;
   padding-right:12%;
 }
+  .box-btns-large .box-dotted .description {
+    top: 32%;
+    left: 28%;
+  }
 
+
+/* Sidebar */
+
+.sidebar {
+  width: 100%;
+  max-width: 100%;
+  min-width: 300px;
+  float: right;
+  margin-top: 50px;
+  padding-top: 25px;
+  border-top: 2px solid #b6b2b3;
+}
+  .home .sidebar {
+    max-width: 600px;
+    float: none;
+    border-top: none;
+  }
+
+  .sidebar h2 {
+
+  }
+  .sidebar h3 {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .sidebar p {
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 18px;
+  }
+  .sidebar .item {
+    margin-bottom: 25px;
+  }
+.embed-form {
+  width: 100%;
+}
 
 
 
@@ -1477,4 +1662,7 @@ min-height:100px;
     color:white;
     font-weight:bold;
     text-transform:uppercase;
+  }
+  .footer-links {
+    display: none;
   }
