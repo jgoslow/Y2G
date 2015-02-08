@@ -27,6 +27,10 @@ jQuery(document).ready(function($) {
 
 function openModal(obj, target, type) {
 	if (type == 'message') { $('.modal-message').remove(); }
+	if (type == 'login') {
+		_gaq.push(['_trackEvent', 'Login', 'login form', data, 1]); // Analytics
+		_gaq.push(['_trackPageview','/account/login-form']) // Analytics
+	}
 
 	$('#modal').data('modal-type', type);
 	$('html, body').css('overflow', 'hidden')

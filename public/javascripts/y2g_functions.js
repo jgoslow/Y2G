@@ -185,6 +185,7 @@ var Listings = function(location, user) {
       $('#listings').append(listItem)
 
       google.maps.event.addListener(marker, 'click', function() {
+        _gaq.push(['_trackEvent', 'Listing', 'clicked', '"title:'+title.replace(/\x27/g, "")+', type: '+type+', id:'+id+'"', 0]); // Analytics
         $("#listings li.current").removeClass('current')
         $('#listings li').eq(i).addClass("current")
         console.log($('#window-'+id));
@@ -215,6 +216,7 @@ var Listings = function(location, user) {
     }
   }
   Listings.create = function(form){
+    _gaq.push(['_trackPageview','/listings/create-submit']) // Analytics
     var form = $(form);
     if ( form.parsley().isValid() ) {
       $.get('/listings/add', form.serialize(), function(data){
@@ -224,6 +226,8 @@ var Listings = function(location, user) {
         closeModal('new-listing');
         y2g.message('Your listing has been created!<br><br> Click "Edit listings" or search in your area to see it!', 'success', 5);
         $('.modal-new-listing').remove();
+        _gaq.push(['_trackEvent', 'Listing', 'created', form.find('input[name=type]').val(), 0]); // Analytics
+        _gaq.push(['_trackPageview','/listings/create-success']) // Analytics
       })
       .fail(function(XMLHttpRequest, textStatus, errorThrown){
         alert('status:' + XMLHttpRequest.status + ', status text: ' + XMLHttpRequest.statusText);
@@ -252,6 +256,7 @@ var Listings = function(location, user) {
           closeModal('flag');
           y2g.message('this listing has been flagged!', 'success', 3);
           $('.modal-flag').remove();
+          _gaq.push(['_trackEvent', 'Listing', 'flag', form.find('input[name=listing]').val(), 0]); // Analytics
         }
       })
       .fail(function(XMLHttpRequest, textStatus, errorThrown){
@@ -396,7 +401,7 @@ function locationToolOpen() {
 function locationToolClose() {
   $('#location_tool').addClass('closed')
   var search = localStorage.getItem('search')
-  $('#current_location .location').html(search)
+  $('#current_location .location').html(search.trunc(15))
   var r;
   var r1 = $('#show_listings').css('right');
   if ( r1 == '317px') { r = 431; }

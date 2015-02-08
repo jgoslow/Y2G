@@ -141,6 +141,8 @@ Account.signup = function(form) {
 				y2g.message('SUCCESS!<br><br>An email has been sent to '+data+'.<br><br>Please check your email and click the confirmation link.<br><br>If you do not receive an email, check your spam folder or contact <a href="support@y2g.org">support</a>.', 'success', 6);
 				closeModal('sign-up');
 				$('#sign-up-form input:not([type="submit"])').val('');
+				_gaq.push(['_trackEvent', 'Account', 'Create', 'Form Submitted', 0]); // Analytics
+				_gaq.push(['_trackPageview','/account/create-form-submitted']) // Analytics
 			}
 		})
 		.done(function(data) {
@@ -186,6 +188,8 @@ Account.login = function(form) {
 			setTimeout(function(){
 				setTimeout(function(){location.reload();},500);
 			},1000);
+			_gaq.push(['_trackEvent', 'Login', 'success', data, 1]); // Analytics
+			_gaq.push(['_trackPageview','/account/login-success']) // Analytics
 		})
 		.fail(function(XMLHttpRequest, textStatus, errorThrown){
 			y2g.message('Wrong Username or Password', 'error', 2)
@@ -405,10 +409,8 @@ Messages.send = function(form){
 			setTimeout(function(){
 				y2g.message('Success!<br><br> Your message has been sent to ' + data + '. What are you gonna do now?<br><br> Go Plant something...', 'success', 4);
 			}, 1000);
-			setTimeout(function(){
-				document.getElementById('heidi').play();
-				y2g.message('Or else...', 'error', 5);
-			}, 6000);
+			_gaq.push(['_trackEvent', 'Message', 'send', 'listing', 2]); // Analytics
+			_gaq.push(['_trackPageview','/messages/sent-success']) // Analytics
 		})
 		.done(function(data) {
 			//closeModal('sign-up');

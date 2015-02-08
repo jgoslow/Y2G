@@ -1,8 +1,13 @@
 jQuery(function($){
 
+  _gaq.push(['_trackEvent', 'Account', 'Create', 'Sign Up Form', 0]); // Analytics
+  _gaq.push(['_trackPageview','/account/create-form']) // Analytics
+
   $('.show-gardener-profile-signup').click(function(){
     $(this).slideUp();
     $('.gardener-profile-signup').slideDown();
+    _gaq.push(['_trackEvent', 'Account', 'Create', 'Show Gardener Profile', 0]); // Analytics
+    _gaq.push(['_trackPageview','/account/create-show-profile']) // Analytics
   });
 
   /*console.log('hello');

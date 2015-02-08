@@ -1,4 +1,6 @@
 
+_gaq.push(['_trackPageview','/listings/create-type']) // Analytics
+
 var listingType = $('#new-listing').data('type');
 console.log('.choose-type .'+listingType);
 $('.choose-type .'+listingType).addClass('active');
@@ -18,6 +20,13 @@ $('.new-listing .goto').click(function(){
     return false;
   }
   var goto = $(this).data('goto');
+  if (goto == 2) {
+    _gaq.push(['_trackPageview','/listings/create-type-chosen']) // Analytics
+      _gaq.push(['_trackPageview','/listings/create-location']) // Analytics
+  }
+  else if (goto == 3) {
+    _gaq.push(['_trackPageview','/listings/create-profile']) // Analytics
+  }
   if (goto !== $('.new-listing').data('current-step')) {
     TweenLite.to($('.new-listing .steps-container'), .5, {marginLeft: -100*(goto-1)+'%'});
     $('.new-listing .steps .current, .new-listing .step.current').removeClass('current');
@@ -39,6 +48,7 @@ $(document).keydown(function(e){
   }
 });
 $('.new-listing .get-location').click(function(){
+  _gaq.push(['_trackPageview','/listings/create-location-search']) // Analytics
   var address = $('.new-listing input.location').val();
   getLocation(address, null, selectLocation);
   $('.location-results div').remove();
@@ -47,6 +57,7 @@ $('.new-listing .get-location').click(function(){
 });
 
 function selectLocation(results) {
+  _gaq.push(['_trackPageview','/listings/create-location-selected']) // Analytics
   $('#location-results').removeClass('searching');
   var locations = results;
   form.disableNext(3);
@@ -125,7 +136,7 @@ form.setLocation = function(loc) {
 
 
 $('#new-listings-form').submit(function(e){
-  debugger;
+  _gaq.push(['_trackPageview','/listings/create-submit']) // Analytics
   e.preventDefault();
   if ( $(this).parsley().isValid() ) {
     $.post('/listings/add', $(this).serialize());

@@ -203,8 +203,8 @@ router.post('/updatePass', function(req, res) {
 
 /* GET Activation Page. */
 router.get('/activate/', function(req, res) {
-  var url = '/'
-  if (req.query.createListing) url = '/?modal=new-listing'
+  var url = '/?account=confirmed'
+  if (req.query.createListing) url = '/?account=confirmed&modal=new-listing'
   User.findOne({ activationToken: req.query.token }, function(err, user) {
     if (!user) {
       req.flash('error', 'There has been an error - please try to login or recreate your Account.');

@@ -4,7 +4,7 @@ $(function(){
 	// Parse URL Params for listing
 	if (params.listing) {
 		var listing = params.listing
-		
+
 	}
 
 	// Set Location
@@ -22,7 +22,7 @@ $(function(){
 		Listings.get(location, radius, '', Listings.display);
 		$('#location_tool').addClass('closed')
 		console.log(location)
-		$('#current_location .location').html(search)
+		$('#current_location .location').html(search.trunc(15))
 	} else {
 		locationToolOpen();
 	}
@@ -131,11 +131,15 @@ $(function(){
 		var radius = mToK($('#radius_input').val()) * 1000,
 			address = $('#address_input').val(),
 			latLng;
-		localStorage.setItem('search', address.trunc(15));
+		localStorage.setItem('search', $('#address_input').val());
+		localStorage.setItem('radius', $('#radius_input').val());
 
 		getLocation(address, radius, 'getListings').done(function(){ //
 			locationToolClose();
+			_gaq.push(['_trackEvent', 'Search Location', 'submit', localStorage.getItem('search'), 1]); // Analytics
 		});
+
+		analytics.location() // Analytics
 
 		return false;
 	});
