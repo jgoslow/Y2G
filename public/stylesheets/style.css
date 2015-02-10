@@ -14,6 +14,7 @@ PAGES
 
 Needs Format/Style
 ***- message
+- No listings message
 
 Sharing
 - Send a note about Y2G to email addresses.
@@ -166,8 +167,17 @@ h1 {
 .left {
   float:left;
 }
+.left-align {
+  text-align: left;
+}
 .right {
   float:right;
+}
+.right-align {
+  text-align: right;
+}
+.center-align {
+  text-align: center;
 }
 .clear {
   clear:both;
@@ -1328,7 +1338,7 @@ min-height:100px;
       color: #489247;
     }
 
-  .new-listing .gardener, .new-listing .garden, .new-listing .tools, .new-listing .organic {
+  .new-listing .gardener, .new-listing .space, .new-listing .tools, .new-listing .organic {
     display: none;
   }
   .new-listing.gardener .gardener {

@@ -58,34 +58,40 @@ $('.new-listing .get-location').click(function(){
 
 function selectLocation(results) {
   _gaq.push(['_trackPageview','/listings/create-location-selected']) // Analytics
-  $('#location-results').removeClass('searching');
-  var locations = results;
-  form.disableNext(3);
+  $('#location-results').removeClass('searching')
+  var locations = results
+  form.disableNext(3)
   results.forEach(function(result){
-    var div = document.createElement('div'),
-        html = '<a href="#">'+result.formatted_address+'</a>';
-    $(div).addClass("loc").html(html).appendTo($('.location-results'));
-  });
-  $('.step.location').addClass('results');
-  setTimeout(function(){ $('#location-results').focus(); }, 1500);
+    var div = document.createElement('div')
+      , html = '<a href="#">'+result.formatted_address+'</a>'
+    $(div).addClass("loc").html(html).appendTo($('.location-results'))
+  })
+  $('.step.location').addClass('results')
   setTimeout(function(){
-    TweenMax.staggerTo($('.location-results .loc'), .5, {opacity: 1}, .05);
+    $('#location-results').focus();
+  }, 1500)
+  setTimeout(function(){
+    TweenMax.staggerTo($('.location-results .loc'), .5, {opacity: 1}, .05)
     $('.location-results .loc').click(function(){
-      var n = $(this).index();
-      $('.location-results .loc.active').removeClass('active');
-      $(this).addClass('active');
-      form.enableNext(3);
-      form.setLocation(locations[n]);
+      var n = $(this).index()
+      $('.location-results .loc.active').removeClass('active')
+      $(this).addClass('active')
+      form.enableNext(3)
+      form.setLocation(locations[n])
       setTimeout(function(){
         $('button[data-goto="3"]').click()
       }, 500)
-      return false;
-    });
-  }, 500);
+      return false
+    })
+  }, 500)
   setTimeout(function(){
-    if (results.length == 1) { console.log('just 1'); $('.location-results .loc:first-child').click(); }
-    else if (results.length == null) { y2g.message('There were no results for that address.  Try again!', 'error', 2); }
-  }, 1000);
+    if (results.length == 1) {
+      console.log('just 1'); $('.location-results .loc:first-child').click()
+    }
+    else if (results.length == null) {
+      y2g.message('There were no results for that address.  Try again!', 'error', 2)
+    }
+  }, 1000)
 }
 
 var form = function(){};
@@ -98,26 +104,36 @@ form.disableNext = function(num) {
   $('.step.location').removeClass("chosen");
 }
 form.setLocation = function(loc) {
-  var address = loc.formatted_address,
-      city,
-      state,
-      zip,
-      country,
-      latLng = {lat:'', lng:''};
-  if (loc.types[0] == 'street_address') { city = loc.address_components[3].long_name; state = loc.address_components[5].short_name; country = loc.address_components[6].long_name; zip = loc.address_components[7].long_name; }
-  else if (loc.types[0] == "locality") { city = loc.address_components[0].long_name; state = loc.address_components[2].short_name; country = loc.address_components[3].long_name; zip = ''; }
+  var address = loc.formatted_address
+    , city
+    , state
+    , zip
+    , country
+    , latLng = {lat:'', lng:''}
+  if (loc.types[0] == 'street_address') {
+    city = loc.address_components[3].long_name
+    state = loc.address_components[5].short_name
+    country = loc.address_components[5].long_name
+    zip = loc.address_components[6].long_name
+  }
+  else if (loc.types[0] == "locality") {
+    city = loc.address_components[0].long_name
+    state = loc.address_components[2].short_name
+    country = loc.address_components[3].long_name
+    zip = '';
+  }
 
-  latLng.lat = loc.geometry.location.k;
-  latLng.lng = loc.geometry.location.D;
-  latLng = JSON.stringify(latLng);
-  console.log(loc);
-  console.log(address, city, state, zip, country, latLng);
-  $('#location-address').attr('value',address);
-  $('#location-city').attr('value',city);
-  $('#location-state').attr('value',state);
-  $('#location-zip').val(zip);
-  $('#location-country').val(country);
-  $('#location-latLng').val(latLng);
+  latLng.lat = loc.geometry.location.k
+  latLng.lng = loc.geometry.location.D
+  latLng = JSON.stringify(latLng)
+  //console.log(loc)
+  //console.log(address, city, state, zip, country, latLng)
+  $('#location-address').attr('value',address)
+  $('#location-city').attr('value',city)
+  $('#location-state').attr('value',state)
+  $('#location-zip').val(zip)
+  $('#location-country').val(country)
+  $('#location-latLng').val(latLng)
 }
 
 /*$('#new-listing-form').parsley().subscribe('parsley:form:validate', function (formInstance) {
@@ -133,8 +149,6 @@ form.setLocation = function(loc) {
   return;
 });*/
 
-
-
 $('#new-listings-form').submit(function(e){
   _gaq.push(['_trackPageview','/listings/create-submit']) // Analytics
   e.preventDefault();
@@ -143,3 +157,14 @@ $('#new-listings-form').submit(function(e){
   }
   return false;
 });
+
+$('#bio-checkbox').click(function(){
+  var check = $(this).find('input[type=checkbox]')
+    , bio = $(this).data('bio')
+    , textarea = $('textarea[name=bio]')
+  if (check.is(":checked")) {
+    textarea.val(bio)
+  } else {
+    textarea.val('')
+  }
+})

@@ -216,18 +216,31 @@ var Listings = function(location, user) {
     }
   }
   Listings.create = function(form){
+    Listings = this
     _gaq.push(['_trackPageview','/listings/create-submit']) // Analytics
-    var form = $(form);
+    var form = $(form)
     if ( form.parsley().isValid() ) {
       $.get('/listings/add', form.serialize(), function(data){
-        console.log(data);
+        console.log(data)
       })
-      .done(function() {
-        closeModal('new-listing');
-        y2g.message('Your listing has been created!<br><br> Click "Edit listings" or search in your area to see it!', 'success', 5);
+      .done(function(data) {
+        closeModal('new-listing')
+        // Set map to area with listing
+        setTimeout(function(){
+          $('#address_input').attr('value', data.location)
+          $('#location_filter').submit()
+          /*map.setLocation(data.latLng, 20000)
+          Listings.get(data.latLng, 20, '', Listings.display)*/
+        }, 2000)
+        setTimeout(function(){
+          $('#listing-'+data.id+' a').click()
+        }, 3000)
+        y2g.message('Your listing has been created!', 'success', 5);
         $('.modal-new-listing').remove();
         _gaq.push(['_trackEvent', 'Listing', 'created', form.find('input[name=type]').val(), 0]); // Analytics
         _gaq.push(['_trackPageview','/listings/create-success']) // Analytics
+        form.find("input[type='text']").val('')
+        form.find('textarea').html('')
       })
       .fail(function(XMLHttpRequest, textStatus, errorThrown){
         alert('status:' + XMLHttpRequest.status + ', status text: ' + XMLHttpRequest.statusText);

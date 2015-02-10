@@ -86,6 +86,9 @@ select:-webkit-autofill:focus, select:-webkit-autofill, option:-webkit-autofill:
 .field p {
 
 }
+.field + h4, .field + h3 {
+  margin-top: 25px;
+}
 .field.required:before {
   content: '*';
   color: #f05139;
@@ -201,7 +204,7 @@ input[type=checkbox] {
   margin: 0;
   background: none;
   line-height:1em;
-  margin-right: 5px;
+  margin-right: 10px;
   box-shadow: none;
 }
 
@@ -210,6 +213,9 @@ label {
   text-align:left;
   max-width: 300px;
   margin: 0 auto;
+}
+label.checkbox {
+  width: auto;
 }
 
 input:focus, textarea:focus, option:focus {
@@ -237,6 +243,9 @@ input.parsley-success, textarea.parsley-success {
   float: left;
   margin-bottom: 8px;
 }
+  textarea + .parsley-errors-list .parsley-custom-error-message {
+    margin-top: 0;
+  }
 
 
 /* buttons */
@@ -379,7 +388,27 @@ form.edit-listing-form {
   font-family: Helvetica
 }
 
-
+/* Form Options */
+form .options .field {
+  text-align: left;
+  width: auto;
+}
+form .options .field:first-child {
+  margin: 0 auto 14px;
+}
+form .options .field label {
+  text-align: left;
+  display: inline;
+  width: auto;
+  float: none;
+}
+form .options .field label + a, form .options .field label + span {
+  padding: 0;
+  display: block;
+  float: none;
+  margin: 0 0 0 25px;
+  width: auto;
+}
 
 
 @media (min-width: 415px) {

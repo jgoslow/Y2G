@@ -51,7 +51,7 @@ router.get('/single', function(req, res) {
 module.exports = router;
 
 
-/* GET New User page. */
+/* GET new listing form. */
 router.get('/new', function(req, res) {
   var type = req.query.type;
   res.render('listings/new', {
@@ -61,7 +61,7 @@ router.get('/new', function(req, res) {
   });
 });
 
-/* GET New User page. */
+/* Save the new listing */
 router.get('/add', function(req, res) {
   var listingInfo = req.query
     , newLatLng = JSON.parse(decodeURI(listingInfo.latLng))
@@ -83,13 +83,13 @@ router.get('/add', function(req, res) {
     function(listingInfo, done) {
       console.log(listingInfo)
       var newListing = new Listing({
-        owner: listingInfo.owner
+          owner: listingInfo.owner
         , ownerName: listingInfo.ownerName
         , type: listingInfo.type
         , typeFields: listingInfo.typeFields
         , title: listingInfo.title
         , description: listingInfo.description
-        , location: listingInfo.location
+        , location: listingInfo.address
         , preciseMarker: listingInfo.preciseMarker
         , city: listingInfo.city
         , state: listingInfo.state
@@ -108,6 +108,11 @@ router.get('/add', function(req, res) {
     },
     ],
     function(err, listing) {
+      var listingInfo = {}
+      listingInfo.latLng = listing.displayLatLng
+      listingInfo.id = listing.id
+      listingInfo.location = listing.location
+
       console.log('listing saved..');
       console.log(err, listing);
       if (err) {
@@ -115,21 +120,30 @@ router.get('/add', function(req, res) {
         res.status(409).send(err);
       } else {
         console.log(listing);
-        res.status(200).send('success');
+        res.status(200).send(listingInfo);
       }
     }
   ); // End Async
 });
 
 
+/* Remove Listing */
+router.get('/remove', function(req, res) {
+  if (req.user) {
+    Listing.findOneAndUpdate({id: req.listing},  function(listing){
+      console.log(listing)
+    })
+  }
+})
+
 /* GET Flag Listing form. */
 router.get('/flag', function(req, res) {
   res.render('listings/flag', {
-    user: req.user,
-    listing: req.query.id,
-    listingTitle: req.query.title
-  });
-});
+      user: req.user
+    , listing: req.query.id
+    , listingTitle: req.query.title
+  })
+})
 /* Flag listing. */
 router.post('/flag', function(req, res) {
   var newFlag = new Flag({
@@ -169,7 +183,6 @@ router.get('/edit', function(req, res) {
       user: req.user
     });
   }
-
 });
 
 

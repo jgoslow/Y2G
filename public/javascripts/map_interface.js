@@ -12,24 +12,26 @@ $(function(){
 		,	radius = localStorage.getItem('radius')
 		,	search = localStorage.getItem('search')
 	if (location) {
-		if (!radius) { radius = 5; }
-		location = JSON.parse(location);
-		//console.log(location, radius);
-		var latLng = {}; // Save Location for next visit
-		latLng.lat = location.k;
-		latLng.lng = location.D;
-		map.setLocation(latLng, radius*1000);
-		Listings.get(location, radius, '', Listings.display);
+		if (!radius) {
+			radius = 5
+		}
+		location = JSON.parse(location)
+		//console.log(location, radius)
+		var latLng = {} // Save Location for next visit
+		latLng.lat = location.k
+		latLng.lng = location.D
+		map.setLocation(latLng, radius*1000)
+		Listings.get(location, radius, '', Listings.display)
 		$('#location_tool').addClass('closed')
 		console.log(location)
 		$('#current_location .location').html(search.trunc(15))
 	} else {
-		locationToolOpen();
+		locationToolOpen()
 	}
 
 	$('#logo').click(function(){
-		localStorage.clear();
-	});
+		localStorage.clear()
+	})
 
 
 	// Tools
