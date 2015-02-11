@@ -39,6 +39,7 @@
     "mailstrip": "*",
     "xregexp": "*",
     "parse-reply": "*",
-    "mongoose-session-store": "*"
+    "mongoose-session-store": "*",
+    "winston": "*"
   }
 }

@@ -120,6 +120,9 @@ select:-webkit-autofill:focus, select:-webkit-autofill, option:-webkit-autofill:
   -moz-box-sizing:border-box;
   -webkit-box-sizing:border-box;
 }
+  .field.email {
+    color: #9e9d8e;
+  }
   .editable, .editable:nth-child(2n) {
     margin-right: 9px;
   }
@@ -170,6 +173,12 @@ select:-webkit-autofill:focus, select:-webkit-autofill, option:-webkit-autofill:
     opacity: 0;
     pointer-events: none;
   }
+  .field.editing .add-field, .field.saved .add-field {
+    display: none;
+  }
+  .field.saved.empty .add-field {
+    display: block;
+  }
   .field .fa-edit:hover, .field .fa-save:hover, .field .fa-remove:hover {
     color: #2ebadb;
     text-decoration: none;
@@ -190,6 +199,31 @@ select:-webkit-autofill:focus, select:-webkit-autofill, option:-webkit-autofill:
   }
   .updatePassField .fa-thumbs-up {
     opacity: 0;
+  }
+
+  /* Checkboxes */
+  .field.checkbox.editing input[type=checkbox] {
+    pointer-event: none;
+  }
+  .field.checkbox:before {
+    content: "\f164";
+    font-family: "FontAwesome";
+    opacity: 0;
+    display: block;
+    height: 15px;
+    width: 15px;
+    font-size: 16px;
+    position: absolute;
+    top: 5px;
+    right: 0;
+    color: #3fa947;
+    -webkit-transition:all .5s ease-in-out;
+    -moz-transition:all .5s ease-in-out;
+    -o-transition:all .5s ease-in-out;
+    transition:all .5s ease-in-out;
+  }
+  .field.checkbox.saved:before {
+    opacity: 1;
   }
 
 
@@ -230,7 +264,15 @@ input:focus, textarea:focus, option:focus {
 :-ms-input-placeholder { font-size: 14px; line-height: 18px; }
 
 input.parsley-error, textarea.parsley-error {
-  border: 1px solid #c92128
+  border: 1px solid #c92128;
+}
+li.parsley-minlength {
+  color: #c92128;
+  float: right;
+  width: 160px;
+  margin-right: 34px;
+  font-size: 13px;
+  margin-top: 5px;
 }
 input.parsley-success, textarea.parsley-success {
   background-color: #dbedc8;

@@ -126,7 +126,7 @@ form.setLocation = function(loc) {
   latLng.lat = loc.geometry.location.k
   latLng.lng = loc.geometry.location.D
   latLng = JSON.stringify(latLng)
-  //console.log(loc)
+  console.log(loc)
   //console.log(address, city, state, zip, country, latLng)
   $('#location-address').attr('value',address)
   $('#location-city').attr('value',city)

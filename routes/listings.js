@@ -65,23 +65,21 @@ router.get('/new', function(req, res) {
 router.get('/add', function(req, res) {
   var listingInfo = req.query
     , newLatLng = JSON.parse(decodeURI(listingInfo.latLng))
-
-  listingInfo.typeInfo = {}
+    , typeInfo = {}
+  //console.log(listingInfo)
   async.waterfall([
     // Get Respond Message from DB and add message to thread
     function(done) {
       if (listingInfo.type == 'gardener') {
-        listingInfo.typeInfo.bio = listingInfo.bio;
+        typeInfo['gardenerBio'] = listingInfo.gardenerBio
       } else if (listingInfo.type == 'space') {
-        console.log('amount:'+listingInfo.amount)
-        listingInfo.typeInfo.amount = listingInfo.amount;
+        typeInfo['squareMeters'] = listingInfo.squareMeters
       } else if (listingInfo.type == 'organic') {
       } else if (listingInfo.type == 'tools') {
       }
       done(null, listingInfo);
     },
     function(listingInfo, done) {
-      console.log(listingInfo)
       var newListing = new Listing({
           owner: listingInfo.owner
         , ownerName: listingInfo.ownerName
@@ -95,19 +93,27 @@ router.get('/add', function(req, res) {
         , state: listingInfo.state
         , zip: listingInfo.zip
         , latLng: {
-          lat: newLatLng.lat
+            lat: newLatLng.lat
           , lng: newLatLng.lng
-        }
+          }
+        , typeInfo: []
+        , publicListing: listingInfo.publicListing
         , active: true
       });
+      newListing.typeInfo.push(typeInfo)
+      for (i = 0; i < typeInfo.length; i++) {
+
+      }
 
       newListing.save(function(err, listing) {
+        console.log(err)
         if (err) done(err)
         if (listing) done(err, listing, 'done')
       });
     },
     ],
     function(err, listing) {
+      console.log(listing)
       var listingInfo = {}
       listingInfo.latLng = listing.displayLatLng
       listingInfo.id = listing.id

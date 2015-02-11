@@ -220,7 +220,7 @@ router.get('/activate/', function(req, res) {
             req.logIn(user, function(err) {
               if (err) return next(err);
               console.log('createListing:'+req.query.createListing)
-              req.flash('success', 'Your account is now active.  We went ahead and logged you in.');
+              req.flash('success', 'Your account is now active.  We went ahead and logged you in.<br><br>Now you can create and edit listings!');
               return res.redirect(url);
             });
           });
@@ -249,6 +249,7 @@ router.post('/forgot', function(req, res){
       });
     },
     function(token, done) {
+      console.log('find and update user')
       User.findOne({ email: req.body.email }, function(err, user) {
         if (err) done(err)
         if (user) {
@@ -263,12 +264,13 @@ router.post('/forgot', function(req, res){
       });
     },
     function(token, user, done) {
+      console.log('send email')
       var url = 'https://mandrillapp.com/api/1.0/messages/send-template.json'
       var options = require('../lib/email/default')
       options.message.subject = 'Here\'s a link to reset your password!'
       options.message.to[0].email = user.email
       options.message.to[0].name = user.name
-      options.message.tags = 'password-reset'
+      options.message.tags[0] = 'password-reset'
       options.message.merge_vars[0].rcpt = user.email;
       options.message.merge_vars[0].vars[0].content = 'Password reset link from Y2G.org'
       options.message.merge_vars[0].vars[1].content = user.name
@@ -281,6 +283,7 @@ router.post('/forgot', function(req, res){
         url:     url,
         form:    options
       }, function(err, response){
+        console.log(response)
         done(err, user.email, 'done')
       })
     }

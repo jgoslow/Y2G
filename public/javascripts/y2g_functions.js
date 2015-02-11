@@ -34,7 +34,7 @@ map.setLocation = function(latLng, radius) {
     }
     var circle = new google.maps.Circle(circleOptions);
     google.maps.event.addListener(circle, "click", function () {
-      infoWindow.close();
+      //infoWindow.close();
     });
     y2gBounds(this, circle.getBounds());
   }
@@ -103,7 +103,7 @@ var Listings = function(location, user) {
       , minWidth: 280
       , maxHeight: 280
       , minHeight: 240
-      , closeImage: 'google.com'
+      , closeImage: ''
       , shadowStyle: 0
       , padding: 0
       , backgroundColor: '#fff'
@@ -120,17 +120,29 @@ var Listings = function(location, user) {
 
     listings.forEach(function(listing, i){
       if (!listing.displayLatLng) listing.displayLatLng = listing.latLng
-      var id = listing._id,
-          created = moment(listing.created, 'YYYY-MM-DDTHH:mm:ssZ').format('MMM DD YYYY'),
-          lat = listing.displayLatLng.lat,
-          lng = listing.displayLatLng.lng,
-          desc = listing.description,
-          owner = listing.owner,
-          ownerName = listing.ownerName,
-          title = listing.title,
-          type = listing.type;
+      var id = listing._id
+        , created = moment(listing.created, 'YYYY-MM-DDTHH:mm:ssZ').format('MMM DD YYYY')
+        , lat = listing.displayLatLng.lat
+        , lng = listing.displayLatLng.lng
+        , desc = listing.description
+        , owner = listing.owner
+        , ownerName = listing.ownerName
+        , title = listing.title
+        , type = listing.type
+        , typeInfo = listing.typeInfo
+        , typeHTML = ''
+        , publicClass = ''
       //console.log(id, lat, lng, desc, owner, title, type);
 
+      if (type == 'space') {
+        typeHTML = '<span class="square-meters"><strong>Space: </strong><br>Roughly '+typeInfo[0].squareMeters+' sq. meters</span>'
+      } else if (type == 'gardener') {
+        typeHTML = '<span class="gardener-bio"><strong>Bio: </strong><br>'+typeInfo[0].gardenerBio+'</span>'
+      }
+
+      if (listing.publicListing == true) {
+        publicClass = ' public'
+      }
       /*li.garden
         a
           .title
@@ -138,9 +150,9 @@ var Listings = function(location, user) {
           .date*/
 
       if (!listing.imgData) { var image_html = ''; }
-      var image_html = '';
-      var latlngset = new google.maps.LatLng(lat, lng);
-      var fullIcon = new typeIcon(type);
+      var image_html = ''
+        , latlngset = new google.maps.LatLng(lat, lng)
+        , fullIcon = new typeIcon(type)
       titleStrip = title.replace(/\x27/g, "");
       //console.log(type, fullIcon.shadow);
       var marker = new google.maps.Marker({
@@ -158,21 +170,22 @@ var Listings = function(location, user) {
       });
 
       google.maps.event.addListener(map, "click", function () {
-        infoWindow.close();
+        //infoWindow.close();
       });
       markersArray.push(marker);
       var contactModal = 'onclick="openModal(this, \'/messages/send?owner='+owner+'&ownerName='+ownerName+'&listingId='+id+'&listingTitle='+titleStrip+'\', \'message\'); return false;" href="/messages/send?to='+owner+'" data-modal-type="message"'
         , content = ''
         , listItem = ''
 
-      content += '<div id="window-'+id+'" class="info-window">'+
+      content += '<div id="window-'+id+'" class="info-window'+publicClass+' '+type+'">'+
                   '<div class="info-window_inner_wrap"><h4>'+title+'</h4>'+
                   '<div class="info">'+image_html+
-                  '<span class="author"><strong>BY:</strong>'+
+                  '<span class="author"><strong>BY: </strong> '+
                   '<a href="#" '+contactModal+'>'+ownerName+'</a></span>'+
-                  '<span class="date"><strong>DATE:</strong> '+created+'</span>'+
-                  '<span class="date"><strong>TYPE:</strong> '+type+'</span></div>'+
+                  '<span class="date"><strong>DATE: </strong> '+created+'</span>'+
+                  '<span class="type"><strong>TYPE: </strong> '+type+'</span></div>'+
                   '<div class="description">'+desc+'</div>'+
+                  typeHTML +
                   '<a '+contactModal+' class="contact openmodal" title="Contact '+name+'"><span class="fa">&#xf003;</span> Send a Note</a>'+
                   '<a href="#'+id+'" onclick="Listings.flag(\''+id+'\', \''+titleStrip+'\'); return false;" class="flag" title="flag this post">flag this post</a>'+
                   '</div></div>'

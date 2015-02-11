@@ -192,7 +192,7 @@
     }
   .listings_wrap .listings {
   }
-  
+
 
   .footer_wrap {
     min-height: 25px;
@@ -220,7 +220,6 @@
     padding: 1px 13px 0;
   }
   .home .content_wrap .content .post{
-    width: 70%;
     padding-right: 30%;
   }
 }
@@ -262,6 +261,7 @@
   }
   .home .sidebar {
     float: right;
+    margin-top: 35px;
   }
   .post.left {
     padding-right:330px;

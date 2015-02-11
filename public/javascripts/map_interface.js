@@ -91,7 +91,7 @@ $(function(){
 
 	// Keyboard Add Shortcuts to interface
 	$(document).keydown(function(e){
-	    if (e.keyCode == 70) {
+	    if (event.shiftKey && e.keyCode == 70) {
 	    	if (!($(document.activeElement).is('input') || $(document.activeElement).is('textarea'))) {
 					if ($('#location_tool').width() == '330') {
 						locationToolClose();
@@ -100,12 +100,12 @@ $(function(){
 					}
 	    	}
 	    }
-	    if (e.keyCode == 76) {
+	    if (event.shiftKey && e.keyCode == 76) {
 	    	if (!($(document.activeElement).is('input') || $(document.activeElement).is('textarea'))) {
 					Listings.showHideBar();
 	    	}
 	    }
-			if (e.keyCode == 67) {
+			if (event.shiftKey && e.keyCode == 67) {
 				if (!($(document.activeElement).is('input') || $(document.activeElement).is('textarea'))) {
 					$('#map_new_listing').click();
 				}

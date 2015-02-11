@@ -62,8 +62,8 @@ else
           //.field
             input(type="hidden", name="imgData")
           .field
-            input.space(type="number", name="amount", placeholder="square meters.. roughly =)", data-parsley-group="space")
-            textarea.gardener(type="text", name="bio", placeholder="Gardener Bio", data-parsley-length="[6, 500]", data-parsley-error-message="Tell us something about your gardening experience (no more than 500 chars).", data-parsley-group="gardener")
+            input.space(type="number", name="squareMeters", placeholder="square meters.. roughly =)", data-parsley-group="space")
+            textarea.gardener(type="text", name="gardenerBio", placeholder="Gardener Bio", data-parsley-length="[6, 500]", data-parsley-error-message="Tell us something about your gardening experience (no more than 500 chars).", data-parsley-group="gardener")
           if user.bio
             .field.gardener
               label#bio-checkbox.checkbox.center-align(for=bio-checkbox, data-bio=user.bio)

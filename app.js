@@ -26,6 +26,10 @@ var dbURL = config.db.user+':'+config.db.pass+'@'+config.db.host+':'+config.db.p
 var collections = ["listings", "users"];
 
 
+
+
+//require('longjohn');
+
 // Passport Funcs
 passport.use(new LocalStrategy({
   usernameField: 'email'
@@ -78,19 +82,44 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
-  store: require('mongoose-session')(mongoose),
-  resave: false, // don't save session if unmodified
-  saveUninitialized: false, // don't create session until something stored
-  secret: 'The 1adsecret to the whole B$7sHod world is one thing',
-  cookie: {
-    maxAge: 14 * 24 * 60 * 60 * 1000 // 14 days
-  }
+    store: require('mongoose-session')(mongoose)
+  , resave: false // don't save session if unmodified
+  , saveUninitialized: false // don't create session until something stored
+  , secret: 'The 1adsecret to the whole B$7sHod world is one thing'
+  , cookie: {
+        expires: new Date(Date.now() + (14 * 24 * 60 * 60 * 1000))
+      , maxAge: 14 * 24 * 60 * 60 * 1000 // 14 days
+    }
 }));
 app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 //app.use(stylus.middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+// error handlers
+// Log all console.log requests to a file with user and date time
+app.use(function(req, res, next){
+  var fs = require('fs')
+    , util = require('util')
+    , log_file = fs.createWriteStream(__dirname + '/logs/console.log', {flags : 'a'})
+    , log_stdout = process.stdout
+    , userLogId = 'anonymous'
+    , date = new Date()
+  if (req.user) userLogId = 'user '+req.user.id
+  var meta = '\n\n'+userLogId+' @ '+date
+
+  console.log = function(d) { //
+    var log_message = meta+'\n'+util.format(d) + '\n'
+    fs.appendFile('logs/console.log', log_message, function (err) {
+      if (err) throw err;
+    });
+    //log_file.write(log_message);
+    log_stdout.write(util.format(d) + '\n');
+  }
+  next()
+})
 
 // routes
 var routes = require('./routes/index');
@@ -126,7 +155,6 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handlers
 
 // development error handler
 // will print stacktrace

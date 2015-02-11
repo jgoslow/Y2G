@@ -12,6 +12,10 @@ PAGES
   - message any user
   - edit site content
 
+Listings
+- add URL to public listings?
+- clicking on a name should show the user info (need another display box method) - make qtip
+
 Needs Format/Style
 ***- message
 - No listings message
@@ -25,10 +29,13 @@ Create listing
 - Green Check? (need from Jesse) for selecting location
 
 Message
+- make sure "I'm not a robot" is actually being checked
 - allow message sending through website? yeah - mostly the same as any old send
 - make reply-to email different from "from" address - then you can add a gravatar
 
 Profile
+- Location should say "address and zip" - with an info indicator (use i)
+- "settings updated" message when saved
 - add image to profile?
 
 Create Account
@@ -619,7 +626,7 @@ min-height:100px;
   overflow: auto;
   height: 190px;
   margin-right: -10px;
-  padding-right: 14px;
+  padding: 0 14px 10px 0;
 }
   .info-window_inner_wrap:after {
     content: '';
@@ -1543,6 +1550,8 @@ min-height:100px;
     max-width: 600px;
     float: none;
     border-top: none;
+    margin-top: 25px;
+    float: left;
   }
 
   .sidebar h2 {

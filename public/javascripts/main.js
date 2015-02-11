@@ -207,13 +207,18 @@ Account.editItem = function(name) {
 		,	target = $('span.editable[name='+name+']')
 		, val = target.html()
 		, inputType = target.data('input-type')
-		, inputHTML = '<input class="editable" name="'+name+'" value="'+val+'" data-initial-value="'+val+'">'
+		, inputHTML = ''
 		, editBtn = container.find('.fa-edit')
 		, saveBtn = container.find('.fa-save')
 		, cancelBtn = container.find('.fa-remove')
+		, parsley = ''
 
+	if (name == 'name') {
+		parsley = ' data-parsley-minlength="3" required';
+	}
+	inputHTML = '<input id="field-'+name+'" class="editable" name="'+name+'" value="'+val+'" data-initial-value="'+val+'"'+parsley+'>'
 	if (inputType == 'textarea') {
-		inputHTML = '<textarea class="editable" name="'+name+'" data-initial-value="'+val+'">'+val+'</textarea>'
+		inputHTML = '<textarea id="field-'+name+'" class="editable" name="'+name+'" data-initial-value="'+val+'">'+val+'</textarea>'
 	}
 	container.addClass('editing')
 	target.after(inputHTML).remove()
@@ -231,6 +236,9 @@ Account.saveItem = function(name) {
 		, data = {}
 	if (input.is('textarea')) type = 'textarea'
 
+	$('#field-'+name).parsley().validate()
+	if (!$('#field-'+name).parsley().isValid()) return false
+
 	var cancelHTML = '<span name="'+name+'" data-input-type="'+type+'" class="editable">'+initial+'</span>'
 		,	saveHTML = '<span name="'+name+'" data-input-type="'+type+'" class="editable">'+val+'</span>'
 	data.field = name
@@ -247,7 +255,9 @@ Account.saveItem = function(name) {
 		}, 2000)
 	})
 	.done(function(){
+		container.find('.parsley-errors-list').remove()
 		container.addClass('saved').removeClass('editing')
+		if (val == '') container.removeClass('saved')
 		input.after(saveHTML).remove()
 		editBtn.addClass('fa-thumbs-up').removeClass('fa-edit')
 		setTimeout(function(){
@@ -255,6 +265,33 @@ Account.saveItem = function(name) {
 		}, 2000)
 	});
 
+}
+Account.saveCheckBox = function(name) {
+	var container = $('.field.'+name)
+		,	input = container.find('[name='+name+']')
+		, type = 'checkbox'
+		, val = false
+		, data = {}
+	if (input.is(':checked')) val = true
+	data.field = name
+	data.val = val
+	container.addClass('editing')
+	$.post('/account/updateItem', data, function(response){
+
+	})
+	.fail(function(){
+		y2g.message('there has been an error.  Please try again later.', 'error', 3)
+		container.removeClass('editing').addClass('failed')
+		setTimeout(function(){
+			container.removeClass('failed')
+		}, 2000)
+	})
+	.done(function(){
+		container.removeClass('editing').addClass('saved')
+		setTimeout(function(){
+			container.removeClass('saved')
+		}, 2000)
+	});
 }
 Account.cancelEditItem = function(name) {
 	var container = $('.field.'+name)
@@ -268,7 +305,7 @@ Account.cancelEditItem = function(name) {
 	if (input.is('textarea')) {
 		type = 'textarea'
 	}
-	if (name = 'updatePassField') {
+	if (name == 'updatePassField') {
 		TweenMax.to($('.new-password'), .25, {height: 0})
 		setTimeout(function(){
 			$('.updatePassField a.password').show()
