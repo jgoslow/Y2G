@@ -83,6 +83,10 @@ p {
   max-height: 360px;
   margin-left: -300px !important;
 }
+.modal-new-listing {
+  max-width: 500px;
+  margin-left: -250px !important;
+}
 .modal_bg {
   display:none;
   position:fixed;

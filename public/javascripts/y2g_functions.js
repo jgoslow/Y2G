@@ -22,7 +22,7 @@ function getLocation(address, radius, callback) {
 
 map.setLocation = function(latLng, radius) {
   //console.log('setLocation:',latLng, radius);
-  if ($('#map_tools_top').data('map') != 'expanded') $('#expand_map').click();
+  //if ($('#map_tools_top').data('map') != 'expanded') $('#expand_map').click();
   this.setCenter(latLng);
   if (radius) {
     var circleOptions = {
@@ -133,11 +133,12 @@ var Listings = function(location, user) {
         , typeHTML = ''
         , publicClass = ''
       //console.log(id, lat, lng, desc, owner, title, type);
-
-      if (type == 'space') {
-        typeHTML = '<span class="square-meters"><strong>Space: </strong><br>Roughly '+typeInfo[0].squareMeters+' sq. meters</span>'
-      } else if (type == 'gardener') {
-        typeHTML = '<span class="gardener-bio"><strong>Bio: </strong><br>'+typeInfo[0].gardenerBio+'</span>'
+      if (typeInfo != undefined) {
+        if (type == 'space') {
+          typeHTML = '<span class="square-meters"><strong>Space: </strong><br>Roughly '+typeInfo[0].squareMeters+' sq. meters</span>'
+        } else if (type == 'gardener') {
+          typeHTML = '<span class="gardener-bio"><strong>Bio: </strong><br>'+typeInfo[0].gardenerBio+'</span>'
+        }
       }
 
       if (listing.publicListing == true) {
@@ -426,7 +427,9 @@ function locationToolOpen() {
 }
 function locationToolClose() {
   $('#location_tool').addClass('closed')
-  var search = localStorage.getItem('search')
+  var search = ''
+    , storedSearch = localStorage.getItem('search')
+  if (storedSearch) search = storedSearch
   $('#current_location .location').html(search.trunc(15))
   var r;
   var r1 = $('#show_listings').css('right');

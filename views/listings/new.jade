@@ -20,7 +20,7 @@ else
       h2 Create a new Listing
       .steps-container
         .step.type.current
-          h3 Choose a listing type:
+          h3 Choose your listing type:
           .choose-type.clearfix(class=listingType)
             a.gardener(href="#", data-type="gardener")
               span Gardener
@@ -35,11 +35,11 @@ else
           p.space You are listing available space for someone else to garden in.
           p.organic You are listing extra organic materials to share (i.e. Mulch, worms, compost...etc).
           p.tools You are listing extra tools to share.
-          button.next.goto(type="button", data-goto='2') next
+          button.next.small.goto(type="button", data-goto='2') enter your location &raquo;
         .step.location
-          h3 Enter the location
-          input.location(name="location", placeholder="location, city, zip")
-          button.get-location.btn-small go
+          h3 Enter the listing location
+          input.location(name="location", placeholder="address and zip")
+          button.get-location.btn-small submit
           #location-results
             h3 Choose your location
             .location-results
@@ -49,7 +49,7 @@ else
           input#location-zip(type="hidden", name="zip")
           input#location-country(type="hidden", name="country")
           input#location-latLng(type="hidden", name="latLng")
-          button.next.disabled.goto(type="button", data-goto='3', data-error="Please enter and select a location") next
+          button.next.small.disabled.goto(type="button", data-goto='3', data-error="Please enter and select a location") Enter your details &raquo;
         .step.info
           h3 Tell us about your listings
           .field.required
@@ -77,13 +77,12 @@ else
                 | Use exact location&nbsp;
               span.note Will display precise marker on map
                 a(href="#info", data-tooltip="By default, our map will display a marker on random location within a block or two of the location you enter. <br><br>Check this box to display a marker on your exact location (read our <a href='/privacy-policy' target='_blank'>privacy policy</a>). ") (more info)
-            .field
+            //.field
               label.checkbox
                 input(type="checkbox", name="publicListing", value="true")
                 | Public Listing&nbsp;
               span.note By clicking this you agree to our
                 a(href="/about-public-listings", target="_blank") public listing terms
           button.next.disabled.submit(type="submit", data-error="Please fill out all *required fields") Create Listing
+        .clear
   script(type="text/javascript", src="/javascripts/page/listings.new.js")
-
-include ../snippets/footer-lite.jade

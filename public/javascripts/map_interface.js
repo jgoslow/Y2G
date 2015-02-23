@@ -40,7 +40,7 @@ $(function(){
 	$('#show_listings').click(function(){
 		Listings.showHideBar()
 	})
-	$('#map_wrap').click(function(){
+	$('#map_wrap:not(#location_tool)').click(function(){
 		if (!$(this).hasClass("fullsize")) $('#expand_map').click()
 	})
 

@@ -1,6 +1,8 @@
 .btn-options
-    button.login.show-login.btn-option(onclick="jQuery('#login-wrap').slideDown(); jQuery('#signup-wrap').slideUp();return false;") Login
-    button.login.show-signup.btn-option(onclick="jQuery('#signup-wrap').slideDown(); jQuery('#login-wrap').slideUp();return false;") Sign Up
+    button.login.openmodal.btn-option(data-modaltype='login', href='/account/login/') Login
+    button.openmodal.signup.btn-option(href='/account/sign-up/', data-modaltype='sign-up') Sign Up
+    // button.login.show-login.btn-option(onclick="jQuery('#login-wrap').slideDown(); jQuery('#signup-wrap').slideUp();return false;") Login
+    // button.login.show-signup.btn-option(onclick="jQuery('#signup-wrap').slideDown(); jQuery('#login-wrap').slideUp();return false;") Sign Up
   #login-wrap(style="display:none;")
     include login.jade
   #signup-wrap(style="display:none;")

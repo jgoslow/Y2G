@@ -10,7 +10,7 @@ form.standard:after {
   clear: both;
 }
 
-input, textarea, select, option, input:-webkit-autofill {
+input, textarea, select, option {
   max-width: 280px;
   padding: 6px 8px 5px;
   font-size:15px;
@@ -43,8 +43,34 @@ textarea {
 }
 
 input[type=range] {
-  -webkit-appearance: slider-horizontal;
+  -webkit-appearance: none;
 }
+  input[type=range]::-webkit-slider-runnable-track {
+    width: 300px;
+    height: 5px;
+    background: #ddd;
+    border: none;
+    border-radius: 3px;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    background: #000;
+    border: 2px solid white;
+    margin-top: -10px;
+    transition: background .25s;
+  }
+  input[type=range]:focus {
+    background: none;
+  }
+  input[type=range]:focus::-webkit-slider-thumb {
+    background: #82c341;
+  }
+
+
 input[type=checkbox] {
   -webkit-appearance: checkbox;
 }
@@ -291,6 +317,27 @@ input.parsley-success, textarea.parsley-success {
 
 
 /* buttons */
+.btn {
+  font-size: 18px;
+  font-weight: bold;
+  display: inline-block;
+  margin-bottom: 15px;
+  line-height: 20px;
+  padding: 9px 10px 7px;
+  text-transform: uppercase;
+  width: auto;
+  cursor: pointer;
+  background-color: #f05139;
+  color: white;
+  text-align: center;
+  border: none;
+  text-decoration: none;
+}
+.btn:hover {
+  background-color: black;
+  text-decoration: none;
+  color: white;
+}
 .btn-small {
   font-size: 14px;
   line-height: 16px;
@@ -302,6 +349,7 @@ input.parsley-success, textarea.parsley-success {
   color: white;
   text-align: center;
   border: none;
+  text-decoration: none;
 }
 .btn-small:hover {
   background-color: black;
@@ -350,6 +398,12 @@ a.note {
   }
   .next:hover {
     background-color: #000;
+  }
+  .next.small {
+    height: 30px;
+    padding: 0 15px;
+    line-height: 30px;
+    font-size: 15px;
   }
 .btn-options {
   text-align: center;
@@ -412,6 +466,12 @@ form.new-listing-form {
   margin: 0;
   padding: 0;
 }
+  .new-listing-form h2 {
+    color: #acaa90;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size:25px;
+  }
 
 form.edit-listing-form {
   height: 0;

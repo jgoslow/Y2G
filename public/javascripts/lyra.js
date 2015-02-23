@@ -58,7 +58,13 @@ function openModal(obj, target, type) {
 	} else {
 		if (type == 'new-listing') {
 			var listingType = obj.data('listingtype')
-			$('#new-listing-form .'+listingType).click()
+			$('#new-listing-form .steps li:first-child').click();
+			if ($('#new-listing-form .choose-type .active').hasClass(listingType)) {
+
+			} else {
+				$('#new-listing-form input[type=text], #new-listing-form textarea').val('')
+				$('#new-listing-form .'+listingType).click()
+			}
 		}
 		$('.modal_bg, .modal-'+type).fadeIn();
 	}

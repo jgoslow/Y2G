@@ -220,7 +220,7 @@ router.get('/activate/', function(req, res) {
             req.logIn(user, function(err) {
               if (err) return next(err);
               console.log('createListing:'+req.query.createListing)
-              req.flash('success', 'Your account is now active.  We went ahead and logged you in.<br><br>Now you can create and edit listings!');
+              req.flash('success', 'Your account is now active.  We went ahead and logged you in.\n\nNow you can create and edit listings!');
               return res.redirect(url);
             });
           });
