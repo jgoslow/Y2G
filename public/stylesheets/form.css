@@ -109,6 +109,32 @@ select:-webkit-autofill:focus, select:-webkit-autofill, option:-webkit-autofill:
     -webkit-transition-delay: 0s;
     transition-delay: 0s;
   }
+
+  .field.show-self {
+    width: 100%:
+  }
+  .field.show-self label {
+    text-align: center;
+    opacity: 1;
+    width: 100%;
+    -webkit-transition:all .25s ease-in-out;
+    -moz-transition:all .25s ease-in-out;
+    -o-transition:all .25s ease-in-out;
+    transition:all .25s ease-in-out;
+  }
+  .field.show-self .item, .field.show-self.show label {
+    opacity: 0;
+    height: 0;
+    -webkit-transition:all .25s ease-in-out;
+    -moz-transition:all .25s ease-in-out;
+    -o-transition:all .25s ease-in-out;
+    transition:all .25s ease-in-out;
+  }
+  .field.show-self.show .item {
+    opacity: 1;
+    height: auto;
+  }
+
 .field p {
 
 }

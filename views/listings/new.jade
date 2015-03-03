@@ -61,14 +61,18 @@ else
               input(type="file", name="pic")
           //.field
             input(type="hidden", name="imgData")
-          .field
-            input.space(type="number", name="squareMeters", placeholder="square meters.. roughly =)", data-parsley-group="space")
-            textarea.gardener(type="text", name="gardenerBio", placeholder="Gardener Bio", data-parsley-length="[6, 500]", data-parsley-error-message="Tell us something about your gardening experience (no more than 500 chars).", data-parsley-group="gardener")
-          if user.bio
-            .field.gardener
-              label#bio-checkbox.checkbox.center-align(for=bio-checkbox, data-bio=user.bio)
-                input(type="checkbox", name="bio-checkbox")
-                | use my bio
+          .field.space
+            input(type="number", name="squareMeters", placeholder="square meters.. roughly =)", data-parsley-group="space")
+          .field.gardener.show-self
+            label
+              a(tooltip="You can include info about your gardening experience here") Enter Gardener Info
+            .item
+              textarea(type="text", name="gardenerBio", placeholder="Gardener Bio", data-parsley-length="[6, 500]", data-parsley-error-message="Tell us something about your gardening experience (no more than 500 chars).", data-parsley-group="gardener")
+              if user.bio
+                .field.gardener
+                  label#bio-checkbox.checkbox.center-align(for=bio-checkbox, data-bio=user.bio)
+                    input(type="checkbox", name="bio-checkbox")
+                    | use my bio
           h4 options:
           .options
             .field

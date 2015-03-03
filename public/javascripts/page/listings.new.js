@@ -151,12 +151,16 @@ form.setLocation = function(loc) {
 
 $('#new-listings-form').submit(function(e){
   _gaq.push(['_trackPageview','/listings/create-submit']) // Analytics
-  e.preventDefault();
+  e.preventDefault()
   if ( $(this).parsley().isValid() ) {
-    $.post('/listings/add', $(this).serialize());
+    $.post('/listings/add', $(this).serialize())
   }
-  return false;
-});
+  return false
+})
+
+$('.field.show-self label').click(function(){
+  $(this).parent('.field').addClass('show')
+})
 
 $('#bio-checkbox').click(function(){
   var check = $(this).find('input[type=checkbox]')

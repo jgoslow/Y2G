@@ -133,7 +133,8 @@ var Listings = function(location, user) {
         , typeHTML = ''
         , publicClass = ''
       //console.log(id, lat, lng, desc, owner, title, type);
-      if (typeInfo != undefined) {
+      if (typeInfo.length > 0) {
+        console.log(typeInfo)
         if (type == 'space') {
           typeHTML = '<span class="square-meters"><strong>Space: </strong><br>Roughly '+typeInfo[0].squareMeters+' sq. meters</span>'
         } else if (type == 'gardener') {

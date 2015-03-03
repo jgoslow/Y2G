@@ -1350,16 +1350,16 @@ min-height:100px;
     display: none;
   }
   .new-listing.gardener .gardener {
-    display: inline-block;
+    display: block;
   }
   .new-listing.space .space {
-    display: inline-block;
+    display: block;
   }
   .new-listing.organic .organic {
-    display: inline-block;
+    display: block;
   }
   .new-listing.tools .tools {
-    display: inline-block;
+    display: block;
   }
 
 .edit_listing {
