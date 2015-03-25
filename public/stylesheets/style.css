@@ -34,9 +34,11 @@ Message
 - make reply-to email different from "from" address - then you can add a gravatar
 
 Profile
-- Location should say "address and zip" - with an info indicator (use i)
 - "settings updated" message when saved
 - add image to profile?
+
+Profile-View
+- Need redirect or message if user not found
 
 Create Account
 - Add User to Mailchimp (volunteer list) - checkbox
@@ -103,6 +105,9 @@ a {
 a:hover {
   color: #2ebadb;
   text-decoration:underline;
+}
+a[data-tooltip] {
+  cursor: pointer;
 }
 
 
@@ -499,6 +504,7 @@ header .logo img {
 }
   .login_button.messages {
     display: inline-block;
+    display: none;
   }
   .login_button.fa-envelope-o {
   }
@@ -545,7 +551,6 @@ header .social a.pi:hover {
   text-align:right;
   margin-top:8px;
 }
-
 
 
 
@@ -600,8 +605,10 @@ min-height:100px;
     left: 167px;
   }
   .info-window-close-img {
-    width: 24px !important;
-    height: 25px !important;
+    width: 20px !important;
+    height: 20px !important;
+    top: 10px !important;
+    right: 10px !important;
   }
   .info-window-parent {
     margin-top: -20px;
@@ -843,7 +850,11 @@ min-height:100px;
   top:0;
   left:50%;
   margin-left:-15px;
+  display: none;
 }
+  .location_tool.closed .icon {
+    display: block;
+  }
 .map_wrap .location_tool .icon:hover {
   background-color:#5a5a5a;
 }
@@ -1054,7 +1065,7 @@ min-height:100px;
   padding:0 5px;
   background: black;
 }
-.listings_wrap .listings > li {
+.listings_wrap .listings > li, .listing-cards > li {
   list-style-type: none;
   margin-bottom: 5px;
   height: 38px;
@@ -1063,10 +1074,10 @@ min-height:100px;
   margin: 3px 0;
   box-sizing: border-box;
 }
-.listings_wrap .listings > li:last-child {
+.listings_wrap .listings > li:last-child, .listing-cards > li:last-child {
   margin-bottom:15px;
 }
-.listings_wrap .listings > li > a {
+.listings_wrap .listings > li > a, .listing-cards > li > .card {
   height:100%;
   width:100%;
   display:block;
@@ -1074,20 +1085,48 @@ min-height:100px;
   background-position:0 10px;
 }
 
-.listings_wrap .listings > li:visited a {
+.listings_wrap .listings > li:visited a, .listing-cards > li:visited .card {
   border-right:4px solid blue;
 }
-.listings_wrap .listings > li.current a{
+.listings_wrap .listings > li.current a, .listing-cards > li.current .card{
   background-color: #ffceaa;
 }
 
-.listings_wrap .listings > li.gardener > a{background-position:6px -69px;} .listings_wrap .listings > li.gardener > a:hover {background:url(/images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:6px -69px;}
-.listings_wrap .listings > li.space > a{background-position:7px -101px;} .listings_wrap .listings > li.space > a:hover {background:url(/images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:7px -101px;}
-.listings_wrap .listings > li.organic > a{background-position:7px -131px;} .listings_wrap .listings > li.organic > a:hover {background:url(/images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:7px -131px;}
-.listings_wrap .listings > li.tools > a{background-position:6px -161px;} .listings_wrap .listings > li.tools > a:hover {background:url(/images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:6px -161px;}
+.listings_wrap .listings > li.gardener > a, .listing-cards > li.gardener > .card {
+  background-position:6px -69px;
+}
+  .listings_wrap .listings > li.gardener > a:hover, .listing-cards > li.gardener > .card:hover {
+    background:url(/images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:6px -69px;
+  }
+.listings_wrap .listings > li.space > a, .listing-cards > li.space > .card {
+  background-position:7px -101px;
+}
+  .listings_wrap .listings > li.space > a:hover, .listing-cards > li.space > .card:hover {
+    background:url(/images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:7px -101px;
+  }
+.listings_wrap .listings > li.organic > a, .listing-cards > li.organic > .card {
+  background-position:7px -131px;
+}
+  .listings_wrap .listings > li.organic > a:hover, .listing-cards > li.organic > .card:hover {
+    background:url(/images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:7px -131px;
+  }
+.listings_wrap .listings > li.tools > a, .listing-cards > li.tools > .card {
+  background-position:6px -161px;
+}
+  .listings_wrap .listings > li.tools > a:hover, .listing-cards > li.tools > .card:hover {
+    background:url(/images/layout/y2g_sprites.png) no-repeat #f2e96c; background-position:6px -161px;
+  }
 
-.listings_wrap .listings > li a .title, .listings_wrap .listings > li a .desc, .listings_wrap .listings > li a .date {position:absolute;}
-.listings_wrap .listings > li a .title {
+.listings_wrap .listings > li a .title,
+.listings_wrap .listings > li a .desc,
+.listings_wrap .listings > li a .date,
+.listing-cards > li .card .title,
+.listing-cards > li .card .desc,
+.listing-cards > li .card .date {
+  position:absolute;
+}
+.listings_wrap .listings > li a .title,
+.listing-cards > li .card .title {
   top:7px;
   left:40px;
   font-size:11px;
@@ -1095,21 +1134,40 @@ min-height:100px;
   font-weight:bold;
   color:black;
 }
-.listings_wrap .listings > li a .desc {
+.listings_wrap .listings > li a .desc,
+.listing-cards > li .card .desc {
   top:20px;
   left:40px;
   font-size:11px;
   line-height:11px;
   color:black;
 }
-.listings_wrap .listings > li a .date {
+.listings_wrap .listings > li a .date,
+.listing-cards > li .card .date {
   top:6px;
   right:8px;
   color:#b6b2b3;
   font-size:9px;
 }
 
+/* Profiles */
 
+.modal-profile .account h3 {
+  margin-bottom: 10px;
+}
+
+/* Profile View */
+.profile-view .item {
+  margin-bottom: 8px;
+}
+.profile-view .info {
+  text-align: left;
+  width: 280px;
+  margin: 20px auto;
+}
+.profile-view .listings {
+  margin: 20px 0;
+}
 
 
 /* Forms */
@@ -1136,7 +1194,6 @@ min-height:100px;
 .new-listing {
   width: 100%;
   overflow:hidden;
-  height: 100%;
   padding: 40px 0 20px;
 }
   .new-listing .steps {
@@ -1200,11 +1257,11 @@ min-height:100px;
   .new-listing .step:current {
 
   }
-  .new-listing .choose-type {
+  .choose-type {
     display: block !important;
     margin-bottom: 5px;
   }
-  .new-listing .choose-type a {
+  .choose-type a {
     color: black;
     width: 48%;
     margin: 15px 4% 15px 0;
@@ -1220,7 +1277,7 @@ min-height:100px;
     transition:all .25s ease-in-out;
     text-decoration: none;
   }
-    .new-listing .choose-type a span {
+    .choose-type a span {
       opacity: 0;
       text-decoration: none;
       font-weight: normal;
@@ -1233,31 +1290,31 @@ min-height:100px;
     }
 
     /* remove this to have it be a 4-square */
-    .new-listing .choose-type a {
+    .choose-type a {
       width: 22%;
       padding-top: 22%;
     }
-    .new-listing .choose-type a:nth-child(2n) {margin-right: 4%;}
-    .new-listing .choose-type a:last-child {margin-right: 0;}
+    .choose-type a:nth-child(2n) {margin-right: 4%;}
+    .choose-type a:last-child {margin-right: 0;}
     /* end 4-square */
 
-    .new-listing .choose-type a:nth-child(2n) {margin-right: 0;}
-    .new-listing .choose-type a:hover, .new-listing .choose-type a.active, .new-listing .choose-type a.active span, .new-listing .choose-type a:hover span {
+    .choose-type a:nth-child(2n) {margin-right: 0;}
+    .choose-type a:hover, .choose-type a.active, .choose-type a.active span, .choose-type a:hover span {
       opacity: 1;
     }
-    .new-listing .choose-type a.gardener {
+    .choose-type a.gardener {
       background:url(/images/svg/gardener.svg) top left no-repeat;
       background-size: 100%;
     }
-    .new-listing .choose-type a.space {
+    .choose-type a.space {
       background:url(/images/svg/space.svg) top left no-repeat;
       background-size: 100%;
     }
-    .new-listing .choose-type a.tools {
+    .choose-type a.tools {
       background:url(/images/svg/tools.svg) top left no-repeat;
       background-size: 100%;
     }
-    .new-listing .choose-type a.organic {
+    .choose-type a.organic {
       background:url(/images/svg/organic.svg) top left no-repeat;
       background-size: 100%;
     }
@@ -1346,26 +1403,88 @@ min-height:100px;
       color: #489247;
     }
 
-  .new-listing .gardener, .new-listing .space, .new-listing .tools, .new-listing .organic {
+  .show-gardener, .show-space,
+  .show-tools, .show-organic {
     display: none;
   }
-  .new-listing.gardener .gardener {
-    display: block;
-  }
-  .new-listing.space .space {
-    display: block;
-  }
-  .new-listing.organic .organic {
-    display: block;
-  }
-  .new-listing.tools .tools {
+  .gardener .show-gardener,
+  .space .show-space,
+  .organic .show-organic,
+  .tools .show-tools {
     display: block;
   }
 
-.edit_listing {
+
+/* Edit Listings */
+.edit-listings {
+
+}
+.edit-listings > li {
+  display: block;
+  float: left;
+  width: 100%;
+  max-width: 270px;
+  margin-right: 20px;
+  border: 1px solid black;
+}
+.edit-listings > li:nth-child(3n) {
+  margin-right: 0;
+}
+.edit-listings > li .panel {
+  display: none;
+  font-family: 'FontAwesome';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  line-height: 36px;
+  text-align: center;
+  background-color: rgba(255,255,255,.9);
+  color: #b6b2b3;
+  z-index: 10;
+}
+.edit-listings > li:hover .panel {
+  display: block;
+}
+.edit-listings > li .panel .fa {
+  display: inline-block;
+  margin: 0 30px;
+  font-size: 23px;
+  line-height: 38px;
+  color: black;
+}
+.edit-listings > li .panel .fa:hover {
+  color: #f05139;
+}
+.edit-listings .editing .edit-listing-form {
   display:none;
+  height: auto;
+  position: absolute;
+  top: 0;
+  left: -10px;
+  right: -10px;
+  height: 200px;
+  background: white;
+  border: 3px solid black;
 }
 
+.edit-listings li.editing {
+  height: auto;
+}
+.edit-listings li.editing .card,.edit-listings li.editing .panel {
+  display: none;
+}
+.edit-listings li.editing .edit-listing-form {
+  display: block;
+}
+
+.edit-listing-form .choose-type a {
+  opacity: .2;
+}
+.edit-listing-form .choose-type a.active {
+  opacity: 1;
+}
 
 
 

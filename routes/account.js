@@ -16,6 +16,7 @@ var mongoose = require('mongoose'),
     passport = require('passport'),
     Message = require('../lib/db/message-model'),
     User = require('../lib/db/user-model'),
+    OldUser = require('../lib/db/olduser-model'),
     Listing = require('../lib/db/listing-model');
 
 /* Main Account Page. */
@@ -33,11 +34,11 @@ router.get('/login', function(req, res){
 
 /* POST Login. */
 router.post('/login', function(req, res, next){
-  console.log(req.body);
+  //console.log(req.body);
 
   passport.authenticate('local', function(err, user, info) {
     console.log('error: ' +err)
-    console.log('user: '+ user)
+    console.log('user: '+ user.name + ' - '+user.id)
     console.log('info: '+info)
     if (err) return next(err)
     if (!user) {
@@ -150,22 +151,101 @@ router.post('/sign-up/', function(req, res) {
 
 });
 
-var gracefulExit = function() {
+
+router.get('/delete', function(req, res) {
+  res.render('account/delete', {
+    title: 'Delete Account',
+    user: req.user
+  });
+})
+
+router.post('/remove', function(req, res) {
+  var user = req.user
+    , formInfo = req.body;
+  console.log(formInfo)
+  if (!user) res.send('You must be logged in to delete your account')
+  console.log('id: ' +user.id)
+  async.waterfall([
+    function(done) {
+      User.findOne({_id: user.id, active: true}, function(err, user){
+        done(err, user)
+      })
+    },
+    function(user, done) {
+      user.remove()
+      var activeUser = user
+      var archive = new OldUser({
+        _id: user.id,
+        name: user.name,
+        email: user.email,
+        location: user.location,
+        reasons: user.reasons,
+        bio: user.bio,
+        masterGardener: user.masterGardener,
+        deleteSurvey: [formInfo]
+      })
+      console.log(archive)
+      archive.save(function(err, user) {
+        var newUser = user;
+        done(err, newUser);
+      })
+    }
+  ], function(err, user) {
+    console.log(err, user);
+    if (err) {
+      console.log(err, user);
+      res.status(409).send(err);
+    } else {
+      req.logOut();
+      req.flash('info','Your account has been removed and your listings de-activated.\n\n  Thanks for using Y2G!');
+      res.redirect('/')
+    }
+  });
+})
+
+
+/*var gracefulExit = function() {
   mongoose.connection.close(function () {
     console.log('Mongoose default connection with DB Closed');
   });
-}
-
+} */
 // If the Node process ends, close the Mongoose connection
 //process.on('SIGINT', gracefulExit).on('SIGTERM', gracefulExit);
 
 /* GET Profile Page. */
 router.get('/profile/', function(req, res) {
-  res.render('account/profile', {
-    user: req.user,
-    title: 'View your Profile'
-  });
-});
+  if (req.user) {
+    res.render('account/profile', {
+      user: req.user,
+      title: 'View your Profile'
+    })
+  } else {
+    res.render('account/login-required', {
+      redirect: '/',
+      message: 'You must login to view your profile.',
+      title: 'View your Profile'
+    })
+  }
+})
+
+/* GET Profile Page. */
+router.get('/profile-view', function(req, res) {
+  User.findById(req.query.user, function(err, result){
+    if(err) console.log(err)
+    Listing.find({owner:req.query.user}, function(err, listings){
+      if(err) console.log(err)
+      res.render('account/profile-view', {
+          user: result
+        , requestUser: req.user
+        , listingId: req.query.listingId
+        , listingTitle: req.query.listingTitle
+        , listings: listings
+        , title: 'Profile for '+req.query.userName
+      })
+    })
+  })
+
+})
 
 
 /* GET Restricted Page. */

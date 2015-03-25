@@ -23,6 +23,15 @@ blockquote:before, blockquote:after {
   content: "";
   content: none;
 }
+.display-b {
+  display: block;
+}
+.display-i {
+  display: inline;
+}
+.display-ib {
+  display: inline-block;
+}
 
 del {
   text-decoration: line-through;
@@ -125,7 +134,6 @@ p {
 
 .modal_content_wrap {
   position: relative;
-  height: 100%;
   width: 100%;
   overflow: hidden;
   box-sizing: border-box;
@@ -133,10 +141,10 @@ p {
   -webkit-box-sizing: border-box;
 }
 .modal_content {
-  height: 100%;
   width: 100%;
   overflow: auto;
   -webkit-overflow-scrolling: touch;
+  padding-bottom:70px;
 }
   .modal_content:after {
     content: '';
@@ -169,19 +177,28 @@ p {
   }
 
 /* Wordpress Styles */
-.alignright {
+.align-right {
   float:right;
   width:200px;
   margin:10px 0 10px 10px;
 }
-.alignleft {
+.align-left {
   float:left;
   width:200px;
   margin:10px 10px 10px 0;
 }
-.aligncenter {
+.align-center {
   padding:10px 0;
   max-width:100%;
+}
+.text-left {
+  text-align: left;
+}
+.text-right {
+  text-align: right;
+}
+.text-center {
+  text-align: center;
 }
 .clear {
   clear:both;

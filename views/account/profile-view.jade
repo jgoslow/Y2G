@@ -1,0 +1,30 @@
+- contactUrl = '/messages/send?owner='+user.id+'&ownerName='+user.name+'&listingId='+listingId+'&listingTitle='+listingTitle
+h2= title
+.profile-view
+  .info
+    if user.location
+      .item
+        strong Location:
+        span.reasons &nbsp; #{user.location}
+    if user.bio
+      .item
+        strong About #{user.name}:
+        span.bio &nbsp; #{user.bio}
+    if user.reasons
+      .item
+        strong Reasons for gardening:
+        span.reasons &nbsp; #{user.reasons}
+    if user.masterGardener
+      .item.text-center
+        a.master-gardener.fa(data-tooltip="Feel free to contact me for advice!") &#xf005; Master Gardener
+  a.btn-small.display-ib.contact.openmodal(onclick="openModal(this, contactUrl, 'message'); return false;", href=contactUrl, data-modal-type="message", title="Contact '+user.name+'")
+    span.fa &#xf003;&nbsp;
+    | Send a Note
+  //-
+    .listings
+      h3 Listings by #{user.name}
+      ul
+        each listing, i in listings
+          a(href="#", class=listing.type, onclick="alert('view listing')") #{listing.title}
+
+include ../snippets/footer-profile.jade

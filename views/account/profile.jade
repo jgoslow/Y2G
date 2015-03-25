@@ -1,6 +1,4 @@
-if !user
-  h2 Please login to view your profile.
-else
+if user
   - if (user.masterGardener == true) { masterGardener = 'checked'; } else { masterGardener = 'false' }
   h2 Profile for #{user.name}
   .profile
@@ -56,6 +54,11 @@ else
         input#master-gardener-checkbox(type="checkbox", checked=(user.masterGardener === true ? "checked" : undefined), name="masterGardener", onclick="Account.saveCheckBox('masterGardener')")
         | &nbsp;&nbsp;
         a.note(href="#", data-tooltip="If you list as a master gardener, then people looking for gardening advice nearby will be able to message you with questions. It's a great way to meet people in the neighborhood!<br><br>Note: This functionality is not live yet.  We will notify you when it is.") (more info)
-    script(type="text/javascript", src="/javascripts/page/profile.js")
+  .account
+    h3 Account
+    .field
+      a#delete-account.btn-small(href="/account/remove", onclick="deleteConfirm(); return false;") Delete Account
+
+  script(type="text/javascript", src="/javascripts/page/profile.js")
 
   include ../snippets/footer-profile.jade

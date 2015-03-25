@@ -5,6 +5,8 @@ form#login-form.standard(method="post", action="/account/login", onsubmit="Accou
     .field
       input(type='password', name="password" placeholder='password')
     input.next.submit(type='submit', value='login')
+    if redirect
+      input(type="hidden", name="redirect", value="#{redirect}")
     p
       a.reset-password(href="#", onclick="openModal( '', 'account/forgot', 'forgot-pass'); return false;", data-modaltype="forgot-pass") Forgot my password
       | &nbsp; | &nbsp;

@@ -1,12 +1,12 @@
 jQuery(function($){
 
-
 	//Interpret URL
 	if (params.modal) {
 		var modal = params.modal
 			,	url
 		if (params.modal == 'profile') url = '/account/profile'
 		else if (params.modal == 'new-listing') url = '/listings/new'
+		else if (params.modal == 'edit-listings') url = '/listings/edit'
 		openModal('', url, params.modal)
 		newUrl = window.location.protocol+"//"+window.location.host
 		window.location.origin = window.location.protocol+"//"+window.location.host
@@ -167,6 +167,7 @@ Account.login = function(form) {
 	if ( form.parsley().isValid() ) {
 		$.post('/account/login', form.serialize(), function(data){
 			console.log(data);
+			var formData = data
 			if (data == 'Wrong Username or Password') {
 
 			}
@@ -186,7 +187,12 @@ Account.login = function(form) {
 			closeModal('login');
 			y2g.message('You are now logged in. =)<br><br>reloading..', 'success', 2);
 			setTimeout(function(){
-				setTimeout(function(){location.reload();},500);
+				if ($('input[name="redirect"]').length) {
+					setTimeout(function(){window.location.href = $('input[name="redirect"]').val();},500);
+				} else {
+					setTimeout(function(){location.reload();},500);
+				}
+
 			},1000);
 			_gaq.push(['_trackEvent', 'Login', 'success', data, 1]); // Analytics
 			_gaq.push(['_trackPageview','/account/login-success']) // Analytics
@@ -364,40 +370,6 @@ Account.forgot = function(form){
 	return false
 }
 
-
-// listings funcs
-var Listings = function(){
-}
-Listings.edit = function(item) {
-	console.log(item)
-	debugger
-	var listing = $(item)
-
-	//listingInfo = JSON.parse(listing.data('listing'))
-	console.log(listing.data('listing'))
-
-	/*var form = '<form class="edit listing" onsubmit="updateListing($(this)); return false;">'
-
-	form += '<div class="field"><label>Title:</label'
-	form += '<input type="text" value="'+listingInfo
-	*/
-
-	return false
-}
-
-function showEditListing(link) {
-	var parent = $(link).parents('li')
-	if (parent.hasClass('open')) {
-		parent.removeClass('open')
-	} else {
-		parent.addClass('open')
-	}
-}
-
-Listings.update = function(form) {
-
-}
-
 // Keyboard Add Shortcuts to Forms
 function formKeyCodes() {
 	$(document).keydown(function(e){
@@ -454,7 +426,11 @@ Messages.send = function(form){
 		})
 		.fail(function(XMLHttpRequest, textStatus, errorThrown){
 			console.log('status:' + XMLHttpRequest.status + ', status text: ' + XMLHttpRequest.statusText);
-			alert('There has been an error, please contact Y2G support or try again later.');
+			if ( XMLHttpRequest.responseText = "You failed the captcha, please reload the page and try again"){
+				y2g.message('Please click "I am not a Robot"..', 'error', 2)
+			} else {
+				alert('There has been an error, please contact Y2G support or try again later.');
+			}
 		})
 		.always(function() {
 

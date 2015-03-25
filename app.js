@@ -23,7 +23,7 @@ var monk = require('monk');
 var config = require('./config'); // DB Config
 var connStr = 'mongodb://'+config.db.user+':'+config.db.pass+'@'+config.db.host+':'+config.db.port+'/'+config.db.db;
 var dbURL = config.db.user+':'+config.db.pass+'@'+config.db.host+':'+config.db.port+'/'+config.db.db;
-var collections = ["listings", "users"];
+var collections = ["listings", "users", "oldusers"];
 
 
 
@@ -35,7 +35,7 @@ passport.use(new LocalStrategy({
   usernameField: 'email'
 },function(email, password, done) { // NOTE: Email is username
   console.log(email, password);
-  User.findOne({ email: email }, function(err, user) {
+  User.findOne({ email: email.toLowerCase(), active: true }, function(err, user) {
     if (err) {
       return done(err);
     }

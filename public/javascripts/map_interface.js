@@ -8,14 +8,14 @@ $(function(){
 	}
 
 	// Set Location
-	var location = localStorage.getItem('location')
+	var location = JSON.parse(localStorage.getItem('location'))
 		,	radius = localStorage.getItem('radius')
 		,	search = localStorage.getItem('search')
-	if (location) {
+	//console.log(location)
+	if (location && !params.listing) {
 		if (!radius) {
 			radius = 5
 		}
-		location = JSON.parse(location)
 		//console.log(location, radius)
 		var latLng = {} // Save Location for next visit
 		latLng.lat = location.k
@@ -23,8 +23,10 @@ $(function(){
 		map.setLocation(latLng, radius*1000)
 		Listings.get(location, radius, '', Listings.display)
 		$('#location_tool').addClass('closed')
-		console.log(location)
+		//console.log(location)
 		$('#current_location .location').html(search.trunc(15))
+	} else if (params.listing) {
+		map.showListing(params.listing)
 	} else {
 		locationToolOpen()
 	}
@@ -135,6 +137,7 @@ $(function(){
 			latLng;
 		localStorage.setItem('search', $('#address_input').val());
 		localStorage.setItem('radius', $('#radius_input').val());
+		if (window.mobilecheck()) window.scrollTo(0,0)
 
 		getLocation(address, radius, 'getListings').done(function(){ //
 			locationToolClose();

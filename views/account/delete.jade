@@ -1,0 +1,52 @@
+extends ../basic
+
+block content
+  if user
+    h1 #{user.name}, We're sad to see you go
+    p We would love a bit of information about your use of Y2G so we can see the impact of our work and get more support.
+    p Please fill out the form below, or just click the "Delete my account" button at the botton.
+    form.standard.delete-account(action="/account/remove", method="post")
+      h3 How did you use Y2G.org?
+      p.note (Select all that are true)
+      .field.checkboxes
+        label
+          input(type="checkbox", name="foundgardener", value="I found a gardener for my space")
+          | I found a gardener for my space
+        label
+          input(type="checkbox", name="foundspace", value="I found a space to garden in")
+          | I found a space to garden in
+        br
+        label
+          input(type="checkbox", name="foundtools", value="I shared or found gardening tools")
+          | I shared or found gardening tools
+        br
+        label
+          input(type="checkbox", name="foundorganic", value="I found or shared organic materials")
+          | I found or shared organic materials
+        br
+        label
+          input(type="checkbox", name="metsomeone", value="I met someone in my neighborhood")
+          | I met someone in my neighborhood
+      .field
+        p If you started a new garden, about how big is it?
+          input.short(type="text", name="gardenSize", placeholder="total")
+          span.select-short.fa-angle-down.fa
+            select.short
+              option(value="meters") Meters
+              option(value="feet") Feet
+          br
+          a(data-tooltip="That's the length multiplied by the width") (how do I figure this out?)
+      .field
+        p Any comments or suggestions for us?
+        textarea(name="suggestions")
+      input.btn(type="submit", value="Delete my account")
+  else
+    h1= title
+    p You must be logged in to delete your account.
+    include login.jade
+
+block sidebar
+  include ../snippets/sidebar/volunteer.jade
+
+
+script(type="text/javascript", src="/javascripts/page/profile.js")

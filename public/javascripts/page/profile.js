@@ -28,3 +28,29 @@ function newPass() {
   $('.updatePassField').addClass('editing')
   TweenMax.to($('.new-password'), .5, {opacity: 1, height:150})
 }
+
+function deleteConfirm(form) {
+  var deleteForm = '<div class="deleteForm steps">' +
+    '<div class="step" data-step="1">' +
+    '<h4>Are you sure you want to Delete your account?</h4>'+
+    '<a class="btn-option" href="/account/delete">DELETE</a>'+
+    '<a class="btn-option grey" onclick="$(\'#message\').fadeOut()">Not Yet</a>'+
+    '</div>'+
+    '</div>'
+  y2g.message(deleteForm, 'info')
+}
+
+function deleteAccount() {
+
+  y2g.message()
+  if (confirm('All of your listings will be removed from the map. Are you sure you want to delete your account?')) {
+    window.location.href = '/account/remove';
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function gotoStep(step) {
+
+}

@@ -39,13 +39,35 @@ router.get('/', function(req, res) {
     //if (callback && typeof(callback) == "function") callback(response);
   });
 });
+
+
 /* GET single listing. */
 router.get('/single', function(req, res) {
   var id = req.query.id
-  Listing.findById(id).select('-latLng -location').exec(function(err, listing){
+  Listing.findById(id).select('-latLng -location -updated').exec(function(err, listing){
     if (err) res.status(400).send(err)
     if (listing) res.status(200).send(listing)
   })
+});
+
+/* Remove single listing. */
+router.get('/single/remove', function(req, res) {
+  var id = req.query.id
+    , user = req.user
+  console.log(user)
+  if (user) {
+    Listing.find({ id: id, owner: user.id}).exec(function(err, listing){
+      if (err) {
+        res.status(400).send(err)
+      } if (listing) {
+        listing.update({active: false}).exec(function(err, listing){
+          res.status(200).send('listing '+listing.name+' removed successfully!')
+        });
+      }
+    })
+  } else {
+    res.status(400).send('You must be logged in to delete a listing')
+  }
 });
 
 module.exports = router;
@@ -175,18 +197,44 @@ router.post('/flag', function(req, res) {
 
 /* GET Edit Listings Page. */
 router.get('/edit', function(req, res) {
+  var moment = require('moment')
   if (req.user) {
     Listing.find({owner: req.user.id})
     .limit(5000).exec(function(err, listings) {
       console.log(listings)
       res.render('listings/edit', {
         listings: listings,
-        user: req.user
+        user: req.user,
+        moment: moment
       });
     })
   } else {
-    res.render('listings/edit', {
-      user: req.user
+    res.render('account/login-required',{
+      message: 'You must login to edit listings',
+      title: "Edit Listings",
+      redirect: '/?modal=edit-listings'
+    });
+  }
+});
+/* GET Edit Single Listing Page. */
+router.get('/edit-single', function(req, res) {
+  var moment = require('moment')
+    , listingId = req.query.id
+  if (req.user) {
+    Listing.findById(listingId)
+    .exec(function(err, listing) {
+      console.log('edit listing: '+listing.id)
+      res.render('listings/edit-single', {
+        listing: listing,
+        user: req.user,
+        moment: moment
+      });
+    })
+  } else {
+    res.render('account/login-required',{
+      message: 'You must login to edit listings',
+      title: "Edit Listings",
+      redirect: '/?modal=edit-listings'
     });
   }
 });

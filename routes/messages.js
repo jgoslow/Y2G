@@ -102,6 +102,7 @@ router.post('/send', function(req, res) {
 		    toName: rcpt.name,
         from: messageInfo.from,
 		    fromName: sender.name,
+		    subject: messageInfo.subject,
 		    listing: messageInfo.listingId,
         listingTitle: messageInfo.listingTitle,
         thread: [
@@ -123,7 +124,7 @@ router.post('/send', function(req, res) {
       var options = require('../lib/email/message');
       options.message.from_name = newMessage.fromName;
       options.message.from_email = newMessage.respondToken+'@messages.y2g.org';
-      options.message.subject = 'Response to your listing: "' + newMessage.listingTitle + '"';
+      options.message.subject = newMessage.subject;
       options.message.to[0].email = newMessage.to;
       options.message.to[0].name = newMessage.toName;
 

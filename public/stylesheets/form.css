@@ -81,14 +81,41 @@ select:-webkit-autofill:focus, select:-webkit-autofill, option:-webkit-autofill:
   border: 1px solid #e5e3d6;
 }
 
+/* Short inputs with a select option */
+input.short {
+  width: 100px;
+  display: inline-block;
+}
+.select-short {
+  position: relative;
+  display: inline-block;
+  width: 85px;
+  height: 35px;
+  margin-left: 10px;
+}
+.select-short:before {
+  position: absolute;
+  right: 5px;
+  top: 7px;
+  color: #f05139;
+  pointer-events: none;
+}
+.select-short select {
+  width: 85px;
+  display: inline-block;
+  font-size: 12px;
+  background: white;
+  color: #f05139;
+  text-transform: uppercase;
+  font-weight: bold;
+  border: 1px solid #f05139;
+  padding-right: 20px;
+}
+
 .field {
   max-width: 300px;
   margin: 0 auto 14px;
   position: relative;
-  -webkit-transition:all .25s ease-in-out;
-  -moz-transition:all .25s ease-in-out;
-  -o-transition:all .25s ease-in-out;
-  transition:all .25s ease-in-out;
   -o-tarnsition-delay: .5s;
   -moz-transition-delay: .5s;
   -webkit-transition-delay: .5s;
@@ -129,6 +156,10 @@ select:-webkit-autofill:focus, select:-webkit-autofill, option:-webkit-autofill:
     -moz-transition:all .25s ease-in-out;
     -o-transition:all .25s ease-in-out;
     transition:all .25s ease-in-out;
+  }
+  .field.show-self .item, .field.show-self.show label:after {
+    content: '';
+    clear: both;
   }
   .field.show-self.show .item {
     opacity: 1;
@@ -254,6 +285,18 @@ select:-webkit-autofill:focus, select:-webkit-autofill, option:-webkit-autofill:
   }
 
   /* Checkboxes */
+  .field.checkboxes {
+    margin-bottom: 50px;
+  }
+  .field.checkboxes input[type="checkbox"] {
+    margin: 0 20px 0 0;
+  }
+  .field.checkboxes label {
+    width: auto;
+    float: none;
+    width: 250px;
+    text-align: left;
+  }
   .field.checkbox.editing input[type=checkbox] {
     pointer-event: none;
   }
@@ -460,6 +503,9 @@ a.note {
     .btn-option:hover {
       background-color: #000;
     }
+  .btn-option.grey {
+    background-color: #919191;
+  }
 .btn-update {
   height: 30px;
   display: inline-block;

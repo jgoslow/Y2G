@@ -4,27 +4,27 @@ if !to
     a(href="/") Return home.
 else
   - if (ownerName == 'undefined') { ownerName = to } // Set Name
-  h2 Send a note
+  h2 Send a note to #{ownerName}
   form#message-form(method="post", action="/messages/send", onsubmit="Messages.send(this); return false;")
       input(type="hidden", name="to", value="#{to}")
       input(type="hidden", name="listingId", value="#{listingId}")
       input(type="hidden", name="listingTitle", value="#{listingTitle}")
-      .field
-        .text listing:&nbsp;
-          = listingTitle
-      .field
-        .text to:&nbsp;
-          = ownerName
-      .field
+      .field.textleft
+        strong Subject:
+        input.subject(name="subject", placeholder="About your listing: "+listingTitle, value="About your listing: "+listingTitle)
+      .field.textleft
+        strong Message:
         textarea(name='message', value='', placeholder='type your note.', required)
       if user
         input(type="hidden", name="from", value="#{user.email}")
         input(type="hidden", name="fromName", value="#{user.name}")
       else
-        .field
-          input(type="text", name="fromName", value="", required, placeholder="Your Name")
-        .field
-          input(type="email", name="from", value="", required, placeholder="Your Email")
+        .field.textleft
+          strong Your Name:
+          input(type="text", name="fromName", value="", required, placeholder="")
+        .field.textleft
+          strong Your Email:
+          input(type="email", name="from", value="", required, placeholder="")
       if !user
         .field
           .g-recaptcha(data-sitekey="6Lf9XwATAAAAAPuqxBekRTPy_e7n-jMqGkNNyMnk")

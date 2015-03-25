@@ -105,6 +105,15 @@
   }
 }
 
+@media (min-width: 616px) {
+  .edit-listings > li:nth-child(3n) {
+    margin-right: 30px;
+  }
+  .edit-listings > li:nth-child(2n) {
+    margin-right: 0;
+  }
+}
+
 @media (min-width: 650px) {
 
   .mobile-menu-btn {
@@ -281,6 +290,16 @@
   }
   .content_wrap .content {
     padding: 0 10px;
+  }
+}
+
+@media (min-width: 930px) {
+
+  .edit-listings > li:nth-child(3n) {
+    margin-right: 0;
+  }
+  .edit-listings > li:nth-child(2n) {
+    margin-right: 20px;
   }
 }
 

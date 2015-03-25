@@ -39,6 +39,22 @@ map.setLocation = function(latLng, radius) {
     y2gBounds(this, circle.getBounds());
   }
 }
+map.showListing = function(listingId) {
+  var id = listingId
+    , map = this
+
+  $.get('/listings/single?id='+listingId, function(data){
+    debugger
+    var listing = data
+      , latLng = new google.maps.LatLng(listing.displayLatLng.lat, listing.displayLatLng.lng)
+
+      map.setLocation(listing.displayLatLng, 10000)
+      Listings.get(latLng, 10, '', Listings.display)
+      google.maps.event.addListenerOnce(map, 'idle', function(){
+          $('#listings #listing-'+listing._id+' a').click()
+      });
+  })
+}
 
 
 var Listings = function(location, user) {
@@ -134,7 +150,7 @@ var Listings = function(location, user) {
         , publicClass = ''
       //console.log(id, lat, lng, desc, owner, title, type);
       if (typeInfo.length > 0) {
-        console.log(typeInfo)
+        //console.log(typeInfo)
         if (type == 'space') {
           typeHTML = '<span class="square-meters"><strong>Space: </strong><br>Roughly '+typeInfo[0].squareMeters+' sq. meters</span>'
         } else if (type == 'gardener') {
@@ -176,6 +192,7 @@ var Listings = function(location, user) {
       });
       markersArray.push(marker);
       var contactModal = 'onclick="openModal(this, \'/messages/send?owner='+owner+'&ownerName='+ownerName+'&listingId='+id+'&listingTitle='+titleStrip+'\', \'message\'); return false;" href="/messages/send?to='+owner+'" data-modal-type="message"'
+        , profileViewModal = 'onclick="openModal(this, \'/account/profile-view?user='+owner+'&userName='+ownerName+'&listingId='+id+'&listingTitle='+titleStrip+'\', \'profile-view\'); return false;" href="/account/profile-view?user='+owner+'&userName='+ownerName+'&listingId='+id+'" data-modal-type="profile-view"'
         , content = ''
         , listItem = ''
 
@@ -183,7 +200,7 @@ var Listings = function(location, user) {
                   '<div class="info-window_inner_wrap"><h4>'+title+'</h4>'+
                   '<div class="info">'+image_html+
                   '<span class="author"><strong>BY: </strong> '+
-                  '<a href="#" '+contactModal+'>'+ownerName+'</a></span>'+
+                  '<a href="#" '+profileViewModal+'>'+ownerName+'</a></span>'+
                   '<span class="date"><strong>DATE: </strong> '+created+'</span>'+
                   '<span class="type"><strong>TYPE: </strong> '+type+'</span></div>'+
                   '<div class="description">'+desc+'</div>'+
@@ -417,11 +434,11 @@ function locationToolOpen() {
   setTimeout(function(){
     $('#location_tool .tools').show()
     TweenLite.to($('#location_tool .tools'), .5, {width: 285, marginLeft: -153, height: 100})
-    setTimeout(function(){
-      $('#location_tool .tools .wrap').fadeIn()
-      $('#address_input').focus()
-    }, 500)
   }, 500)
+  setTimeout(function(){
+    $('#location_tool .tools .wrap').fadeIn()
+    if (!window.mobilecheck()) $('#address_input').focus()
+  }, 1500)
   $('.map_modal_bg').fadeIn().click(function(){
     locationToolClose()
   });

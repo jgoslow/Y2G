@@ -2,7 +2,6 @@
 _gaq.push(['_trackPageview','/listings/create-type']) // Analytics
 
 var listingType = $('#new-listing').data('type');
-console.log('.choose-type .'+listingType);
 $('.choose-type .'+listingType).addClass('active');
 $('.new-listing .choose-type a').click(function(){
   var type = $(this).data('type');
@@ -10,6 +9,16 @@ $('.new-listing .choose-type a').click(function(){
   $(this).siblings().removeClass('active');
   $(this).addClass('active');
   $('#listingType').val(type);
+  return false;
+});
+
+var editListingType = $('.edit-listing-form').data('type');
+$('.edit-listing-form .choose-type .'+editListingType).addClass('active');
+$('.edit-listing-form .choose-type a').click(function(){
+  var type = $(this).data('type');
+  $('.edit-listing-form').data('type', type).removeClass('gardener space organic tools').addClass(type);
+  $(this).siblings().removeClass('active');
+  $(this).addClass('active');
   return false;
 });
 
@@ -158,8 +167,11 @@ $('#new-listings-form').submit(function(e){
   return false
 })
 
-$('.field.show-self label').click(function(){
-  $(this).parent('.field').addClass('show')
+$('.field.show-self').each(function(){
+  var field = $(this)
+  field.find('label').click(function(){
+    $(this).parent('.field').addClass('show')
+  })
 })
 
 $('#bio-checkbox').click(function(){

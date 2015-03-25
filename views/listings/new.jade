@@ -31,15 +31,17 @@ else
             a.tools(href="#", data-type="tools")
               span Tools & Stuff
           input#listingType(type="hidden", name="type",value=listingType)
-          p.gardener You are listing as a Gardener looking for space to garden.
-          p.space You are listing available space for someone else to garden in.
-          p.organic You are listing extra organic materials to share (i.e. Mulch, worms, compost...etc).
-          p.tools You are listing extra tools to share.
+          p.show-gardener You are listing as a Gardener looking for space to garden.
+          p.show-space You are listing available space for someone else to garden in.
+          p.show-organic You are listing extra organic materials to share (i.e. Mulch, worms, compost...etc).
+          p.show-tools You are listing extra tools to share.
           button.next.small.goto(type="button", data-goto='2') enter your location &raquo;
         .step.location
           h3 Enter the listing location
-          input.location(name="location", placeholder="address and zip")
+          input.location(name="location", placeholder="address and zipcode")
           button.get-location.btn-small submit
+          | &nbsp;
+          a.fa(data-tooltip="This is the location of your listing. A pin will appear on the map within a few blocks of the location you give.") &#xf05a;
           #location-results
             h3 Choose your location
             .location-results
@@ -61,11 +63,11 @@ else
               input(type="file", name="pic")
           //.field
             input(type="hidden", name="imgData")
-          .field.space
+          .field.show-space
             input(type="number", name="squareMeters", placeholder="square meters.. roughly =)", data-parsley-group="space")
-          .field.gardener.show-self
+          .field.show-gardener.show-self
             label
-              a(tooltip="You can include info about your gardening experience here") Enter Gardener Info
+              a(data-tooltip="You can include info about your gardening experience here") Enter Gardener Info
             .item
               textarea(type="text", name="gardenerBio", placeholder="Gardener Bio", data-parsley-length="[6, 500]", data-parsley-error-message="Tell us something about your gardening experience (no more than 500 chars).", data-parsley-group="gardener")
               if user.bio
