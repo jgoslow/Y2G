@@ -12,16 +12,6 @@ $('.new-listing .choose-type a').click(function(){
   return false;
 });
 
-var editListingType = $('.edit-listing-form').data('type');
-$('.edit-listing-form .choose-type .'+editListingType).addClass('active');
-$('.edit-listing-form .choose-type a').click(function(){
-  var type = $(this).data('type');
-  $('.edit-listing-form').data('type', type).removeClass('gardener space organic tools').addClass(type);
-  $(this).siblings().removeClass('active');
-  $(this).addClass('active');
-  return false;
-});
-
 $('.new-listing .goto').click(function(){
   if ($(this).hasClass('disabled')) {
     var msg = $(this).data('error');

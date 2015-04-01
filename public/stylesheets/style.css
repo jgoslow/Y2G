@@ -1486,6 +1486,32 @@ min-height:100px;
   opacity: 1;
 }
 
+.edit-listing-form .field label {
+  text-align: left;
+  font-weight: bold;
+  width: 100%;
+}
+
+.edit-listing-form .type-box {
+  padding-top: 50px;
+}
+.edit-listing-form.space .type-box {
+  background: url(/images/svg/space.svg) center top no-repeat;
+  background-size: 50px;
+}
+.edit-listing-form.gardener .type-box {
+  background: url(/images/svg/gardener.svg) center top no-repeat;
+  background-size: 50px;
+}
+.edit-listing-form.tools .type-box {
+  background: url(/images/svg/tools.svg) center top no-repeat;
+  background-size: 50px;
+}
+.edit-listing-form.organic .type-box {
+  background: url(/images/svg/organic.svg) center top no-repeat;
+  background-size: 50px;
+}
+
 
 
 

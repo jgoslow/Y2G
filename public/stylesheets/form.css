@@ -420,7 +420,15 @@ input.parsley-success, textarea.parsley-success {
   border: none;
   text-decoration: none;
 }
-.btn-small:hover {
+  .btn-small.grey {
+    background-color: #919191;
+  }
+
+.btn-small[disabled], .btn-small[disabled]:hover {
+  background-color: #d1d1d1;
+}
+
+.btn-small:hover, .btn-small.grey:hover {
   background-color: black;
   text-decoration: none;
   color: white;

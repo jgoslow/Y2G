@@ -9,35 +9,59 @@ else
     h1 You must select a listing to edit
   else
     h1 Edit #{listing.title}
-    form.edit-listing-form(id='edit-listing-'+listing.id, onsubmit="Listings.update($(this)); return false;", data-type=listing.type)
+    form(class=listing.type+" edit-listing-form", id='edit-listing-'+listing.id, onsubmit="Listing.update($(this)); return false;", data-type=listing.type)
       .field.title
-        label Title
-        input(type="text", value=listing.title)
-      .field(class=listing.type+" field type")
-        #edit-choose-type(class=' clearfix choose-type')
-          a.gardener(href="#", data-type="gardener")
-            span Gardener
-          a.space(href="#", data-type="space")
-            span Available Space
-          a.organic(href="#", data-type="organic")
-            span Organic Materials
-          a.tools(href="#", data-type="tools")
-            span Tools & Stuff
-        input#listingType(type="hidden", name="type",value=listingType)
-        p.show-gardener This listing is for a Gardener looking for space to garden.
-        p.show-space This listing is for available space for someone else to garden in.
-        p.show-organic This listing is for extra organic materials to share (i.e. Mulch, worms, compost...etc).
-        p.show-tools This listing is for extra tools to share.
+        label Title:
+        input(type="text", value=listing.title, name="title")
+      .field.type
+        label Listing type:
+        .type-box
+          strong= listing.type
+          br
+          p.show-gardener This listing is for a Gardener looking for space to garden.
+          p.show-space This listing is for available space for someone else to garden in.
+          p.show-organic This listing is for extra organic materials to share (i.e. Mulch, worms, compost...etc).
+          p.show-tools This listing is for extra tools to share.
+      //
+        .field(class=" field type")
+          #edit-choose-type(class=' clearfix choose-type')
+            a.gardener(href="#", data-type="gardener")
+              span Gardener
+            a.space(href="#", data-type="space")
+              span Available Space
+            a.organic(href="#", data-type="organic")
+              span Organic Materials
+            a.tools(href="#", data-type="tools")
+              span Tools & Stuff
+          input#listingType(type="hidden", name="type",value=listing.type)
+          p.show-gardener This listing is for a Gardener looking for space to garden.
+          p.show-space This listing is for available space for someone else to garden in.
+          p.show-organic This listing is for extra organic materials to share (i.e. Mulch, worms, compost...etc).
+          p.show-tools This listing is for extra tools to share.
       .field.location
-        label Description
-        input(type="text", value=listing.description)
-      .field.active
-        label Active?
-        input(type="text", value=listing.title)
-      if listing.type = garden
-        .field.amount
-          label Amount of space
-          input(type="text", value=listing.typeInfo.squareMeters)
+        p This listings is at
+          br
+          strong= listing.location
+        //
+          label Location:
+          input(type="text", name="location", value=listing.location)
+      .field.description
+        label Description:
+        textarea(name="description")
+          | #{listing.description}
+      .field.amount.show-space
+        label Amount of space:
+        input(type="text", value=listing.typeInfo.squareMeters, name="squareMeters")
+      .field.amount.show-gardener
+        label Gardener Bio:
+        textarea(name="gardenerBio")
+          | #{listing.typeInfo.gardenerBio}
+      input(type="hidden", name="id", value=listing.id)
+      .field
+        input.btn-small(type="submit", value="save", disabled)
+    .account
+      .field
+        a.btn-small.grey.edit_listings.openmodal(href="/listings/edit", data-modal-type="edit-listings") &laquo; View all Listings
 
-  script(type="text/javascript", src="/javascripts/page/listings.new.js")
+  script(type="text/javascript", src="/javascripts/page/listing.edit.js")
   include ../snippets/footer-profile.jade

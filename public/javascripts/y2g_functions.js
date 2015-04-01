@@ -44,12 +44,12 @@ map.showListing = function(listingId) {
     , map = this
 
   $.get('/listings/single?id='+listingId, function(data){
-    debugger
     var listing = data
       , latLng = new google.maps.LatLng(listing.displayLatLng.lat, listing.displayLatLng.lng)
 
       map.setLocation(listing.displayLatLng, 10000)
       Listings.get(latLng, 10, '', Listings.display)
+      document.getElementById('header_wrap').scrollIntoView();
       google.maps.event.addListenerOnce(map, 'idle', function(){
           $('#listings #listing-'+listing._id+' a').click()
       });
@@ -346,6 +346,25 @@ var Listing = function(id, type, location) {
   - save *db
   */
 }
+  Listing.update = function(form) {
+    var form = $(form);
+    console.log(form.serialize())
+    if ( form.parsley().isValid() ) {
+      $.post('/listings/single/update', form.serialize(), function(data){
+      })
+      .done(function(data) {
+        y2g.message('this listing has been updated!', 'success', 2);
+        _gaq.push(['_trackEvent', 'Listing', 'updated', form.find('input[name=id]').val(), 0]); // Analytics
+      })
+      .fail(function(XMLHttpRequest, textStatus, errorThrown){
+        y2g.message('There was an error updating your listing, please make sure you are logged in', 'err', null);
+      })
+      .always(function() {
+
+      });
+    }
+    return false;
+  }
   Listing.openMarker = function(i){
     var w = $(window).width()
     google.maps.event.trigger( markersArray[i], 'click' )

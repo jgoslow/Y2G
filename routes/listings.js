@@ -50,11 +50,44 @@ router.get('/single', function(req, res) {
   })
 });
 
+/* Update single listing. */
+router.post('/single/update', function(req, res) {
+  var user = req.user
+    , listingData = req.body
+  console.log("listingData:")
+  console.log(listingData)
+  async.waterfall([
+    function(done) {
+      if (user) {
+        Listing.findById(listingData.id).where('owner').equals(user.id)
+        .exec(function(err, listing){
+          done(err, listing)
+        })
+      } else {
+        done('You must be logged in to delete a listing')
+      }
+    },
+    function(listing, done) {
+      // Update map locations based on address change
+      done(null, listing)
+    },
+    function(listing, done) {
+      listing.update(listingData).exec(function(err, listing){
+        done(err, listing)
+      });
+    }
+  ],
+  function(err, listing){
+    if (err) res.status(500).send(err)
+    else res.status(200).send('listing '+listing.name+' updated successfully!')
+  })
+
+});
+
 /* Remove single listing. */
 router.get('/single/remove', function(req, res) {
   var id = req.query.id
     , user = req.user
-  console.log(user)
   if (user) {
     Listing.find({ id: id, owner: user.id}).exec(function(err, listing){
       if (err) {
@@ -69,8 +102,6 @@ router.get('/single/remove', function(req, res) {
     res.status(400).send('You must be logged in to delete a listing')
   }
 });
-
-module.exports = router;
 
 
 /* GET new listing form. */
@@ -267,3 +298,8 @@ function rad2deg(angle) {
 function deg2rad(angle) {
   return angle * .017453292519943295;
 }
+
+
+
+
+module.exports = router;
