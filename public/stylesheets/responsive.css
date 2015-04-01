@@ -116,6 +116,11 @@
 
 @media (min-width: 650px) {
 
+  #beta-message {
+    top: 39px;
+    left: 317px;
+  }
+
   .mobile-menu-btn {
     display: none;
   }

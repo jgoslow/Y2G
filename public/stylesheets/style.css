@@ -1833,3 +1833,25 @@ min-height:100px;
   .footer-links {
     display: none;
   }
+
+
+#beta-message {
+  position: absolute;
+  top: 11px;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 11px;
+  text-align: center;
+  left: 89px;
+  background: white;
+  color: white;
+  border-radius: 0;
+  z-index: 1000;
+  height: 27px;
+  line-height: 20px;
+  width: 60px;
+  margin-left: 0;
+  text-indent: -2000em;
+  background: url(/images/svg/beta2.svg) bottom left no-repeat;
+  background-size: 49px;
+}
