@@ -6,6 +6,17 @@ var async = require('async');
 var dbURL = config.db.user+':'+config.db.pass+'@'+config.db.host+':'+config.db.port+'/'+config.db.db;
 var collections = ["listings", "users"];
 var db = require("mongojs").connect(dbURL, collections);
+var app = require('../app');
+var cache = app.get('cache');
+var cacheCheck = function(req,res,next){
+  if (!req.user) cache.prefix = 'Y2G:';
+  else cache.prefix = 'Y2G-user:';
+  var flash = req.session.flash[Object.keys(req.session.flash)[0]]
+  //console.log(req)
+  console.log('flash:'+flash)
+  if (flash) cache.prefix += 'flash('+flash+'):' //console.log(req.session.flash)
+  next()
+}
 
 var mongoose = require('mongoose'),
     passport = require('passport'),
@@ -15,7 +26,7 @@ var mongoose = require('mongoose'),
     Listing = require('../lib/db/listing-model');
 
 /* GET listings */
-router.get('/', function(req, res) {
+router.get('/', cache.route(), function(req, res) {
   var distance = parseInt(req.query.radius)
     , radius = 6371
     , lat = parseFloat(req.query.lat)
@@ -42,7 +53,7 @@ router.get('/', function(req, res) {
 
 
 /* GET single listing. */
-router.get('/single', function(req, res) {
+router.get('/single', cache.route(), function(req, res) {
   var id = req.query.id
   Listing.findById(id).select('-latLng -location -updated').exec(function(err, listing){
     if (err) res.status(400).send(err)
@@ -105,7 +116,7 @@ router.get('/single/remove', function(req, res) {
 
 
 /* GET new listing form. */
-router.get('/new', function(req, res) {
+router.get('/new', cache.route(), function(req, res) {
   var type = req.query.type;
   res.render('listings/new', {
     user: req.user,
@@ -174,6 +185,7 @@ router.get('/add', function(req, res) {
 
       console.log('listing saved..');
       console.log(err, listing);
+      clearListingsCache()
       if (err) {
         console.log(err);
         res.status(409).send(err);
@@ -190,13 +202,14 @@ router.get('/add', function(req, res) {
 router.get('/remove', function(req, res) {
   if (req.user) {
     Listing.findOneAndUpdate({id: req.listing},  function(listing){
+      clearListingsCache();
       console.log(listing)
     })
   }
 })
 
 /* GET Flag Listing form. */
-router.get('/flag', function(req, res) {
+router.get('/flag', cache.route(), function(req, res) {
   res.render('listings/flag', {
       user: req.user
     , listing: req.query.id
@@ -248,7 +261,7 @@ router.get('/edit', function(req, res) {
   }
 });
 /* GET Edit Single Listing Page. */
-router.get('/edit-single', function(req, res) {
+router.get('/edit-single', cache.route(), function(req, res) {
   var moment = require('moment')
     , listingId = req.query.id
   if (req.user) {
@@ -297,6 +310,14 @@ function rad2deg(angle) {
 }
 function deg2rad(angle) {
   return angle * .017453292519943295;
+}
+
+
+function clearListingsCache() {
+  console.log('listings cleared')
+  cache.del('Y2G:/listings*', function(){})
+  cache.del('Y2G-user:/listings*', function(){})
+  cache.del('Y2G:flash*', function(){})
 }
 
 

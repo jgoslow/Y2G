@@ -15,19 +15,15 @@ function initialize() {
 
   map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
 
-  var scripts = [ {url: '/javascripts/y2g_funcs.js'}, {url: '/javascripts/map_functions.js'}, {url: '/javascripts/map_interface.js'} ]
-
   loadScript([
-      {url: '/javascripts/y2g_functions.js'}
-    , {url:'/javascripts/infobubble.js'}
-    , {url:'/javascripts/icons.js'}
+      {url: '/javascripts/concat.y2g.js'}
   ]);
 
   //moment().format(); // Date Formatting Tool
 
 }
 
-var libs = [ {url: 'https://maps.googleapis.com/maps/api/js?v=3.exp&'+'callback=initialize'}, {url: '/javascripts/moment.js'} ]
+var libs = [ {url: 'https://maps.googleapis.com/maps/api/js?v=3.exp&'+'callback=initialize'} ]
 
 
 window.onload = function(){

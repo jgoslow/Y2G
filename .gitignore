@@ -6,3 +6,5 @@ node_modules
 npm-debug.log
 .tmp*
 logs/*.log
+public/javascripts/concat*
+public/assets/

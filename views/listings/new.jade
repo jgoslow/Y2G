@@ -83,12 +83,13 @@ else
                 | Use exact location&nbsp;
               span.note Will display precise marker on map
                 a(href="#info", data-tooltip="By default, our map will display a marker on random location within a block or two of the location you enter. <br><br>Check this box to display a marker on your exact location (read our <a href='/privacy-policy' target='_blank'>privacy policy</a>). ") (more info)
-            //.field
-              label.checkbox
-                input(type="checkbox", name="publicListing", value="true")
-                | Public Listing&nbsp;
-              span.note By clicking this you agree to our
-                a(href="/about-public-listings", target="_blank") public listing terms
+            if (user.role == 'admin')
+              .field
+                label.checkbox
+                  input(type="checkbox", name="publicListing", value="true")
+                  | Public Listing&nbsp;
+                span.note By clicking this you agree to our
+                  a(href="/about-public-listings", target="_blank") public listing terms
           button.next.disabled.submit(type="submit", data-error="Please fill out all *required fields") Create Listing
         .clear
   script(type="text/javascript", src="/javascripts/page/listings.new.js")

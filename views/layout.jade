@@ -23,7 +23,7 @@ head
   link(rel='stylesheet', type='text/css', media='all', href='/stylesheets/style.css')
   link(rel='stylesheet', type='text/css', media='all', href='/stylesheets/browser.css')
   //link(rel=stylesheet', type='text/css', media='all', href='/fonts/fonts.css')
-  link(rel="stylesheet", type="text/css", media="all", href="http://fonts.googleapis.com/css?family=Roboto:400,100italic,100,400italic,500,500italic|Roboto+Condensed:300italic,400italic,700italic,400,300,700")
+  link(rel="stylesheet", type="text/css", media="all", href="https://fonts.googleapis.com/css?family=Roboto:400,100italic,100,400italic,500,500italic|Roboto+Condensed:300italic,400italic,700italic,400,300,700")
   //link(href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300italic,400italic,700italic,400,300,700', rel='stylesheet', type='text/css')
   //link(href='http://fonts.googleapis.com/css?family=Roboto:400,900,700,500,300,100,300italic,400italic', rel='stylesheet', type='text/css')
   link(rel='stylesheet', type='text/css', media='all', href='/stylesheets/form.css')
@@ -37,7 +37,7 @@ head
     var infoBubble;
     var markersArray = [];
 
-  script(type='text/javascript', src='/javascripts/map.load.js?')
+  script(type='text/javascript', src='/javascripts/load.js')
 
   block header
 
@@ -121,35 +121,6 @@ body(class=bodyClasses)
     .content
     a.close
   // JAVASCRIPT
-  script(type='text/javascript', src='/javascripts/jquery/jquery.min.js', style='')
+  script(type='text/javascript', src='/javascripts/concat.inc.js', style='')
 
-  script(type='text/javascript', src='/javascripts/tweenmax.js')
-
-  script(type='text/javascript', src='/javascripts/parsley.js')
-  script(type='text/javascript', src='/javascripts/parsley.remote.min.js')
-  script(type='text/javascript', src='/javascripts/jquery/jquery-qtip.min.js')
-  script(type='text/javascript', src='/javascripts/jquery/jquery-ui.js')
-  // <script type="text/javascript" src="http://mapjs/jquery/jquery-tools.js"></script>
-  script(type='text/javascript', src='/javascripts/lyra.js')
-
-  script(type='text/javascript', src='/javascripts/main.js')
-
-  script(type='text/javascript', src='/javascripts/responsive.js')
-  script(type='text/javascript', src='javascripts/analytics.js')
-
-  // <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC7oM_im_K8XAFd25v4ZTAgnk2pAXHLblM"></script>
-  //
-    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHfWHqA0vkS16oU6Qi0xAT-6-RQ51edD4&amp;sensor=false">
-    </script><script src="https://maps.gstatic.com/intl/en_us/mapfiles/api-3/15/5/main.js" type="text/javascript"></script>
-  //
-    <?php if ($GLOBALS[ 'map' ] == true) : //include 'lib/jsphp/dbcall.js.php'; ?>
-    <?php $location = 'san francisco ca'; ?>
-    <script type="text/javascript" src="js/map.js"></script>
-    <script type="text/javascript">
-    getLatLng('<?php echo $location; ?>', '3');
-    </script>
-    <script type="text/javascript" src="js/infobubble.js"></script>
-    <script type="text/javascript" src="js/icons.js"></script>
-    <!--<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/lib/js/hello.js"></script>
-    <!--<script type="text/javascript" src="js/map.js"></script>
-    <script type="text/javascript" src="js/map_interface.js"></script>
+  script(type='text/javascript', src='/javascripts/concat.gen.js')

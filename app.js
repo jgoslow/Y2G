@@ -20,13 +20,18 @@ var crypto = require('crypto');
 var connect = require('connect');
 var http = require('http');
 var monk = require('monk');
-var config = require('./config'); // DB Config
+var config = require('./config'); // Site Config Options
 var connStr = 'mongodb://'+config.db.user+':'+config.db.pass+'@'+config.db.host+':'+config.db.port+'/'+config.db.db;
 var dbURL = config.db.user+':'+config.db.pass+'@'+config.db.host+':'+config.db.port+'/'+config.db.db;
 var collections = ["listings", "users", "oldusers"];
+var compression = require('compression');
 
-
-
+var cache = require('express-redis-cache')({
+        host : config.redis.host,
+        port : config.redis.port,
+        expire : 60*5, // week: 60*60*24*7
+        prefix : 'Y2G'
+    })
 
 //require('longjohn');
 
@@ -72,7 +77,9 @@ var app = module.exports = express(); // NEW - didn't have = module.exports
 var connectApp = connect();
 
 // middleware
-app.disable('view cache');
+//app.disable('view cache');
+app.set('config', config);
+app.set('cache', cache);
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -95,7 +102,7 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 //app.use(stylus.middleware(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'))); // , { maxAge: oneDay } for caching
 
 
 // error handlers
@@ -120,6 +127,9 @@ app.use(function(req, res, next){
   }
   next()
 })
+
+app.use(compression()); //use compression
+
 
 // routes
 var routes = require('./routes/index');
@@ -166,7 +176,11 @@ if (app.get('env') === 'development') {
       error: err
     });
   });
+  cache.on('message', function(message){
+      console.log(message);
+  });
 }
+
 
 // production error handler
 // no stacktraces leaked to user
@@ -177,6 +191,3 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
-
-module.exports = app;

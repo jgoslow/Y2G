@@ -18,6 +18,11 @@ var config = {
         host: 'localhost',
         port: '3000'
       },
+      //redis cache details
+      redis: {
+        host: 'localhost',
+        port: '6379'
+      },
       // Mandrill Details
       mandrill: {
         key: 'mandrillKEY'
