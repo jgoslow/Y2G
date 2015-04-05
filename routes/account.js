@@ -429,49 +429,9 @@ router.post('/reset/:token', function(req, res) {
     });
   });
 
-
-
-router.get('/user-test', function(req, res){
-  mongoose.connect(dbURL, function(err) {
-    if (err) throw err;
-    console.log('Successfully connected to MongoDB');
-  });
-  // create a user a new user
-  var testUser = new User({
-    name: 'jamar',
-    email: 'jmar777@hello.com',
-    password: 'Password'
-  });
-
-  // save user to database
-  testUser.save(function(err) {
-    if (err) throw err;
-    if (err && (11000 === err.code || 11001 === err.code)) {
-      // custom error message
-      throw 'email already in use';
-    }
-
-    // fetch user and test password verification
-    User.findOne({ email: 'jmar777@hello.com' }, function(err, user) {
-      if (err) throw err;
-
-      // test a matching password
-      user.comparePassword('Password', function(err, isMatch) {
-        if (err) throw err;
-        console.log('Password:', isMatch); // -&gt; Password123: true
-      });
-
-      // test a failing password
-      user.comparePassword('123Password', function(err, isMatch) {
-        if (err) throw err;
-        console.log('123Password:', isMatch); // -&gt; 123Password: false
-      });
-    });
-  });
-});
-
 /* GET users listing. */
 router.get('/users/', function(req, res) {
+  if (req.user.role != 'admin') res.status(500).send('You do not have permission to access this page.')
   db.users.find({}).limit(5000, function(err, response) {
     res.send(response);
   });

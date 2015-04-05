@@ -336,3 +336,20 @@
   }
 
 }
+
+
+
+
+
+
+/* Browser CSS - MOVE TO OTHER FILE IF SIZE INCREASES*/
+
+/* Safari iOS */
+
+.mobile.safari .map_wrap .location_tool .submit {
+  height: 45px;
+}
+
+.mobile.safari .radius_box .lc {
+  bottom: 5px;
+}
