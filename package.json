@@ -42,15 +42,17 @@
     "mongoose-session-store": "*",
     "winston": "*",
     "compression": "*",
-    "expressjs-redis-cache": "*"
+    "express-redis-cache": "*"
   },
   "devDependencies": {
     "gulp": "^3.8.11",
     "gulp-changed": "^1.2.1",
     "gulp-concat": "^2.5.2",
+    "gulp-filter": "^2.0.2",
     "gulp-jshint": "^1.9.4",
     "gulp-minify-html": "^1.0.2",
     "gulp-order": "^1.1.1",
+    "gulp-plumber": "^1.0.0",
     "gulp-strip-debug": "^1.0.2",
     "gulp-uglify": "^1.1.0"
   }

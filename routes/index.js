@@ -6,10 +6,14 @@ var cache = app.get('cache');
 var cacheCheck = function(req,res,next){
   if (!req.user) cache.prefix = 'Y2G:';
   else cache.prefix = 'Y2G-user:';
-  var flash = req.session.flash[Object.keys(req.session.flash)[0]]
-  //console.log(req)
-  console.log('flash:'+flash)
-  if (flash) cache.prefix += 'flash('+flash+'):' //console.log(req.session.flash)
+  if (req.session.flash) {
+    var flash = req.session.flash[Object.keys(req.session.flash)[0]]
+    //console.log(req)
+    //console.log('flash:'+flash)
+    if (flash) {
+      cache.prefix += 'flash('+flash+'):' //console.log(req.session.flash)
+    }
+  }
   next()
 }
 
