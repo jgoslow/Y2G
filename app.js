@@ -29,7 +29,7 @@ var compression = require('compression');
 var cache = require('express-redis-cache')({
         host : config.redis.host,
         port : config.redis.port,
-        expire : 60*5, // week: 60*60*24*7
+        expire : config.redis.expire,
         prefix : 'Y2G'
     })
 
@@ -77,7 +77,7 @@ var app = module.exports = express(); // NEW - didn't have = module.exports
 var connectApp = connect();
 
 // middleware
-//app.disable('view cache');
+app.disable(config.disable);
 app.set('config', config);
 app.set('cache', cache);
 app.set('port', process.env.PORT || 3000);
@@ -177,7 +177,7 @@ if (app.get('env') === 'development') {
     });
   });
   cache.on('message', function(message){
-      console.log(message);
+      console.log(message)
   });
 }
 

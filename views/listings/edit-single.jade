@@ -59,6 +59,7 @@ else
       input(type="hidden", name="id", value=listing.id)
       .field
         input.btn-small(type="submit", value="save", disabled)
+        a.btn-small.grey.remove-listing(href="#", title="Remove Listing", onClick="Listing.removeSurvey('#{listing.id}', '#{listing.type}'); return false;") Remove
     .account
       .field
         a.btn-small.grey.edit_listings.openmodal(href="/listings/edit", data-modal-type="edit-listings") &laquo; View all Listings

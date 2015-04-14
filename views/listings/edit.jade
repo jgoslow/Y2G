@@ -6,7 +6,7 @@ if !user
   include ../snippets/footer-lite.jade
 else
   h2 Your Listings
-  if user.role = 'admin'
+  if listings.length > 0
     ul.edit-listings.listing-cards
       each listing, i in listings
         - var created = moment(listing.created).format('MMM DD YYYY')
@@ -19,10 +19,13 @@ else
           .panel
             a.show-listing.fa.fa-map-marker(href="#", onclick='map.showListing(\"#{listing.id}\"); closeModal(); return false;', title="Show Listing")
             a.edit-listing.fa.fa-edit.openmodal(href='/listings/edit-single?id='+listing.id, data-modaltype='edit-listing', title="Edit Listing")
+            a.remove-listing.fa.fa-remove(href="#", title="Remove Listing", onClick="Listing.removeSurvey('#{listing.id}', '#{listing.type}'); return false;")
           // form.edit-listing-form(id='edit-listing-'+listing.id, onsubmit="Listings.update($(this)); return false;")
             .field.title
               label Title
               input(type="text")
+  else
+    p You have no listings!
 
-  script(type="text/javascript", src="/javascripts/main.js")
+  script(type="text/javascript", src="/javascripts/concat.gen.js")
   include ../snippets/footer-profile.jade

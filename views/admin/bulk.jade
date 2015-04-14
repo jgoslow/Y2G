@@ -1,0 +1,58 @@
+extends ../basic
+
+block content
+  if !user
+    h2 Please login to use the Admin.
+    include ../account/mustlogin.jade
+
+  else
+    if !(admin.access)
+      h2 Psych! You don't have permission to access this page.
+    else
+      h2 Y2G Bulk Listing Import
+      p logged in as&nbsp;
+        strong
+          a.openmodal(href='/account/profile/', data-modaltype='profile') #{user.name}
+      if admin.listings
+        .bulk-import(data-parsley-validate)
+          li.header
+            .title title
+            .type type
+            .location location
+            .small
+            .desc description
+            .bio gardener bio
+            .sqM.small
+              a(data-tooltip="Square Meters") M&sup2;
+            .small
+              a(data-tooltip="Is this a public listing?") public
+            .small
+              a(data-tooltip="Do you want this listing to be displayed in it's exact location?") exact
+          form#listings.listings.blank-form
+            li.listing
+              input.title(type="text", name="title", placeholder="title", required)
+              span.select-short.fa.fa-angle-down.type
+                select(name="listingType")
+                  option(value="space") space
+                  option(value="gardener") gardener
+                  option(value="organic") organic
+                  option(value="tools") tools
+              input#location.location(type="text", name="location", placeholder="enter location", required)
+              a.small.fa.confirmLocation(href="#", onclick="confirmLocation($('#location').val())", tabindex="-1")
+              textarea.desc(type="text", name="description", placeholder="enter description", required)
+              textarea.bio(type="text", name="gardenerBio", placeholder="enter bio")
+              input.sqM.small(type="text", name="sqareMeters", placeholder="#")
+              input(type="hidden", name="owner", value=user.id)
+              input(type="hidden", name="ownerName", value=user.name)
+              input(type="hidden", name="latLng", class="latLng", required)
+              span.small
+                input(type="checkbox", name="preciseMarker", value="true", checked)
+              span.small
+                input(type="checkbox", name="publicListing", value="true", checked)
+              .add-more.after.fa.fa-plus(title="add row", onclick="addRow(this); return false;")
+          a.add-more-bottom.fa.fa-plus(title="add row", onclick="addToLastRow(); return false;")
+          a.next(onclick="submitBulkListings(); return false;", href="#") submit
+
+block scripts
+  script(type="text/javascript", src="/javascripts/concat.gen.js")
+  script(type="text/javascript", src="/javascripts/page/bulk-import.js")

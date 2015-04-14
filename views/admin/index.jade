@@ -2,51 +2,41 @@ extends ../basic
 
 block content
   if !user
-    h2 Please login to view your profile.
+    h2 Please login to use the Admin.
     include ../account/mustlogin.jade
 
   else
-    p okay fine
-    if user.role != 'admin'
+    if !(admin.access)
       h2 You don't have permission to access this page
     else
-      - if (user.masterGardener == true) { masterGardener = 'checked'; } else { masterGardener = 'false' }
-      h2 Profile for #{user.name}
-      .profile
-        .field
-          .username username:
-            span.editable(name='username') user.name
-        .field
-          .email email:
-            span.editable(name='email') user.email
-        .field
-          a.password change password?
-            form.new-password(method="post", action="/account/newpass")
-              .field
-                input(name="old-password", placeholder="old password")
-              .field
-                input(name="password", placeholder="new password")
-              .field
-                input(name="password-confirm", placeholder="confirm new password")
-      .bio
-        .field
-          .location Location:
-            if user.location
-              span.editable(name="location") user.location
-            else
-              a.add-field(name="location") add location
-        .field
-          .reasons Reasons for Gardening:
-            if user.reasons
-              span.editable(name="reasons") user.reasons
-            else
-              a.add-field(name="reasons") add reasons
-        .field
-          .bio Gardener Bio:
-            if user.bio
-              span.editable(name="bio") user.bio
-            else
-              a.add-field(name="bio") add location
-        .field
-          .location Master Gardener?
-            input.editable(type="checkbox", masterGardener, name="masterGardener")
+      h2 Y2G Admin
+      p logged in as&nbsp;
+        strong
+          a.openmodal(href='/account/profile/', data-modaltype='profile') #{user.name}
+      if admin.listings
+        h3 Listings:
+        p
+          a.btn-small(href="#", disabled) Manage Listings
+          a.btn-small.flag(href="#", disabled) Flagged Listings
+          a.btn-small(href="/admin/bulk") Bulk Import
+      if admin.users
+        h3 Users:
+        p
+          a.btn-small(href="#", disabled) Manage Users
+      if admin.messages
+        h3 Messages:
+        p
+          a.btn-small(href="#", disabled) Manage Messages
+      if admin.manager
+        h3 Reporting:
+        p
+          a.btn-small(href="#", disabled) Analytics
+          a.btn-small(href="#", disabled) Exit Survey Results
+    if user
+      p role: #{user.role}
+      li Access: #{admin.access}
+      li Admin: #{admin.admin}
+      li Listings: #{admin.listings}
+      li Users: #{admin.users}
+      li Messages: #{admin.messages}
+      li Manager: #{admin.manager}

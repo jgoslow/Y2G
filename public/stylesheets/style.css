@@ -109,6 +109,9 @@ a:hover {
 a[data-tooltip] {
   cursor: pointer;
 }
+a.fa:hover {
+  text-decoration: none;
+}
 
 
 h1 {
@@ -391,6 +394,20 @@ footer {
 
 }
 
+
+/* Alt Layouts */
+/* Wide */
+.page-wide .content_wrap .content {
+  max-width: 100%;
+}
+.page-wide .content_wrap .content .post, .page-wide .content_wrap .content .post.left {
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+  width: 90%;
+  display: block;
+  float: none;
+}
 
 
 

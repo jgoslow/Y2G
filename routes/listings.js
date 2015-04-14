@@ -11,6 +11,7 @@ var cache = app.get('cache');
 var cacheCheck = function(req,res,next){
   if (!req.user) cache.prefix = 'Y2G:';
   else cache.prefix = 'Y2G-user:';
+  console.log(Object.keys(req.session.flash))
   var flash = req.session.flash[Object.keys(req.session.flash)[0]]
   //console.log(req)
   console.log('flash:'+flash)
@@ -26,7 +27,7 @@ var mongoose = require('mongoose'),
     Listing = require('../lib/db/listing-model');
 
 /* GET listings */
-router.get('/', cache.route(), function(req, res) {
+router.get('/', function(req, res) {
   var distance = parseInt(req.query.radius)
     , radius = 6371
     , lat = parseFloat(req.query.lat)
@@ -42,7 +43,7 @@ router.get('/', cache.route(), function(req, res) {
     , minlng = lng - rad2deg(distance / radius / Math.cos(deg2rad(lat)))
 
   //console.log('db vars: '+maxlat, minlat, maxlng, minlng);
-  Listing.find({'latLng.lat': {$gt : minlat, $lt: maxlat}, 'latLng.lng': {$gt : minlng, $lt: maxlng}})
+  Listing.find({'active': 'true', 'latLng.lat': {$gt : minlat, $lt: maxlat}, 'latLng.lng': {$gt : minlng, $lt: maxlng}})
   .select('-latLng -location').limit(5000).exec(function(err, response) {
     if (err) return console.log(err)
     //console.log(response);
@@ -53,7 +54,7 @@ router.get('/', cache.route(), function(req, res) {
 
 
 /* GET single listing. */
-router.get('/single', cache.route(), function(req, res) {
+router.get('/single', function(req, res) {
   var id = req.query.id
   Listing.findById(id).select('-latLng -location -updated').exec(function(err, listing){
     if (err) res.status(400).send(err)
@@ -96,17 +97,25 @@ router.post('/single/update', function(req, res) {
 });
 
 /* Remove single listing. */
-router.get('/single/remove', function(req, res) {
-  var id = req.query.id
+router.post('/single/remove', function(req, res) {
+  var id = req.body.id
+    , survey = req.body
     , user = req.user
+  console.log(id)
   if (user) {
-    Listing.find({ id: id, owner: user.id}).exec(function(err, listing){
+    Listing.findOne({'_id': id}, function(err, listing){
+      console.log(listing)
       if (err) {
         res.status(400).send(err)
-      } if (listing) {
-        listing.update({active: false}).exec(function(err, listing){
-          res.status(200).send('listing '+listing.name+' removed successfully!')
+      } if (listing.owner == user.id) {
+        listing.deleteSurvey = survey
+        listing.active = false
+        listing.save(function(err){
+          if (err) res.status(400).send('listing could not be removed')
+          else res.status(200).send('listing '+listing.name+' removed successfully!')
         });
+      } else {
+        err.status(500).send('You do not have permission to remove this listing')
       }
     })
   } else {
@@ -243,7 +252,7 @@ router.post('/flag', function(req, res) {
 router.get('/edit', function(req, res) {
   var moment = require('moment')
   if (req.user) {
-    Listing.find({owner: req.user.id})
+    Listing.find({owner: req.user.id, active: true})
     .limit(5000).exec(function(err, listings) {
       console.log(listings)
       res.render('listings/edit', {

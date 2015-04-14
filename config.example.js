@@ -21,8 +21,11 @@ var config = {
       //redis cache details
       redis: {
         host: 'localhost',
-        port: '6379'
+        port: '6379',
+        expire: 60*60*24*7, // week: 60*60*24*7
       },
+      // Express Disabled Parameters
+      disable: 'view cache',
       // Mandrill Details
       mandrill: {
         key: 'mandrillKEY'
@@ -46,6 +49,11 @@ var config = {
       server: {
         host: 'localhost',
         port: '3000'
+      },
+      //redis cache details
+      redis: {
+        host: 'localhost',
+        port: '6379'
       },
       // Mandrill Details
       mandrill: {
