@@ -122,8 +122,8 @@ form.setLocation = function(loc) {
     zip = '';
   }
 
-  latLng.lat = loc.geometry.location.k
-  latLng.lng = loc.geometry.location.D
+  latLng.lat = loc.geometry.location.A
+  latLng.lng = loc.geometry.location.F
   latLng = JSON.stringify(latLng)
   console.log(loc)
   //console.log(address, city, state, zip, country, latLng)
